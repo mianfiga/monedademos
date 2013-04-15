@@ -1,0 +1,447 @@
+<?php
+
+//Yii::import('application.extensions.EUploadedImage');
+
+class MarketController extends Controller {
+
+    /**
+     * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+     * using two-column layout. See 'protected/views/layouts/column2.php'.
+     */
+    public $layout = '//layouts/column2';
+
+    /**
+     * @return array action filters
+     */
+    public function filters() {
+        return array(
+            'accessControl', // perform access control for CRUD operations
+        );
+    }
+
+    /**
+     * Specifies the access control rules.
+     * This method is used by the 'accessControl' filter.
+     * @return array access control rules
+     */
+    public function accessRules() {
+        return array(
+            array('allow', // allow all users to perform 'index' and 'view' actions
+                'actions' => array('index', 'view'),
+                'users' => array('*'),
+            ),
+            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                'actions' => array('create', 'update', 'join', 'panel', 'panelUser', 'list', 'delete', 'expire'),
+                'users' => array('@'),
+            ),
+            array('allow', // allow admin user to perform 'admin' and 'delete' actions
+                'actions' => array('admin'),
+                'users' => array('admin'),
+            ),
+            array('deny', // deny all users
+                'users' => array('*'),
+            ),
+        );
+    }
+
+    /**
+     * Displays a particular model.
+     * @param integer $id the ID of the model to be displayed
+     */
+    public function actionView($id) {
+        $user_id = Yii::app()->user->getId();
+        $model = MarketAd::model()->with(array('users' => array('on' => ($user_id ? 'users.id=' . $user_id : null)),
+                    'joined' => array('on' => ($user_id ? 'joined.user_id=' . $user_id : null))
+                ))->findByPk($id);
+
+        $this->render('view', array(
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Displays a particular model.
+     * @param integer $id the ID of the model to be displayed
+     */
+    public function actionPanel($id) {
+        $model = $this->loadModel($id); //MarketAd::model()->with('users')->findByPk($id);
+        if ($model->created_by == Yii::app()->user->getId()) {
+            $criteria = new CDbCriteria;
+            /* 			$criteria->with=array(
+              'users',
+              'joined'
+              );
+
+              $dataProvider=new CActiveDataProvider('MarketAd', array(
+              'criteria'=>$criteria,
+              ));
+             */
+
+            $criteria->with = array(
+                'marketAds' => array(
+                    'together' => true,
+                    'condition' => 'marketAds.id=' . $id,
+                ),
+                'marketJoined' => array(
+                    'together' => true,
+                    'condition' => 'marketJoined.ad_id=' . $id,
+                ),
+            );
+
+            $criteria->compare('marketAds.id', $id);
+
+            $dataProvider = new CActiveDataProvider('User', array(
+                        'criteria' => $criteria,
+                    ));
+
+            Notification::shown($model->created_by, Notification::getSID($model));
+            $this->render('panel', array(
+                'model' => $model,
+                'dataProvider' => $dataProvider,
+            ));
+        } else {
+            Yii::app()->user->setFlash('error', Yii::t('market', 'You can not access to this advertisement control panel'));
+            $this->redirect(array('view', 'id' => $id));
+        }
+    }
+
+    public function actionPanelUser($ad_id, $user_id) {
+        $ad = $this->loadModel($ad_id);
+        if ($ad->created_by == Yii::app()->user->getId()) {
+            $user = User::model()->findByPk($user_id);
+            $joined = MarketJoined::model()->with('user')->findByPk(array('ad_id' => $ad_id, 'user_id' => $user_id));
+            $joined->setScenario('panel');
+
+            if (isset($_POST['MarketJoined'])) {
+                $joined->attributes = $_POST['MarketJoined'];
+                if ($joined->save()) {
+                    /*          if($joined->form_comment != '')
+                      {
+                      $headers  = 'MIME-Version: 1.0' . "\r\n";
+                      $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+                      $headers .= "From: noreply@instauremoslademocracia.net\r\n";
+
+                      if (mail($user->email,Yii::t('market','[Comment from DEMOS Market]').' '.$ad->title,
+                      $this->renderPartial('_joinMail',
+                      array('title' => $ad->title,
+                      'message' => $joined->form_comment,
+                      'ad_id' => $ad_id,
+                      'user_id' => $user_id,
+                      ),
+                      true),$headers))
+                      Yii::app()->user->setFlash('success',Yii::t('market','Thank you for contacting'));
+                      else
+                      Yii::app()->user->setFlash('error',Yii::t('market','E-mail not sent'));
+                      } */
+                    $this->redirect(array('panel', 'id' => $ad_id));
+                }
+            }
+
+            Notification::shown($ad->created_by, Notification::getSID($joined));
+            $this->render('panelUser', array(
+                'user' => $user,
+                'joined' => $joined,
+                'ad' => $ad,
+                    )
+            );
+        } else {
+            Yii::app()->user->setFlash('error', Yii::t('market', 'You can not access to this advertisement control panel'));
+            $this->redirect(array('view', 'id' => $ad_id));
+        }
+    }
+
+    /**
+     * Creates a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionCreate() {
+        $model = new MarketAd;
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if (isset($_POST['MarketAd'])) {
+            $model->attributes = $_POST['MarketAd'];
+
+            /* 			$model->image = EUploadedImage::getInstance($model,'image');
+              $model->image->maxWidth = 500;
+              $model->image->maxHeight = 400;
+
+              $model->image->thumb = array(
+              'maxWidth' => 150,
+              'maxHeight' => 120,
+              //			    'dir' => Yii::getPathOfAlias('webroot.images.market'),
+              'prefix' => MarketAd::THUMB_PREFIX,
+              ); */
+
+            if ($model->save()) {
+                /* 				$ext = substr($model->image,strrpos($model->image,'.'));
+                  $model->image->saveAs(Yii::getPathOfAlias('webroot.images.market').'/'. $model->id . $ext);
+                  $model->image = $model->id.$ext;
+                  $model->saveAttributes(array('image')); */
+                $this->redirect(array('view', 'id' => $model->id));
+            }
+        }
+
+        $model->expiration = date('Y-m-d', time() + MarketAd::MAX_EXPIRATION);
+
+        $this->render('create', array(
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Updates a particular model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id the ID of the model to be updated
+     */
+    public function actionUpdate($id) {
+        $model = $this->loadModel($id);
+        if ($model->created_by != Yii::app()->user->getId()) {
+            Yii::app()->user->setFlash('error', Yii::t('market', 'You can not update this advertisement'));
+            $this->redirect(array('view', 'id' => $id));
+            return;
+        }
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if (isset($_POST['MarketAd'])) {
+            $model->attributes = $_POST['MarketAd'];
+            if ($model->save())
+                $this->redirect(array('view', 'id' => $model->id));
+        }
+
+        $this->render('update', array(
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Deletes a particular model.
+     * If deletion is successful, the browser will be redirected to the 'admin' page.
+     * @param integer $id the ID of the model to be deleted
+     */
+    public function actionExpire($id) {
+        $model = $this->loadModel($id);
+        if ($model->created_by != Yii::app()->user->getId()) {
+            Yii::app()->user->setFlash('error', Yii::t('market', 'You can not update this advertisement'));
+            $this->redirect(array('view', 'id' => $id));
+            return;
+        }
+        // we only allow deletion via POST request
+        $model->expiration = '0000-00-00';
+        $model->save();
+
+        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+    }
+
+    /**
+     * Deletes a particular model.
+     * If deletion is successful, the browser will be redirected to the 'admin' page.
+     * @param integer $id the ID of the model to be deleted
+     */
+    public function actionDelete($id) {
+        $model = $this->loadModel($id);
+        if ($model->created_by != Yii::app()->user->getId()) {
+            Yii::app()->user->setFlash('error', Yii::t('market', 'You can not delete this advertisement'));
+            $this->redirect(array('view', 'id' => $id));
+            return;
+        }
+
+        $model->visible = 0;
+        $model->save();
+        Yii::app()->user->setFlash('notice', Yii::t('app', 'The advertisement have been moved away'));
+
+
+        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+        if (!isset($_GET['ajax']))
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+
+//		else
+//			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
+
+    /**
+     * Join to a Market Ad a new model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     */
+    public function actionJoin($id) {
+        $ad = $this->loadModel($id);
+        $user_id = Yii::app()->user->getId();
+        $model = MarketJoined::model()->findByPk(array('ad_id' => $id, 'user_id' => $user_id));
+
+        if ($model == null) {
+            $model = new MarketJoined;
+            $model->ad_id = $id;
+            $already_joined = false;
+        } else {
+            $already_joined = true;
+            Yii::app()->user->setFlash('success', Yii::t('market', 'You are already joined, update anything you need.'));
+        }
+
+        $model->setScenario('join');
+
+        // uncomment the following code to enable ajax-based validation
+        /*
+          if(isset($_POST['ajax']) && $_POST['ajax']==='market-joined-join-form')
+          {
+          echo CActiveForm::validate($model);
+          Yii::app()->end();
+          }
+         */
+
+        if (isset($_POST['MarketJoined'])) {
+            $model->attributes = $_POST['MarketJoined'];
+            if ($model->validate()) {
+                // form inputs are valid, do something here
+                if ($model->save()) {
+                    /*          if($already_joined == false)
+                      {
+                      $user = User::model()->findByPk($user_id);
+                      $headers  = 'MIME-Version: 1.0' . "\r\n";
+                      $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+                      $headers .="From: noreply@instauremoslademocracia.net\r\n";
+                      mail($ad->createdBy->email,Yii::t('market','[Joined to DEMOS Market]').' '.$ad->title,Yii::t('market','{name} has joined to {ad_title}.',array('{name}'=>$user->name, '{ad_title}'=>$ad->title)),$headers);
+
+                      }
+
+                      if($model->form_comment!= '')
+                      {
+                      $headers="From: noreply@instauremoslademocracia.net\r\n";
+
+                      $headers  = 'MIME-Version: 1.0' . "\r\n";
+                      $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+                      $headers .="From: noreply@instauremoslademocracia.net\r\n";
+                      //if (mail($ad->createdBy->email,Yii::t('market','[Comment from DEMOS Market] '.$ad->title,$model->form_comment,$headers))
+                      if (mail($ad->createdBy->email,Yii::t('market','[Comment from DEMOS Market]').' '.$ad->title,
+                      $this->renderPartial('_joinMailPanel',
+                      array('title' => $ad->title,
+                      'message' => $model->form_comment,
+                      'ad_id' => $id,
+                      'user_id' => $user_id,
+                      ),
+                      true),$headers))
+                      Yii::app()->user->setFlash('success', Yii::t('market','Comment sent by e-mail'));
+                      else
+                      Yii::app()->user->setFlash('error', Yii::t('market','Comment not sent by e-mail'));
+                      } */
+
+                    $this->redirect(array('view', 'id' => $ad->id));
+                }
+            }
+        }
+        Notification::shown($user_id, Notification::getSID($model));
+        $this->render('join', array('model' => $model, 'ad' => $ad));
+    }
+
+    /**
+     * Lists all models.
+     */
+    public function actionList($user = null) {
+        $user_id = Yii::app()->user->getId();
+        //Yii::app()->user->setFlash('notice',Yii::t('dev','Market is under special testing period things may not work properly'));	
+        $dataProvider = new CActiveDataProvider('MarketAd', array(
+                    'criteria' => array(
+                        'condition' => 'visible=1' . ($user == 1 ? ' AND created_by=\'' . $user_id . '\'' : ''),
+//						'order' => 't.updated DESC, id DESC',
+                        'with' => ($user_id == null ? array() : array(
+                            'joined' => array(
+                                'together' => true,
+                                'joinType' => 'LEFT outer JOIN',
+                                ($user == 2 ? 'condition' : 'on') => 'joined.user_id=' . $user_id,
+                            )
+                                )),
+                    ),
+                    'sort' => array(
+                        'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
+                    ),
+                ));
+
+        $model = new MarketAd('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['MarketAd']))
+            $model->attributes = $_GET['MarketAd'];
+
+        $this->render('index', array(
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Lists all models.
+     */
+    public function actionIndex() {
+        $user_id = Yii::app()->user->getId();
+        //Yii::app()->user->setFlash('notice',Yii::t('dev','Market is under special testing period things may not work properly'));	
+
+        $dataProvider = new CActiveDataProvider('MarketAd', array(
+                    'criteria' => array(
+                        'condition' => 'visible=1',
+//						'order' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
+                        'with' => ($user_id == null ? array() : array(
+                            'joined' => array(
+                                'together' => true,
+                                'joinType' => 'LEFT outer JOIN',
+                                'on' => 'joined.user_id=' . $user_id,
+                            )
+                                )),
+                    ),
+                    'sort' => array(
+                        'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
+                    ),
+                ));
+
+
+        $model = new MarketAd('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['MarketAd']))
+            $model->attributes = $_GET['MarketAd'];
+
+        $this->render('index', array(
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actionAdmin() {
+        $model = new MarketAd('search');
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['MarketAd']))
+            $model->attributes = $_GET['MarketAd'];
+
+        $this->render('admin', array(
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Returns the data model based on the primary key given in the GET variable.
+     * If the data model is not found, an HTTP exception will be raised.
+     * @param integer the ID of the model to be loaded
+     */
+    public function loadModel($id) {
+        $model = MarketAd::model()->findByPk($id);
+        if ($model === null)
+            throw new CHttpException(404, 'The requested page does not exist.');
+        return $model;
+    }
+
+    /**
+     * Performs the AJAX validation.
+     * @param CModel the model to be validated
+     */
+    protected function performAjaxValidation($model) {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'market-ad-form') {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }
+
+}
