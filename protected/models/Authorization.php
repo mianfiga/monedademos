@@ -70,8 +70,10 @@ class Authorization extends AuthorizationBase
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+        return array(
+            'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
+            'user' => array(self::BELONGS_TO, 'User', 'user_id'),
+        );
 	}
 
 	/**
@@ -149,7 +151,7 @@ class Authorization extends AuthorizationBase
 		$auth = self::getAuthorization($a);
 		if ($auth===null || $auth->code != $a['code'])
 			return false;
-		return true;
+		return $auth;
 	}
 
 	protected function beforeSave()
