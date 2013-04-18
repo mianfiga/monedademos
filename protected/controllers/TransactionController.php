@@ -199,6 +199,9 @@ class TransactionController extends Controller {
         if (isset(Yii::app()->session['accountNumber'])) {
             $account_number = Yii::app()->session['accountNumber'];
         }
+        
+        $form_model = new AccountNumberFilterForm;
+
         if (isset($_POST['AccountNumberFilterForm'])) {
             $form_model->attributes = $_POST['AccountNumberFilterForm'];
             if ($form_model->validate()) {
@@ -236,8 +239,6 @@ class TransactionController extends Controller {
         }
 
         Yii::app()->session['accountNumber'] = $account_number;
-
-        $form_model = new AccountNumberFilterForm;
 
         //$acc = Authorization::splitAccountNumber($account_number);
 
