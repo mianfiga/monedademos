@@ -114,7 +114,7 @@ class Transaction extends TransactionBase {
         $account_number = Yii::app()->session['accountNumber'];
 
         if ($account_number == null) {
-            $accounts = Authorization::getUserAccounts($user_id /* ,'class='.Authorization::CLASS_HOLDER */);
+            $accounts = Authorization::getByUser($user_id /* ,'class='.Authorization::CLASS_HOLDER */);
             foreach ($accounts as $account) {
                 $account_number = $account->getAccountNumber();
             }
@@ -158,9 +158,8 @@ class Transaction extends TransactionBase {
         if (isset(Yii::app()->session)) {
             $account_number = Yii::app()->session['accountNumber'];
             $acc = Authorization::splitAccountNumber($account_number);
-            $selfAccount = Authorization::formAccountNumber($acc['user_id'], $acc['account_id']);
 
-            if ($selfAccount == $this->charge_account_number) {
+            if ($acc['account_id'] == $this->charge_account) {
                 $this->foreign_account_number = $this->deposit_account_number;
                 $this->is_payment = true;
             } else {
@@ -170,7 +169,7 @@ class Transaction extends TransactionBase {
         }
     }
 
-    protected function afterValidate() { //esto hay que verlo aqui pone after validate y abajo pone before validate
+    protected function afterValidate() {
         if ($this->isNewRecord) {
             if ($this->getScenario() == 'form') {
                 if (!$this->amount_converted) {
