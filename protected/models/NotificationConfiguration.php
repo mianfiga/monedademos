@@ -29,13 +29,6 @@ class NotificationConfiguration extends NotificationConfigurationBase
 		return parent::model($className);
 	}
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return '{{notification_configuration}}';
-	}
 
 	/**
 	 * @return array validation rules for model attributes.

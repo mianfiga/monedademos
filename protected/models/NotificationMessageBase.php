@@ -1,10 +1,10 @@
 <?php
 
 /**
- * This is the model class for table "{{notification_user}}".
+ * This is the model class for table "{{notification_message}}".
  *
- * The followings are the available columns in table '{{notification_user}}':
- * @property string $user_id
+ * The followings are the available columns in table '{{notification_message}}':
+ * @property string $entity_id
  * @property string $notification_id
  * @property string $sid
  * @property string $data
@@ -15,10 +15,10 @@
  * @property string $shown
  *
  * The followings are the available model relations:
+ * @property Entity $entity
  * @property Notification $notification
- * @property User $user
  */
-class NotificationUserBase extends CActiveRecord
+class NotificationMessageBase extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -35,7 +35,7 @@ class NotificationUserBase extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '{{notification_user}}';
+		return '{{notification_message}}';
 	}
 
 	/**
@@ -46,13 +46,14 @@ class NotificationUserBase extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, notification_id', 'required'),
-			array('user_id, notification_id', 'length', 'max'=>10),
+			array('entity_id, notification_id', 'required'),
+			array('entity_id', 'length', 'max'=>11),
+			array('notification_id', 'length', 'max'=>10),
 			array('sid', 'length', 'max'=>127),
 			array('data, added, sent, read, updated, shown', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('user_id, notification_id, sid, data, added, sent, read, updated, shown', 'safe', 'on'=>'search'),
+			array('entity_id, notification_id, sid, data, added, sent, read, updated, shown', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,8 +65,8 @@ class NotificationUserBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'entity' => array(self::BELONGS_TO, 'Entity', 'entity_id'),
 			'notification' => array(self::BELONGS_TO, 'Notification', 'notification_id'),
-			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 		);
 	}
 
@@ -75,7 +76,7 @@ class NotificationUserBase extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'user_id' => 'User',
+			'entity_id' => 'Entity',
 			'notification_id' => 'Notification',
 			'sid' => 'Sid',
 			'data' => 'Data',
@@ -98,7 +99,7 @@ class NotificationUserBase extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('entity_id',$this->entity_id,true);
 		$criteria->compare('notification_id',$this->notification_id,true);
 		$criteria->compare('sid',$this->sid,true);
 		$criteria->compare('data',$this->data,true);

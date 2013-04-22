@@ -4,7 +4,7 @@
  * This is the model class for table "{{notification_configuration}}".
  *
  * The followings are the available columns in table '{{notification_configuration}}':
- * @property string $user_id
+ * @property string $entity_id
  * @property string $notification_id
  * @property string $mailmode
  * @property string $webmode
@@ -38,13 +38,14 @@ class NotificationConfigurationBase extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, notification_id', 'required'),
-			array('user_id, notification_id', 'length', 'max'=>10),
+			array('entity_id, notification_id', 'required'),
+			array('entity_id', 'length', 'max'=>11),
+			array('notification_id', 'length', 'max'=>10),
 			array('mailmode', 'length', 'max'=>9),
 			array('webmode, pushmode', 'length', 'max'=>6),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('user_id, notification_id, mailmode, webmode, pushmode', 'safe', 'on'=>'search'),
+			array('entity_id, notification_id, mailmode, webmode, pushmode', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,7 +66,7 @@ class NotificationConfigurationBase extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'user_id' => 'User',
+			'entity_id' => 'Entity',
 			'notification_id' => 'Notification',
 			'mailmode' => 'Mailmode',
 			'webmode' => 'Webmode',
@@ -84,7 +85,7 @@ class NotificationConfigurationBase extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('entity_id',$this->entity_id,true);
 		$criteria->compare('notification_id',$this->notification_id,true);
 		$criteria->compare('mailmode',$this->mailmode,true);
 		$criteria->compare('webmode',$this->webmode,true);
