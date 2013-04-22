@@ -29,13 +29,6 @@ class MarketJoined extends MarketJoinedBase
 		return parent::model($className);
 	}
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return '{{market_joined}}';
-	}
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -65,7 +58,7 @@ class MarketJoined extends MarketJoinedBase
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
+			'entity' => array(self::BELONGS_TO, 'Entity', 'entity_id'),
 			'ad' => array(self::BELONGS_TO, 'MarketAd', 'ad_id'),
 		);
 	}

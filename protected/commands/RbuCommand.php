@@ -2,27 +2,34 @@
 
 class RbuCommand extends CConsoleCommand {
 
-    public function actionCorrectRecords(){
+    public function actionUserEntity() {
+        $users = User::model()->findAll();
+        foreach ($users as $user) {
+            $ent = new Entity;
+            $ent->class = get_class($user);
+            $ent->object_id = $user->id;
+            $ent->save();
+        }
+    }
+
+    public function actionCorrectRecords() {
         $users = User::model()->findAll();
         $records = Record::model()->findAll();
         echo count($records);
         $record = current($records);
-        foreach ($users as $user) {  
-            while($record->user_count < ($user->id - 1))
-            {
+        foreach ($users as $user) {
+            while ($record->user_count < ($user->id - 1)) {
                 $record = next($records);
             }
-                
-            if($record->user_count == ($user->id - 1))
-            {
+
+            if ($record->user_count == ($user->id - 1)) {
                 $record->added = $user->created;
                 $record->save();
-                echo 'id:'. $record->id ."\n";
-                
+                echo 'id:' . $record->id . "\n";
             }
         }
     }
-    
+
     //reload
     public function actionReload($date = null) {
         $accounts = Account::getSalaryAccounts();
@@ -45,9 +52,8 @@ class RbuCommand extends CConsoleCommand {
         $period->save();
     }
 
-    public function actionAddSalary($account, $date=null) {
-        if($date==null)
-        {
+    public function actionAddSalary($account, $date = null) {
+        if ($date == null) {
             $date = strtotime('first day of this month');
         }
         $acc = Account::model()->findByPk($account);
@@ -70,18 +76,15 @@ class RbuCommand extends CConsoleCommand {
         $newRule->multiplier = $multiplier;
         $newRule->added = date('YmdHis');
         $newRule->save();
-        
+
         //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
         Account::adaptFunds($newRule);
-
-        
     }
 
     public function actionPeriodCalculate() {
         $period = Period::calculate();
-        echo 'Active Users: '. $period->active_users ."\n";
-        echo 'Movements   : '. $period->movements ."\n";
-        
+        echo 'Active Users: ' . $period->active_users . "\n";
+        echo 'Movements   : ' . $period->movements . "\n";
     }
 
     public function actionNotificationsInstantCheck($date = null) {

@@ -1,23 +1,19 @@
 <?php
 
 /**
- * This is the model class for table "{{market_joined}}".
+ * This is the model class for table "{{entity}}".
  *
- * The followings are the available columns in table '{{market_joined}}':
- * @property string $ad_id
- * @property string $entity_id
- * @property string $comment
- * @property integer $show_mail
- * @property string $status
- * @property string $added
- * @property string $updated
+ * The followings are the available columns in table '{{entity}}':
+ * @property string $id
+ * @property string $class
+ * @property integer $object_id
  */
-class MarketJoinedBase extends CActiveRecord
+class EntityBase extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return MarketJoinedBase the static model class
+	 * @return EntityBase the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -29,7 +25,7 @@ class MarketJoinedBase extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '{{market_joined}}';
+		return '{{entity}}';
 	}
 
 	/**
@@ -40,15 +36,12 @@ class MarketJoinedBase extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ad_id, entity_id', 'required'),
-			array('show_mail', 'numerical', 'integerOnly'=>true),
-			array('ad_id', 'length', 'max'=>20),
-			array('entity_id', 'length', 'max'=>11),
-			array('status', 'length', 'max'=>10),
-			array('comment, added, updated', 'safe'),
+			array('class, object_id', 'required'),
+			array('object_id', 'numerical', 'integerOnly'=>true),
+			array('class', 'length', 'max'=>127),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('ad_id, entity_id, comment, show_mail, status, added, updated', 'safe', 'on'=>'search'),
+			array('id, class, object_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,13 +62,9 @@ class MarketJoinedBase extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ad_id' => 'Ad',
-			'entity_id' => 'Entity',
-			'comment' => 'Comment',
-			'show_mail' => 'Show Mail',
-			'status' => 'Status',
-			'added' => 'Added',
-			'updated' => 'Updated',
+			'id' => 'ID',
+			'class' => 'Class',
+			'object_id' => 'Object',
 		);
 	}
 
@@ -90,13 +79,9 @@ class MarketJoinedBase extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ad_id',$this->ad_id,true);
-		$criteria->compare('entity_id',$this->entity_id,true);
-		$criteria->compare('comment',$this->comment,true);
-		$criteria->compare('show_mail',$this->show_mail);
-		$criteria->compare('status',$this->status,true);
-		$criteria->compare('added',$this->added,true);
-		$criteria->compare('updated',$this->updated,true);
+		$criteria->compare('id',$this->id,true);
+		$criteria->compare('class',$this->class,true);
+		$criteria->compare('object_id',$this->object_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
