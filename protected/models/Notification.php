@@ -67,7 +67,7 @@ class Notification extends NotificationBase
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'users' => array(self::MANY_MANY, 'User', '{{notification_configuration}}(notification_id, user_id)'),
+			'entities' => array(self::MANY_MANY, 'Entity', '{{notification_configuration}}(notification_id, entity_id)'),
 		);
 	}
 
@@ -118,7 +118,7 @@ class Notification extends NotificationBase
       case 'MarketAd':
         return 'ad-'.$object->id;
       case 'MarketJoined':
-        return 'jo-'.$object->ad_id.'-'.$object->user_id;
+        return 'jo-'.$object->ad_id.'-'.$object->entity_id;
     }
   }
   public static function getObject($SID)
@@ -136,21 +136,21 @@ class Notification extends NotificationBase
       case 'ad':
         return MarketAd::model()->findByPk($data[1]);
       case 'jo':
-        return MarketJoined::model()->findByPk(array('ad_id' => $data[1], 'user_id'=>$data[2]));
+        return MarketJoined::model()->findByPk(array('ad_id' => $data[1], 'entity_id'=>$data[2]));
     }
   }
   
-  public static function addNotification($notification_id, $user_id, $SID, $data)
+  public static function addNotification($notification_id, $entity_id, $SID, $data)
   {
-    $notif_user = NotificationUser::model()->findByPk(array('notification_id' => $notification_id, 'user_id' => $user_id, 'sid' => $SID));
-    if($notif_user === null)
+    $notif_mess = NotificationMessage::model()->findByPk(array('notification_id' => $notification_id, 'entity_id' => $entity_id, 'sid' => $SID));
+    if($notif_mess === null)
     {
-      $notif_user = new NotificationUser;
-      $notif_user->notification_id = $notification_id;
-      $notif_user->user_id =$user_id;
-      $notif_user->sid = $SID;
+      $notif_mess = new NotificationMessage;
+      $notif_mess->notification_id = $notification_id;
+      $notif_mess->entity_id =$entity_id;
+      $notif_mess->sid = $SID;
     }
-    $pre_data = ($notif_user->data!=null?json_decode($notif_user->data,true):array());
+    $pre_data = ($notif_mess->data!=null?json_decode($notif_mess->data,true):array());
     reset($data);
     if(is_numeric(key($data)))
     {
@@ -160,57 +160,58 @@ class Notification extends NotificationBase
     {
       array_unshift($pre_data, $data);
     }
-    $notif_user->data = json_encode($pre_data);
-    $notif_user->save();
+    $notif_mess->data = json_encode($pre_data);
+    $notif_mess->save();
   }
   
-  public static function removeNotification($notification_id, $user_id, $SID, $data=null)
+  public static function removeNotification($notification_id, $entity_id, $SID, $data=null)
   {
-    $notif_user = NotificationUser::model()->findByPk(array('notification_id' => $notification_id, 'user_id' => $user_id, 'sid' => $SID));
-    if($notif_user === null)
+    $notif_mess = NotificationMessage::model()->findByPk(array('notification_id' => $notification_id, 'entity_id' => $entity_id, 'sid' => $SID));
+    if($notif_mess === null)
       return true;
     
     if ($data !== null)
     {
-      $pre_data = ($notif_user->data!=null?json_decode($notif_user->data):array());
+      $pre_data = ($notif_mess->data!=null?json_decode($notif_mess->data):array());
       
       foreach ($data as $key => $value)
       {
         unset($pre_data[$key]);
       }
-      $notif_user->data = json_encode($pre_data);
-      return $notif_user->save();
+      $notif_mess->data = json_encode($pre_data);
+      return $notif_mess->save();
     }
     
-    return $notif_user->delete();
+    return $notif_mess->delete();
   }
   
-  public static function shown($user_id, $SID)
+  public static function shown($entity_id, $SID)
   {
-    $notifs = NotificationUser::model()->findAllByAttributes(array('user_id' => $user_id, 'sid' => $SID));
+    $notifs = NotificationMessage::model()->findAllByAttributes(array('entity_id' => $entity_id, 'sid' => $SID));
     foreach ($notifs as $notif)
     {
       $notif->saveAttributes(array('shown'=>date('YmdHis')));
     }
   }
+  
   public static function notify()
   {
     
-    $notifs = NotificationUser::model()->findAll(
+    $notifs = NotificationMessage::model()->findAll(
             array('condition'=> 't.`sent` < t.`updated` AND t.`read` < t.`updated` AND t.`shown` < t.`updated`',
                   'with' => array('notification' => array('together' => true),
-                                  'user' => array('together' => true),
+                                  'entity' => array('together' => true),
 //                                  'configuration' => array('together' => true),
                       ),
                  ));
     
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-    $headers .= "From: noreply@instauremoslademocracia.net\r\n";
+    $headers .= "From: noreply@monedademos.es\r\n";
     
     foreach ($notifs as $notif)
     {
-      $configuration = NotificationConfiguration::model()->find("notification_id=$notif->notification_id AND (user_id=$notif->user_id OR user_id=1) ORDER BY user_id DESC");
+      $configuration = NotificationConfiguration::model()->find("notification_id=$notif->notification_id AND (entity_id=$notif->entity_id OR entity_id=1) ORDER BY entity_id DESC");
 
       $udate =  strtotime($notif->sent); //date_timestamp_get(DateTime::createFromFormat('Y-m-d H:i:s',$notif->sent));
       
@@ -218,8 +219,8 @@ class Notification extends NotificationBase
             || ($configuration->mailmode == NotificationConfiguration::MAILMODE_DAILY &&
                 ($udate + 86400) < time() ))
       {
-        Yii::app()->setLanguage($notif->user->culture);
-        if(mail($notif->user->email,$notif->subject(),
+        Yii::app()->setLanguage($notif->entity->getCulture());
+        if(mail($notif->entity->getEmail(),$notif->subject(),
                    CController::renderInternal(Yii::getPathOfAlias('application.views').($notif->notification->view!=''?$notif->notification->view:'/notification/_mail').'.php', array('data'=>$notif), true),$headers))
         {
           $notif->sent = date('YmdHis');

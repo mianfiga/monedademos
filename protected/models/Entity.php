@@ -8,83 +8,104 @@
  * @property string $class
  * @property integer $object_id
  */
-class Entity extends EntityBase
-{
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return EntityBase the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+class Entity extends EntityBase {
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return '{{entity}}';
-	}
+    protected $_object;
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('class, object_id', 'required'),
-			array('object_id', 'numerical', 'integerOnly'=>true),
-			array('class', 'length', 'max'=>127),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, class, object_id', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return EntityBase the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return '{{entity}}';
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'class' => 'Class',
-			'object_id' => 'Object',
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('class, object_id', 'required'),
+            array('object_id', 'numerical', 'integerOnly' => true),
+            array('class', 'length', 'max' => 127),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, class, object_id', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'marketAdCreator' => array(self::HAS_MANY, 'MarketAd', 'created_by'),
+            'marketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_joined}}(entity_id, ad_id)'),
+            'marketJoined' => array(self::HAS_MANY, 'MarketJoined', 'entity_id'),
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => 'ID',
+            'class' => 'Class',
+            'object_id' => 'Object',
+        );
+    }
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('class',$this->class,true);
-		$criteria->compare('object_id',$this->object_id);
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+        $criteria = new CDbCriteria;
+
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('class', $this->class, true);
+        $criteria->compare('object_id', $this->object_id);
+
+        return new CActiveDataProvider($this, array(
+                    'criteria' => $criteria,
+                ));
+    }
+
+    public function getObject() {
+        if ($this->_object == null) {
+            $classname = $this->class;
+            return $this->_object = $classname::model()->findByPk($this->object_id);
+        }
+
+        return $this->_object;
+    }
+
+    public function getName() {
+        return $this->getObject()->name;
+    }
+
+    public function getEmail() {
+        return $this->getObject()->email;
+    }
+
+    public function getCulture() {
+        return $this->getObject()->culture;
+    }
+
 }

@@ -109,7 +109,7 @@ class MarketJoined extends MarketJoinedBase
 			{
         $this->_isNew = true;
 				$this->added = date('YmdHis');
-				$this->user_id = Yii::app()->user->getId();
+				$this->entity_id = Yii::app()->user->getId();
 				$this->status = 'pending';
 			}
 			$this->updated = date('YmdHis');
@@ -140,8 +140,8 @@ class MarketJoined extends MarketJoinedBase
     
     if($this->_isNew)
     {
-      $notif_data = array($this->user_id => array('{user_id}' => $this->user_id,
-                                                  '{user_name}' => $this->user->name,
+      $notif_data = array($this->entity_id => array('{entity_id}' => $this->entity_id,
+                                                  '{user_name}' => $this->entity->getName(),
                                                   '{added}' => date('YmdHis')));
       
       Notification::addNotification(Notification::MARKET_JOINED, $this->ad->created_by, Notification::getSID($this->ad), $notif_data);
@@ -152,7 +152,7 @@ class MarketJoined extends MarketJoinedBase
       $notif_data = array('{comment}' => $this->form_comment,
                                 '{added}' => date('YmdHis'));
       if($this->ad->created_by == Yii::app()->user->getId())
-        Notification::addNotification(Notification::MARKET_CREATOR_COMM, $this->user_id, Notification::getSID($this), $notif_data);
+        Notification::addNotification(Notification::MARKET_CREATOR_COMM, $this->entity_id, Notification::getSID($this), $notif_data);
       else
         Notification::addNotification(Notification::MARKET_JOINED_COMM, $this->ad->created_by, Notification::getSID($this), $notif_data);
     }

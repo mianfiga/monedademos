@@ -30,12 +30,6 @@ class NotificationMessage extends NotificationMessageBase {
         return parent::model($className);
     }
 
-    /**
-     * @return string the associated database table name
-     */
-    public function tableName() {
-        return '{{notification_user}}';
-    }
 
     /**
      * @return array validation rules for model attributes.
@@ -43,15 +37,16 @@ class NotificationMessage extends NotificationMessageBase {
     public function rules() {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
-        return array(
-            array('notification_id, user_id, sid', 'required'),
-            array('notification_id, user_id', 'length', 'max' => 10),
-            array('sid', 'length', 'max' => 127),
-            array('data, added, sent, read, updated', 'safe'),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
-            array('notification_id, user_id, sid, data, added, sent, read, updated', 'safe', 'on' => 'search'),
-        );
+		return array(
+			array('entity_id, notification_id', 'required'),
+			array('entity_id', 'length', 'max'=>11),
+			array('notification_id', 'length', 'max'=>10),
+			array('sid', 'length', 'max'=>127),
+			array('data, added, sent, read, updated, shown', 'safe'),
+			// The following rule is used by search().
+			// Please remove those attributes that should not be searched.
+			array('entity_id, notification_id, sid, data, added, sent, read, updated, shown', 'safe', 'on'=>'search'),
+		);
     }
 
     /**
@@ -149,7 +144,7 @@ class NotificationMessage extends NotificationMessageBase {
             case Notification::MARKET_JOINED:
                 return Yii::app()->createAbsoluteUrl('market/Panel', array('id' => $object->id));
             case Notification::MARKET_JOINED_COMM:
-                return Yii::app()->createAbsoluteUrl('market/PanelUser', array('ad_id' => $object->ad_id, 'user_id' => $object->user_id));
+                return Yii::app()->createAbsoluteUrl('market/PanelView', array('ad_id' => $object->ad_id, 'entity_id' => $object->entity_id));
             case Notification::MARKET_AD_EXPIRATION:
                 return Yii::app()->createAbsoluteUrl('market/update', array('id' => $object->id, '#' => 'expiration'));
             case Notification::MARKET_AD_EXPIRED:
@@ -196,9 +191,9 @@ class NotificationMessage extends NotificationMessageBase {
             case Notification::MARKET_JOINED:
                 return array('{ad_title}' => $object->title);
             case Notification::MARKET_JOINED_COMM:
-                return array('{ad_title}' => $object->ad->title, '{user_name}' => $object->user->name);
+                return array('{ad_title}' => $object->ad->title, '{user_name}' => $object->entity->getName());
             case Notification::MARKET_CREATOR_COMM:
-                return array('{ad_title}' => $object->ad->title, '{user_name}' => $object->user->name);
+                return array('{ad_title}' => $object->ad->title, '{user_name}' => $object->entity->getName());
             default:
                 return array();
         }

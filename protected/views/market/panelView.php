@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1><?php echo Yii::t('app','View & Update {name}\'s participation in "{title}"', array('{name}' => $user->name,'{title}' => $ad->title)) ?></h1>
+<h1><?php echo Yii::t('app','View & Update {name}\'s participation in "{title}"', array('{name}' => $entity->name,'{title}' => $ad->title)) ?></h1>
 
 <?php echo $this->renderPartial('_panelForm', array('model' => $joined)); ?>

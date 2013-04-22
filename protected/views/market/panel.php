@@ -59,7 +59,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 									),
 								'update' => array(
 										'label'=>'view & update',     //Text label of the button.
-										'url'=>'Yii::app()->createUrl("market/panelUser", array("ad_id"=>$data->marketJoined[0]->ad_id, "user_id"=>$data->id))',
+										'url'=>'Yii::app()->createUrl("market/panelView", array("ad_id"=>$data->marketJoined[0]->ad_id, "entity_id"=>$data->id))',
 										'options'=>array('title'=>'View & Update'), //HTML options for the button tag.
 
 		        			),

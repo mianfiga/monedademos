@@ -122,16 +122,14 @@ class NotificationController extends Controller
 	 */
 	public function actionIndex()
 	{
-    $user_id=Yii::app()->user->getId();
-		$dataProvider=new CActiveDataProvider('NotificationUser',array(
+    $entity_id=Yii::app()->user->getId();
+		$dataProvider=new CActiveDataProvider('NotificationMessage',array(
 				'criteria' => array(
-						'condition' => 'user_id=\''.$user_id.'\'',
+						'condition' => 'entity_id=\''.$entity_id.'\'',
 						'order' => 'updated DESC',
 						'with'=> array(
 								'notification'=> array( 
 										'together' => true,
-//										'joinType'=>'LEFT outer JOIN',
-//										($user==2?'condition':'on')=>'joined.user_id='. $user_id,
 									)
 							),
 					),

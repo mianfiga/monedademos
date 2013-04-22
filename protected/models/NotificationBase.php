@@ -11,8 +11,8 @@
  * @property string $view
  *
  * The followings are the available model relations:
- * @property User[] $rbuUsers
- * @property NotificationUser[] $notificationUsers
+ * @property Entity[] $rbuEntities
+ * @property NotificationMessage[] $notificationMessages
  */
 class NotificationBase extends CActiveRecord
 {
@@ -58,8 +58,8 @@ class NotificationBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'rbuUsers' => array(self::MANY_MANY, 'User', '{{notification_configuration}}(notification_id, user_id)'),
-			'notificationUsers' => array(self::HAS_MANY, 'NotificationUser', 'notification_id'),
+			'rbuEntities' => array(self::MANY_MANY, 'Entity', '{{notification_configuration}}(notification_id, entity_id)'),
+			'notificationMessages' => array(self::HAS_MANY, 'NotificationMessage', 'notification_id'),
 		);
 	}
 

@@ -31,7 +31,7 @@ class MarketController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'join', 'panel', 'panelUser', 'list', 'delete', 'expire'),
+                'actions' => array('create', 'update', 'join', 'panel', 'panelView', 'list', 'delete', 'expire'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -49,9 +49,9 @@ class MarketController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        $user_id = Yii::app()->user->getId();
-        $model = MarketAd::model()->with(array('users' => array('on' => ($user_id ? 'users.id=' . $user_id : null)),
-                    'joined' => array('on' => ($user_id ? 'joined.user_id=' . $user_id : null))
+        $entity_id = Yii::app()->user->getId();
+        $model = MarketAd::model()->with(array('entities' => array('on' => ($entity_id ? 'entities.id=' . $entity_id : null)),
+                    'joined' => array('on' => ($entity_id ? 'joined.entity_id=' . $entity_id : null))
                 ))->findByPk($id);
 
         $this->render('view', array(
@@ -67,15 +67,6 @@ class MarketController extends Controller {
         $model = $this->loadModel($id); //MarketAd::model()->with('users')->findByPk($id);
         if ($model->created_by == Yii::app()->user->getId()) {
             $criteria = new CDbCriteria;
-            /* 			$criteria->with=array(
-              'users',
-              'joined'
-              );
-
-              $dataProvider=new CActiveDataProvider('MarketAd', array(
-              'criteria'=>$criteria,
-              ));
-             */
 
             $criteria->with = array(
                 'marketAds' => array(
@@ -90,7 +81,7 @@ class MarketController extends Controller {
 
             $criteria->compare('marketAds.id', $id);
 
-            $dataProvider = new CActiveDataProvider('User', array(
+            $dataProvider = new CActiveDataProvider('Entity', array(
                         'criteria' => $criteria,
                     ));
 
@@ -105,11 +96,11 @@ class MarketController extends Controller {
         }
     }
 
-    public function actionPanelUser($ad_id, $user_id) {
+    public function actionPanelView($ad_id, $entity_id) {
         $ad = $this->loadModel($ad_id);
         if ($ad->created_by == Yii::app()->user->getId()) {
-            $user = User::model()->findByPk($user_id);
-            $joined = MarketJoined::model()->with('user')->findByPk(array('ad_id' => $ad_id, 'user_id' => $user_id));
+            $entity = Entity::model()->findByPk($entity_id);
+            $joined = MarketJoined::model()->with('entity')->findByPk(array('ad_id' => $ad_id, 'entity_id' => $entity_id));
             $joined->setScenario('panel');
 
             if (isset($_POST['MarketJoined'])) {
@@ -138,8 +129,8 @@ class MarketController extends Controller {
             }
 
             Notification::shown($ad->created_by, Notification::getSID($joined));
-            $this->render('panelUser', array(
-                'user' => $user,
+            $this->render('panelView', array(
+                'entity' => $entity,
                 'joined' => $joined,
                 'ad' => $ad,
                     )
@@ -270,8 +261,8 @@ class MarketController extends Controller {
      */
     public function actionJoin($id) {
         $ad = $this->loadModel($id);
-        $user_id = Yii::app()->user->getId();
-        $model = MarketJoined::model()->findByPk(array('ad_id' => $id, 'user_id' => $user_id));
+        $entity_id = Yii::app()->user->getId();
+        $model = MarketJoined::model()->findByPk(array('ad_id' => $id, 'entity_id' => $entity_id));
 
         if ($model == null) {
             $model = new MarketJoined;
@@ -298,95 +289,64 @@ class MarketController extends Controller {
             if ($model->validate()) {
                 // form inputs are valid, do something here
                 if ($model->save()) {
-                    /*          if($already_joined == false)
-                      {
-                      $user = User::model()->findByPk($user_id);
-                      $headers  = 'MIME-Version: 1.0' . "\r\n";
-                      $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                      $headers .="From: noreply@instauremoslademocracia.net\r\n";
-                      mail($ad->createdBy->email,Yii::t('market','[Joined to DEMOS Market]').' '.$ad->title,Yii::t('market','{name} has joined to {ad_title}.',array('{name}'=>$user->name, '{ad_title}'=>$ad->title)),$headers);
-
-                      }
-
-                      if($model->form_comment!= '')
-                      {
-                      $headers="From: noreply@instauremoslademocracia.net\r\n";
-
-                      $headers  = 'MIME-Version: 1.0' . "\r\n";
-                      $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                      $headers .="From: noreply@instauremoslademocracia.net\r\n";
-                      //if (mail($ad->createdBy->email,Yii::t('market','[Comment from DEMOS Market] '.$ad->title,$model->form_comment,$headers))
-                      if (mail($ad->createdBy->email,Yii::t('market','[Comment from DEMOS Market]').' '.$ad->title,
-                      $this->renderPartial('_joinMailPanel',
-                      array('title' => $ad->title,
-                      'message' => $model->form_comment,
-                      'ad_id' => $id,
-                      'user_id' => $user_id,
-                      ),
-                      true),$headers))
-                      Yii::app()->user->setFlash('success', Yii::t('market','Comment sent by e-mail'));
-                      else
-                      Yii::app()->user->setFlash('error', Yii::t('market','Comment not sent by e-mail'));
-                      } */
-
+                    Yii::app()->user->setFlash('success', Yii::t('market', 'You have successfully joined'));
                     $this->redirect(array('view', 'id' => $ad->id));
                 }
             }
         }
-        Notification::shown($user_id, Notification::getSID($model));
+        Notification::shown($entity_id, Notification::getSID($model));
         $this->render('join', array('model' => $model, 'ad' => $ad));
     }
 
     /**
      * Lists all models.
      */
-    public function actionList($user = null) {
-        $user_id = Yii::app()->user->getId();
-        //Yii::app()->user->setFlash('notice',Yii::t('dev','Market is under special testing period things may not work properly'));	
-        $dataProvider = new CActiveDataProvider('MarketAd', array(
-                    'criteria' => array(
-                        'condition' => 'visible=1' . ($user == 1 ? ' AND created_by=\'' . $user_id . '\'' : ''),
-//						'order' => 't.updated DESC, id DESC',
-                        'with' => ($user_id == null ? array() : array(
-                            'joined' => array(
-                                'together' => true,
-                                'joinType' => 'LEFT outer JOIN',
-                                ($user == 2 ? 'condition' : 'on') => 'joined.user_id=' . $user_id,
-                            )
-                                )),
-                    ),
-                    'sort' => array(
-                        'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
-                    ),
-                ));
+    public function actionList($mode = null) {
+        $this->actionIndex($mode);
+        /*        $user_id = Yii::app()->user->getId();
+          //Yii::app()->user->setFlash('notice',Yii::t('dev','Market is under special testing period things may not work properly'));
+          $dataProvider = new CActiveDataProvider('MarketAd', array(
+          'criteria' => array(
+          'condition' => 'visible=1' . ($user == 1 ? ' AND created_by=\'' . $user_id . '\'' : ''),
+          //						'order' => 't.updated DESC, id DESC',
+          'with' => ($user_id == null ? array() : array(
+          'joined' => array(
+          'together' => true,
+          'joinType' => 'LEFT outer JOIN',
+          ($user == 2 ? 'condition' : 'on') => 'joined.user_id=' . $user_id,
+          )
+          )),
+          ),
+          'sort' => array(
+          'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
+          ),
+          ));
 
-        $model = new MarketAd('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['MarketAd']))
-            $model->attributes = $_GET['MarketAd'];
+          $model = new MarketAd('search');
+          $model->unsetAttributes();  // clear any default values
+          if (isset($_GET['MarketAd']))
+          $model->attributes = $_GET['MarketAd'];
 
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-        ));
+          $this->render('index', array(
+          'dataProvider' => $dataProvider,
+          'model' => $model,
+          )); */
     }
 
     /**
      * Lists all models.
      */
-    public function actionIndex() {
-        $user_id = Yii::app()->user->getId();
-        //Yii::app()->user->setFlash('notice',Yii::t('dev','Market is under special testing period things may not work properly'));	
+    public function actionIndex($mode = null) {
+        $entity_id = Yii::app()->user->getId();
 
         $dataProvider = new CActiveDataProvider('MarketAd', array(
                     'criteria' => array(
-                        'condition' => 'visible=1',
-//						'order' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
-                        'with' => ($user_id == null ? array() : array(
+                        'condition' => 'visible=1' . ($mode == 1 ? ' AND created_by=\'' . $entity_id . '\'' : ''),
+                        'with' => ($entity_id == null ? array() : array(
                             'joined' => array(
                                 'together' => true,
                                 'joinType' => 'LEFT outer JOIN',
-                                'on' => 'joined.user_id=' . $user_id,
+                                ($mode == 2 ? 'condition' : 'on') => 'joined.entity_id=' . $entity_id,
                             )
                                 )),
                     ),

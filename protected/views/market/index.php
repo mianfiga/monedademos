@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 
 $this->menu=array(
 	array('label'=>Yii::t('market','List Advertisements'), 'url'=>array('index')),
-	array('label'=>Yii::t('market','List my Ads'), 'url'=>array('list','user'=>1)),
-	array('label'=>Yii::t('market','List Ads I joined'), 'url'=>array('list','user'=>2)),
+	array('label'=>Yii::t('market','List my Ads'), 'url'=>array('list','mode'=>1)),
+	array('label'=>Yii::t('market','List Ads I joined'), 'url'=>array('list','mode'=>2)),
 	array('label'=>Yii::t('market','Create Advertisement'), 'url'=>array('create')),
 );
 
