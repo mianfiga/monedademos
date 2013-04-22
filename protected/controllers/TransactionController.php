@@ -188,7 +188,7 @@ class TransactionController extends Controller {
     /**
      * Lists all models.
      */
-    public function actionindex() {
+    public function actionIndex() {
 
         $user_id = Yii::app()->user->getId();
 
@@ -222,7 +222,7 @@ class TransactionController extends Controller {
         }
 
         if ($account_number == null) {
-            $accounts = Authorization::getUserAccounts($user_id, 'class=' . Authorization::CLASS_HOLDER);
+            $accounts = Authorization::getByUser($user_id, 'class=' . Authorization::CLASS_HOLDER);
             foreach ($accounts as $account) {
                 $auth = $account;
                 $account_number = $account->getAccountNumber();
@@ -267,6 +267,7 @@ class TransactionController extends Controller {
             'accountList' => Authorization::getUserAccountList($user_id),
             'accountNumber' => $account_number,
             'account' => $account,
+            'auth' => $auth,
         ));
     }
 
@@ -288,22 +289,35 @@ class TransactionController extends Controller {
             $account_number = Yii::app()->session['accountNumber'];
         }
 
+        $auth = null;        
         if ($account_number != null) {
             $acc = Authorization::splitAccountNumber($account_number);
             if ($acc == null)
                 $account_number = null;
             elseif ($acc['user_id'] != $user_id)
                 $account_number = null;
-            elseif (!Authorization::isValidAccountNumber($account_number))
+            elseif (!$auth = Authorization::isValidAccountNumber($account_number))
                 $account_number = null;
         }
 
         if ($account_number == null) {
-            $accounts = Authorization::getUserAccounts($user_id /* ,'class='.Authorization::CLASS_HOLDER */);
+            $accounts = Authorization::getByUser($user_id /* ,'class='.Authorization::CLASS_HOLDER */);
             foreach ($accounts as $account) {
+                $auth = $account;
                 $account_number = $account->getAccountNumber();
+
+                if ($user->salt == $account->salt && $user->password == $account->password)
+                    Yii::app()->user->setFlash('error', Yii::t('app', 'For security reasons you need to set the Pin/password for the account {account}. You can do it in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>', array('{account}' => $account_number,
+                                '{edit_account_link}' => Yii::app()->createUrl('authorization/update', array('id' => $account_number)),
+                                    )
+                            ));
+                if ($auth->account->class == Account::CLASS_USER) {
+                    break;
+                }
             }
         }
+        
+        
 
         Yii::app()->session['accountNumber'] = $account_number;
 //		$form_model->account_number = $account_number;
@@ -333,6 +347,7 @@ class TransactionController extends Controller {
             'accountList' => Authorization::getUserAccountList($user_id),
             'accountNumber' => $account_number,
             'account' => $account,
+            'auth' => $auth,
         ));
     }
 

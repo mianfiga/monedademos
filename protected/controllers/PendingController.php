@@ -175,7 +175,7 @@ class PendingController extends Controller
 
 		if($account_number == null)
 		{
-			$accounts = Authorization::getUserAccounts($user_id /*,'class='.Authorization::CLASS_HOLDER*/);
+			$accounts = Authorization::getByUser($user_id /*,'class='.Authorization::CLASS_HOLDER*/);
 			foreach($accounts as $account)
 			{
 				$account_number = $account->getAccountNumber();

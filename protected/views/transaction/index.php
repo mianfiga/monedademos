@@ -23,7 +23,8 @@ $cs->registerScript('foundation_tooltip', '$(document).foundation(\'tooltips\');
 ?>
 <div class="row">
     <div class="small-12 large-6 columns">
-        <h1 class="no-space"><?php echo Yii::t('app', 'Account') ?>: <span class="subheader has-tip" data-tooltip title="<?php echo Yii::t('app','It\'s important that you copy this number and take it with you, you\'ll need it to pay')?>"><?php echo $accountNumber ?></span></h1>
+        <h1 class="no-space"><?php echo Yii::t('app', 'Account') ?>: <span class="subheader has-tip" data-tooltip title="<?php echo Yii::t('app', 'It\'s important that you copy this number and take it with you, you\'ll need it to pay') ?>"><?php echo $accountNumber ?></span></h1>
+        <?php echo $auth->title; ?>
     </div>
     <div class="small-12 large-2 columns">
         <br/><?php echo CHtml::link(Yii::t('app', 'Edit account'), array('authorization/update', 'id' => $accountNumber), array('class' => 'button secondary')); ?>
@@ -64,7 +65,7 @@ echo $this->renderPartial('_buttons', array('showingTransactions' => isset($mode
   )); */
 ?>
 <?php
-if (isset($model))
+if (isset($model)) {
     $this->widget('zii.widgets.grid.CGridView', array(
         'id' => 'transaction-grid',
         'dataProvider' => $model->search(),
@@ -90,6 +91,12 @@ if (isset($model))
             )
         ),
     ));
+} else { ?>
+    <hr />
+<?php
+    echo $this->renderPartial('_authorization', array('account' => $account,
+        'accountNumber' => $accountNumber));
+}
 ?>
 
 

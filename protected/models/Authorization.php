@@ -108,20 +108,30 @@ class Authorization extends AuthorizationBase
     return $user_id.'.'.$account_id.'.'.$code;
   }
 
-	public function getAccountNumber()
+	public function getAccountNumber($show_code = true)
 	{
 		//UserId.AccountId.Code
-		return self::formAccountNumber($this->user_id, $this->account_id, $this->code);
+        if ($show_code){
+            return self::formAccountNumber($this->user_id, $this->account_id, $this->code);    
+        }
+		else{
+            return self::formAccountNumber($this->user_id, $this->account_id);    
+        }
 	}
 
-	public static function getUserAccounts($user_id, $condition='')
+    public static function getByUser($user_id, $condition='')
 	{
 		return Authorization::model()->findAllByAttributes(array('user_id' => $user_id), $condition);//falta filtrar si está eliminado,bloqueado,etc.
+	}
+    
+    public static function getByAccount($account_id, $condition='')
+	{
+		return Authorization::model()->findAllByAttributes(array('account_id' => $account_id), $condition);//falta filtrar si está eliminado,bloqueado,etc.
 	}
 
 	public static function getUserAccountList($user_id, $condition ='')
 	{
-		$auths = self::getUserAccounts($user_id, $condition);
+		$auths = self::getByUser($user_id, $condition);
 
 		$return=array();
 		foreach($auths as $auth)
