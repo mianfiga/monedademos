@@ -86,6 +86,12 @@ class Entity extends EntityBase {
                     'criteria' => $criteria,
                 ));
     }
+    
+    public static function get($object){
+        return self::model()->findByAttributes(array(
+            'class' => get_class($object),
+            'object_id' => $object->id));
+    }
 
     public function getObject() {
         if ($this->_object == null) {

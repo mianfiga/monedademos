@@ -20,7 +20,7 @@ class UserIdentity extends CUserIdentity
             $this->errorCode=self::ERROR_PASSWORD_INVALID;
         else
         {
-            $this->_id=$user->id;
+            $this->_id= Entity::get($user)->id;
             $this->username=$user->username;
             $this->errorCode=self::ERROR_NONE;
             $user->saveAttributes(array('last_login'=> date('YmdHis')));
