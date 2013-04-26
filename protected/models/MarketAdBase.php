@@ -22,7 +22,7 @@
  *
  * The followings are the available model relations:
  * @property Entity $createdBy
- * @property User[] $rbuUsers
+ * @property Entity[] $rbuEntities
  */
 class MarketAdBase extends CActiveRecord
 {
@@ -78,7 +78,7 @@ class MarketAdBase extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'createdBy' => array(self::BELONGS_TO, 'Entity', 'created_by'),
-			'rbuUsers' => array(self::MANY_MANY, 'User', '{{market_joined}}(ad_id, user_id)'),
+			'rbuEntities' => array(self::MANY_MANY, 'Entity', '{{market_joined}}(ad_id, entity_id)'),
 		);
 	}
 

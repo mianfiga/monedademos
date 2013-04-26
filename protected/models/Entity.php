@@ -92,7 +92,7 @@ class Entity extends EntityBase {
             'class' => get_class($object),
             'object_id' => $object->id));
     }
-
+    
     public function getObject() {
         if ($this->_object == null) {
             $classname = $this->class;
@@ -104,6 +104,10 @@ class Entity extends EntityBase {
 
     public function getName() {
         return $this->getObject()->name;
+    }
+    
+    public function getSurname() {
+        return $this->getObject()->surname;
     }
 
     public function getEmail() {

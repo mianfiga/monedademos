@@ -83,7 +83,7 @@ class ContributionController extends Controller
 			if($model->validate())
 			{
 				$recipent = $this->loadModel($id);
-				$headers="From: contacto@instauremoslademocracia.net\r\nReply-To: {$logged->email}";
+				$headers="From: contacto@monedademos.es\r\nReply-To: {$logged->email}";
 				if (mail($recipent->email,'[Contact from DEMOS] '.$model->subject,$model->body,$headers))
 					Yii::app()->user->setFlash('contact',Yii::t('app','Thank you for contacting'));
 				else

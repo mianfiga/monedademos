@@ -232,6 +232,11 @@ class User extends UserBase {
 
     protected function afterSave() {
         if ($this->_isNew) {
+            $entity = new Entity;
+            $entity->class = get_class($this);
+            $entity->object_id = $this->id;
+            $entity->save();
+            
             $date = date('YmdHis');
             $this->_isNew = false;
             $acc = new Account;
@@ -252,11 +257,6 @@ class User extends UserBase {
             $auth->save();
 
             $acc->addSalary();
-            
-            $entity = new Entity;
-            $entity->class = get_class($this);
-            $entity->object_id = $this->id;
-            $entity->save();
 
             //Records Update
             $users = User::model()->findAll('deleted is NULL');

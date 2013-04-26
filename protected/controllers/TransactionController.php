@@ -50,11 +50,11 @@ class TransactionController extends Controller {
      */
     public function actionView($id, $charge_errors = 0, $deposit_errors = 0) {
         if ($id != null) {
-            $user_id = Yii::app()->user->getId();
+            $entity_id = Yii::app()->user->getId();
 
             $model = $this->loadModel($id);
-            if ($model->charge_user == $user_id || $model->deposit_user == $user_id) { //falta ver si la cuenta es pública
-                Notification::shown($user_id, Notification::getSID($model));
+            if ($model->charge_entity == $entity_id || $model->deposit_entity == $entity_id) { //falta ver si la cuenta es pública
+                Notification::shown($entity_id, Notification::getSID($model));
                 $this->render('view', array(
                     'model' => $model,
                     'charge_errors' => $charge_errors,
@@ -73,17 +73,17 @@ class TransactionController extends Controller {
 
     public function actionCharge() {
         $condition = 'class=' . Authorization::CLASS_HOLDER . ' OR class=' . Authorization::CLASS_AUTHORIZED;
-        $this->actionFill('charge', null, Authorization::getUserAccountList(Yii::app()->user->getId(), $condition));
+        $this->actionFill('charge', null, Authorization::getAccountList(Yii::app()->user->getId(), $condition));
     }
 
     public function actionTransfer() {
         $condition = 'class=' . Authorization::CLASS_HOLDER . ' OR class=' . Authorization::CLASS_AUTHORIZED;
-        $this->actionFill('transfer', Authorization::getUserAccountList(Yii::app()->user->getId(), $condition), null);
+        $this->actionFill('transfer', Authorization::getAccountList(Yii::app()->user->getId(), $condition), null);
     }
 
     public function actionMovement() {
         $condition = 'class=' . Authorization::CLASS_HOLDER . ' OR class=' . Authorization::CLASS_AUTHORIZED;
-        $accountlist = Authorization::getUserAccountList(Yii::app()->user->getId(), $condition);
+        $accountlist = Authorization::getAccountList(Yii::app()->user->getId(), $condition);
         $this->actionFill('movement', $accountlist, $accountlist);
     }
 
@@ -127,42 +127,6 @@ class TransactionController extends Controller {
         ));
     }
 
-    /* 	public function actionConfirm($sid)
-      {
-
-      $model = new Transaction;
-
-
-      $this->render('view',array(
-      'model'=>$this->loadModel($id),
-      ));
-      } */
-
-    /**
-     * Updates a particular model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id the ID of the model to be updated
-     */
-    /* 	public function actionUpdate($id)
-      {
-      $model=$this->loadModel($id);
-
-      // Uncomment the following line if AJAX validation is needed
-      // $this->performAjaxValidation($model);
-
-      if(isset($_POST['Transaction']))
-      {
-      $model->attributes=$_POST['Transaction'];
-      if($model->save())
-      $this->redirect(array('view','id'=>$model->id));
-      }
-
-      $this->render('update',array(
-      'model'=>$model,
-      ));
-      }
-     */
-
     /**
      * Deletes a particular model.
      * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -188,18 +152,19 @@ class TransactionController extends Controller {
     /**
      * Lists all models.
      */
-    public function actionIndex() {
+    public function actionIndex($list = false) {
 
-        $user_id = Yii::app()->user->getId();
+        $entity_id = Yii::app()->user->getId();
+        $entity = Entity::model()->findByPk($entity_id);
 
-        $user = User::model()->findByPk($user_id);
+        $user = ($entity->class == 'User' ? $entity->getObject() : null);
 
         $account_number = null;
 
         if (isset(Yii::app()->session['accountNumber'])) {
             $account_number = Yii::app()->session['accountNumber'];
         }
-        
+
         $form_model = new AccountNumberFilterForm;
 
         if (isset($_POST['AccountNumberFilterForm'])) {
@@ -215,24 +180,28 @@ class TransactionController extends Controller {
             $acc = Authorization::splitAccountNumber($account_number);
             if ($acc == null)
                 $account_number = null;
-            elseif ($acc['user_id'] != $user_id)
+            elseif ($acc['entity_id'] != $entity_id)
                 $account_number = null;
             elseif (!$auth = Authorization::isValidAccountNumber($account_number))
                 $account_number = null;
         }
 
         if ($account_number == null) {
-            $accounts = Authorization::getByUser($user_id, 'class=' . Authorization::CLASS_HOLDER);
+            $accounts = Authorization::getByEntity($entity_id, 'class=' . Authorization::CLASS_HOLDER);
             foreach ($accounts as $account) {
                 $auth = $account;
                 $account_number = $account->getAccountNumber();
+                if ($user) {
+                    if ($user->salt == $account->salt && $user->password == $account->password)
+                        Yii::app()->user->setFlash('error', Yii::t('app', 'For security reasons you need to set the Pin/password for the account {account}. You can do it in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>', array('{account}' => $account_number,
+                                    '{edit_account_link}' => Yii::app()->createUrl('authorization/update', array('id' => $account_number)),
+                                        )
+                                ));
 
-                if ($user->salt == $account->salt && $user->password == $account->password)
-                    Yii::app()->user->setFlash('error', Yii::t('app', 'For security reasons you need to set the Pin/password for the account {account}. You can do it in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>', array('{account}' => $account_number,
-                                '{edit_account_link}' => Yii::app()->createUrl('authorization/update', array('id' => $account_number)),
-                                    )
-                            ));
-                if ($auth->account->class == Account::CLASS_USER) {
+                    if ($auth->account->class == Account::CLASS_USER) {
+                        break;
+                    }
+                } else {
                     break;
                 }
             }
@@ -242,9 +211,7 @@ class TransactionController extends Controller {
 
         //$acc = Authorization::splitAccountNumber($account_number);
 
-        $account = $auth->account;//Account::model()->findByPk($acc['account_id']);
-
-
+        $account = $auth->account; //Account::model()->findByPk($acc['account_id']);
 //        $auth = Authorization::getAuthorization($account_number);
         if ($auth->wrong_pass_count >= ConfirmForm::ATTEMPTS) {
             Yii::app()->user->setFlash('error', Yii::t('app', 'The account {account} is blocked reset account by clicking in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>', array('{account}' => $account_number,
@@ -264,7 +231,7 @@ class TransactionController extends Controller {
         $this->render('index', array(
 //			'dataProvider' => null,
             'form_model' => $form_model,
-            'accountList' => Authorization::getUserAccountList($user_id),
+            'accountList' => Authorization::getAccountList($entity_id),
             'accountNumber' => $account_number,
             'account' => $account,
             'auth' => $auth,
@@ -274,8 +241,10 @@ class TransactionController extends Controller {
     public function actionList($id = null) {
 //        $this->layout='//layouts/column1';
 
-        $user_id = Yii::app()->user->getId();
+        $entity_id = Yii::app()->user->getId();
+        $entity = Entity::model()->findByPk($entity_id);
 
+        $user = ($entity->class == 'User' ? $entity->getObject() : null);
         $form_model = new AccountNumberFilterForm;
 
         $account_number = $id;
@@ -289,35 +258,40 @@ class TransactionController extends Controller {
             $account_number = Yii::app()->session['accountNumber'];
         }
 
-        $auth = null;        
+        $auth = null;
         if ($account_number != null) {
             $acc = Authorization::splitAccountNumber($account_number);
             if ($acc == null)
                 $account_number = null;
-            elseif ($acc['user_id'] != $user_id)
+            elseif ($acc['entity_id'] != $entity_id)
                 $account_number = null;
             elseif (!$auth = Authorization::isValidAccountNumber($account_number))
                 $account_number = null;
         }
 
         if ($account_number == null) {
-            $accounts = Authorization::getByUser($user_id /* ,'class='.Authorization::CLASS_HOLDER */);
+            $accounts = Authorization::getByEntity($entity_id /* ,'class='.Authorization::CLASS_HOLDER */);
             foreach ($accounts as $account) {
                 $auth = $account;
                 $account_number = $account->getAccountNumber();
 
-                if ($user->salt == $account->salt && $user->password == $account->password)
-                    Yii::app()->user->setFlash('error', Yii::t('app', 'For security reasons you need to set the Pin/password for the account {account}. You can do it in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>', array('{account}' => $account_number,
-                                '{edit_account_link}' => Yii::app()->createUrl('authorization/update', array('id' => $account_number)),
-                                    )
-                            ));
-                if ($auth->account->class == Account::CLASS_USER) {
+                if ($user) {
+                    if ($user->salt == $account->salt && $user->password == $account->password)
+                        Yii::app()->user->setFlash('error', Yii::t('app', 'For security reasons you need to set the Pin/password for the account {account}. You can do it in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>', array('{account}' => $account_number,
+                                    '{edit_account_link}' => Yii::app()->createUrl('authorization/update', array('id' => $account_number)),
+                                        )
+                                ));
+
+                    if ($auth->account->class == Account::CLASS_USER) {
+                        break;
+                    }
+                } else {
                     break;
                 }
             }
         }
-        
-        
+
+
 
         Yii::app()->session['accountNumber'] = $account_number;
 //		$form_model->account_number = $account_number;
@@ -344,7 +318,7 @@ class TransactionController extends Controller {
 //			'dataProvider' => $dataProvider,
             'model' => $model,
             'form_model' => $form_model,
-            'accountList' => Authorization::getUserAccountList($user_id),
+            'accountList' => Authorization::getAccountList($entity_id),
             'accountNumber' => $account_number,
             'account' => $account,
             'auth' => $auth,

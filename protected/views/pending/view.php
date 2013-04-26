@@ -48,17 +48,17 @@ $this->menu=array(
 						array(
   		          'label'=>Yii::t('app','Charge account (source)'),
   		          'type'=>'raw',
-  		          'value'=>CHtml::encode($model->charge_user.'.'.$model->charge_account.'.*')
+  		          'value'=>CHtml::encode($model->charge_account_number)
 							),
 						array(
   		          'label'=>Yii::t('app','Deposit account (destination)'),
   		          'type'=>'raw',
-  		          'value'=>CHtml::encode($model->deposit_user.'.'.$model->deposit_account.'.*')
+  		          'value'=>CHtml::encode($model->deposit_account_number)
 							),
 						'subject',
 					);
 
-	if(Yii::app()->user->getId() == $model->charge_user)
+	if(Yii::app()->user->getId() == $model->charge_entity)
 	{
 		array_push ($attr,array(
 					  		          'label'=>Yii::t('app','Confirm payment'),

@@ -72,7 +72,7 @@ class Authorization extends AuthorizationBase
 		// class name for the relations automatically generated below.
         return array(
             'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
-            'user' => array(self::BELONGS_TO, 'User', 'user_id'),
+            'entity' => array(self::BELONGS_TO, 'Entity', 'entity_id'),
         );
 	}
 
@@ -97,31 +97,31 @@ class Authorization extends AuthorizationBase
 		if(count($a)<3)
 			return null;
 		$return = array();
-		$return['user_id']=$a[0];
+		$return['entity_id']=$a[0];
 		$return['account_id']=$a[1];
 		$return['code']=$a[2];
 		return $return;
 	}
   
-  public static function formAccountNumber($user_id, $account_id, $code='*')
+  public static function formAccountNumber($entity_id, $account_id, $code='*')
   {
-    return $user_id.'.'.$account_id.'.'.$code;
+    return $entity_id.'.'.$account_id.'.'.$code;
   }
 
 	public function getAccountNumber($show_code = true)
 	{
-		//UserId.AccountId.Code
+		//EntityId.AccountId.Code
         if ($show_code){
-            return self::formAccountNumber($this->user_id, $this->account_id, $this->code);    
+            return self::formAccountNumber($this->entity_id, $this->account_id, $this->code);    
         }
 		else{
-            return self::formAccountNumber($this->user_id, $this->account_id);    
+            return self::formAccountNumber($this->entity_id, $this->account_id);    
         }
 	}
 
-    public static function getByUser($user_id, $condition='')
+    public static function getByEntity($entity_id, $condition='')
 	{
-		return Authorization::model()->findAllByAttributes(array('user_id' => $user_id), $condition);//falta filtrar si está eliminado,bloqueado,etc.
+		return Authorization::model()->findAllByAttributes(array('entity_id' => $entity_id), $condition);//falta filtrar si está eliminado,bloqueado,etc.
 	}
     
     public static function getByAccount($account_id, $condition='')
@@ -129,9 +129,9 @@ class Authorization extends AuthorizationBase
 		return Authorization::model()->findAllByAttributes(array('account_id' => $account_id), $condition);//falta filtrar si está eliminado,bloqueado,etc.
 	}
 
-	public static function getUserAccountList($user_id, $condition ='')
+	public static function getAccountList($entity_id, $condition ='')
 	{
-		$auths = self::getByUser($user_id, $condition);
+		$auths = self::getByEntity($entity_id, $condition);
 
 		$return=array();
 		foreach($auths as $auth)
@@ -148,7 +148,7 @@ class Authorization extends AuthorizationBase
         {
             $account_number = Authorization::splitAccountNumber($account_number);
         }
-        return Authorization::model()->FindByPk(array('user_id'=>$account_number['user_id'],'account_id'=> $account_number['account_id']));
+        return Authorization::model()->FindByPk(array('entity_id'=>$account_number['entity_id'],'account_id'=> $account_number['account_id']));
     }
 
     public static function isValidAccountNumber($account_number)
@@ -189,7 +189,7 @@ class Authorization extends AuthorizationBase
 				if ($this->user_password!=null || $this->plain_password!=null)
 				{
 					if($this->getScenario()=='update' &&
-							Yii::app()->user->getId() == $this->user_id &&
+							Yii::app()->user->getId() == $this->entity_id &&
 							User::model()->findByPk(Yii::app()->user->getId())->validatePassword($this->user_password) )
 					{
 						$this->salt = md5(self::randString(64));

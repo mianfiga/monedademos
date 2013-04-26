@@ -4,7 +4,7 @@
  * This is the model class for table "{{authorization}}".
  *
  * The followings are the available columns in table '{{authorization}}':
- * @property string $user_id
+ * @property string $entity_id
  * @property string $account_id
  * @property string $code
  * @property string $class
@@ -44,16 +44,17 @@ class AuthorizationBase extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, account_id, code, salt, password', 'required'),
+			array('entity_id, account_id, code, salt, password', 'required'),
 			array('wrong_pass_count', 'numerical', 'integerOnly'=>true),
-			array('user_id, account_id, class', 'length', 'max'=>10),
+			array('entity_id', 'length', 'max'=>11),
+			array('account_id, class', 'length', 'max'=>10),
 			array('code', 'length', 'max'=>1),
 			array('title', 'length', 'max'=>127),
 			array('salt, password', 'length', 'max'=>128),
 			array('added, blocked, deleted', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('user_id, account_id, code, class, title, salt, password, wrong_pass_count, added, blocked, deleted', 'safe', 'on'=>'search'),
+			array('entity_id, account_id, code, class, title, salt, password, wrong_pass_count, added, blocked, deleted', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,7 +75,7 @@ class AuthorizationBase extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'user_id' => 'User',
+			'entity_id' => 'Entity',
 			'account_id' => 'Account',
 			'code' => 'Code',
 			'class' => 'Class',
@@ -99,7 +100,7 @@ class AuthorizationBase extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('entity_id',$this->entity_id,true);
 		$criteria->compare('account_id',$this->account_id,true);
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('class',$this->class,true);

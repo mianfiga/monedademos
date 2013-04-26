@@ -52,9 +52,9 @@ $opmodel = Yii::app()->session['operations'][$model->sid]['model'];
     <div class="form_row buttons">
         <?php echo $form->hiddenField($model2, 'sid'); ?>
         <?php
-        $isChargeUser = Yii::app()->user->getId() == Yii::app()->session['operations'][$model->sid]['model']->charge_user;
+        $isChargeEntity = Yii::app()->user->getId() == Yii::app()->session['operations'][$model->sid]['model']->charge_entity;
         ?>
-        <?php echo CHtml::submitButton($isChargeUser ? Yii::t('app', 'Confirm Later, add to pending transaction') : Yii::t('app', 'Send to Client as pending transaction'), array('class' => 'button secondary')); ?>
+        <?php echo CHtml::submitButton($isChargeEntity ? Yii::t('app', 'Confirm Later, add to pending transaction') : Yii::t('app', 'Send to Client as pending transaction'), array('class' => 'button secondary')); ?>
     </div>
 
     <?php $this->endWidget(); ?>

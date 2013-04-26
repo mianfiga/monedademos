@@ -50,12 +50,12 @@ $this->menu=array(
 				array(
             'label'=>Yii::t('app','Charge Account (Source)'),
             'type'=>'raw',
-            'value'=>CHtml::encode($model->getChargeAccountNumber()) .'; '. $model->chargeUser->name .' '. $model->chargeUser->surname
+            'value'=>CHtml::encode($model->getChargeAccountNumber()) .'; '. $model->chargeEntity->name .' '. $model->chargeEntity->surname
 					),
 				array(
             'label'=>Yii::t('app','Deposit Account (Destination)'),
             'type'=>'raw',
-            'value'=>CHtml::encode($model->getDepositAccountNumber()) .'; '. $model->depositUser->name .' '. $model->depositUser->surname
+            'value'=>CHtml::encode($model->getDepositAccountNumber()) .'; '. $model->depositEntity->name .' '. $model->depositEntity->surname
 					),
 				'subject',
 			),
@@ -66,17 +66,7 @@ $this->menu=array(
 <?php echo CHtml::link(Yii::t('app','View movements'), array('transaction/list'),array('class' => 'button')); ?> 
 <?php echo CHtml::link(Yii::t('app','Back to Account'), array('transaction/index'),array('class' => 'button secondary')); ?>
 <br /><br />
-<h3><?php echo Yii::t('app','Client contribution')?></h3>
-<?php
-	$client = Authorization::splitAccountNumber($model->getChargeAccountNumber());
-	echo $this->renderPartial('//contribution/_view', array('data'=>User::model()->findByPk($client['user_id'])));
-?>
-
-<h3><?php echo Yii::t('app','Vendor contribution')?></h3>
-<?php
-	$vendor = Authorization::splitAccountNumber($model->getDepositAccountNumber());
-	echo $this->renderPartial('//contribution/_view', array('data'=>User::model()->findByPk($vendor['user_id'])));
-?>
+<?php $this->renderPartial('/contribution/_contributions', array('model'=> $model)); ?>
 
 
 

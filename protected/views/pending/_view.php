@@ -17,18 +17,18 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('charge_account')); ?>:</b>
-	<?php echo CHtml::encode($data->charge_user.'.'.$data->charge_account.'.*'); ?>
+	<?php echo CHtml::encode($data->charge_account_number); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('deposit_account')); ?>:</b>
-	<?php echo CHtml::encode($data->deposit_user.'.'.$data->deposit_account.'.*'); ?>
+	<?php echo CHtml::encode($data->deposit_account_number); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('subject')); ?>:</b>
 	<?php echo CHtml::encode($data->subject); ?>
 	<br />
 
-<?php if(Yii::app()->user->getId() == $data->charge_user)
+<?php if(Yii::app()->user->getId() == $data->charge_entity)
 			{?>
 
 	<b><?php echo CHtml::encode(Yii::t('app','Confirm payment')); ?>:</b>

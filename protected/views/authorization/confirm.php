@@ -29,15 +29,4 @@ $opmodel = Yii::app()->session['operations'][$model->sid]['model'];
 
 <?php echo $this->renderPartial('_confirmForm', array('model' => $model, 'model2' => $model2)); ?>
 <br/>
-<h3><?php echo Yii::t('app', 'Client contribution') ?></h3>
-<?php
-$client = Authorization::splitAccountNumber($opmodel->getChargeAccountNumber());
-echo $this->renderPartial('//contribution/_view', array('data' => User::model()->findByPk($client['user_id'])));
-?>
-
-<h3><?php echo Yii::t('app', 'Vendor contribution') ?></h3>
-<?php
-$vendor = Authorization::splitAccountNumber($opmodel->getDepositAccountNumber());
-echo $this->renderPartial('//contribution/_view', array('data' => User::model()->findByPk($vendor['user_id'])));
-?>
-
+<?php $this->renderPartial('/contribution/_contributions', array('model'=> $opmodel)); ?>

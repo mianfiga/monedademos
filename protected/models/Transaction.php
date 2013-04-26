@@ -79,8 +79,8 @@ class Transaction extends TransactionBase {
         return array(
             'chargeAccount' => array(self::BELONGS_TO, 'Account', 'charge_account'),
             'depositAccount' => array(self::BELONGS_TO, 'Account', 'deposit_account'),
-            'chargeUser' => array(self::BELONGS_TO, 'User', 'charge_user'),
-            'depositUser' => array(self::BELONGS_TO, 'User', 'deposit_user'),
+            'chargeEntity' => array(self::BELONGS_TO, 'Entity', 'charge_entity'),
+            'depositEntity' => array(self::BELONGS_TO, 'Entity', 'deposit_entity'),
         );
     }
 
@@ -90,14 +90,13 @@ class Transaction extends TransactionBase {
     public function attributeLabels() {
         return array(
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User'),
             'executed_at' => Yii::t('app', 'Date'),
             'class' => Yii::t('app', 'Class'),
             'form_amount' => Yii::t('app', 'Amount'),
             'charge_account_number' => Yii::t('app', 'Charge Account Number (Source)'),
             'deposit_account_number' => Yii::t('app', 'Deposit Account Number (Destination)'),
-            'charge_account' => Yii::t('app', 'Charge Account (Source)'),
-            'deposit_account' => Yii::t('app', 'Deposit Account (Destination)'),
+//            'charge_account' => Yii::t('app', 'Charge Account (Source)'),
+//            'deposit_account' => Yii::t('app', 'Deposit Account (Destination)'),
             'foreign_account_number' => Yii::t('app', 'Account'),
             'amount' => Yii::t('app', 'Amount'),
             'subject' => Yii::t('app', 'Subject'),
@@ -112,9 +111,9 @@ class Transaction extends TransactionBase {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
         $account_number = Yii::app()->session['accountNumber'];
-
+        $entity_id = Yii::app()->user->getId();
         if ($account_number == null) {
-            $accounts = Authorization::getByUser($user_id /* ,'class='.Authorization::CLASS_HOLDER */);
+            $accounts = Authorization::getByEntity($entity_id /* ,'class='.Authorization::CLASS_HOLDER */);
             foreach ($accounts as $account) {
                 $account_number = $account->getAccountNumber();
             }
@@ -131,8 +130,8 @@ class Transaction extends TransactionBase {
         $criteria->compare('deposit_account_number', $this->deposit_account_number, true);
 
         $criteria->order = 'id DESC'; // last_login DESC, 
-        $criteria->condition = "(charge_account='" . $acc['account_id'] . "')" . /* AND charge_user='".$acc['user_id']."')". */
-                " OR (deposit_account='" . $acc['account_id'] . "')"; /* AND deposit_user='".$acc['user_id']."')", */
+        $criteria->condition = "(charge_account='" . $acc['account_id'] . "')" . /* AND charge_entity='".$acc['entity_id']."')". */
+                " OR (deposit_account='" . $acc['account_id'] . "')"; /* AND deposit_entity='".$acc['entity_id']."')", */
 
         return new CActiveDataProvider($this, array(
                     'criteria' => $criteria,
@@ -151,8 +150,8 @@ class Transaction extends TransactionBase {
     protected function afterFind() {
         parent::afterFind();
 
-        $this->charge_account_number = Authorization::formAccountNumber($this->charge_user, $this->charge_account);
-        $this->deposit_account_number = Authorization::formAccountNumber($this->deposit_user, $this->deposit_account);
+        $this->charge_account_number = Authorization::formAccountNumber($this->charge_entity, $this->charge_account);
+        $this->deposit_account_number = Authorization::formAccountNumber($this->deposit_entity, $this->deposit_account);
 
         //info to display sign in the transaction list
         if (isset(Yii::app()->session)) {
@@ -177,11 +176,11 @@ class Transaction extends TransactionBase {
                 }
 
                 if (($charge = Authorization::model()->splitAccountNumber($this->charge_account_number)) != null) {
-                    $this->charge_user = $charge['user_id'];
+                    $this->charge_entity = $charge['entity_id'];
                     $this->charge_account = $charge['account_id'];
                 }
                 if (($deposit = Authorization::model()->splitAccountNumber($this->deposit_account_number)) != null) {
-                    $this->deposit_user = $deposit['user_id'];
+                    $this->deposit_entity = $deposit['entity_id'];
                     $this->deposit_account = $deposit['account_id'];
                 }
             }
@@ -197,11 +196,11 @@ class Transaction extends TransactionBase {
                         $this->amount = $this->getSystemAmount();
                     }
                     if (($charge = Authorization::model()->splitAccountNumber($this->charge_account_number)) != null) {
-                        $this->charge_user = $charge['user_id'];
+                        $this->charge_entity = $charge['entity_id'];
                         $this->charge_account = $charge['account_id'];
                     }
                     if (($deposit = Authorization::model()->splitAccountNumber($this->deposit_account_number)) != null) {
-                        $this->deposit_user = $deposit['user_id'];
+                        $this->deposit_entity = $deposit['entity_id'];
                         $this->deposit_account = $deposit['account_id'];
                     }
                 }
@@ -275,36 +274,38 @@ class Transaction extends TransactionBase {
         }
 
         $notif_data = array('{amount}' => self::amountSystemToUser($this->amount),
-            '{charge_account_number}' => Authorization::formAccountNumber($this->charge_user, $this->charge_account),
-            '{charge_user_name}' => $this->chargeUser->name,
-            '{deposit_account_number}' => Authorization::formAccountNumber($this->deposit_user, $this->deposit_account),
-            '{deposit_user_name}' => $this->depositUser->name,
+            '{charge_account_number}' => Authorization::formAccountNumber($this->charge_entity, $this->charge_account),
+            '{charge_user_name}' => $this->chargeEntity->name,
+            '{deposit_account_number}' => Authorization::formAccountNumber($this->deposit_entity, $this->deposit_account),
+            '{deposit_user_name}' => $this->depositEntity->name,
             '{subject}' => $this->subject);
 
         if ($this->class == Transaction::CLASS_TRANSFER || $this->class == Transaction::CLASS_CHARGE) {
-            $user_id = Yii::app()->user->getId();
-            $this->chargeUser->saveAttributes(array('last_action' => date('YmdHis')));
-            $this->depositUser->saveAttributes(array('last_action' => date('YmdHis')));
+            $entity_id = Yii::app()->user->getId();
+            $this->chargeEntity->getObject()->saveAttributes(array('last_action' => date('YmdHis')));
+            $this->depositEntity->getObject()->saveAttributes(array('last_action' => date('YmdHis')));
             $this->chargeAccount->saveAttributes(array('last_action' => date('YmdHis')));
             $this->depositAccount->saveAttributes(array('last_action' => date('YmdHis')));
 
-            if ($user_id == $this->charge_user) {
-                Notification::addNotification(Notification::PAYMENT, $this->deposit_user, Notification::getSID($this), $notif_data);
+            if ($entity_id == $this->charge_entity) {
+                Notification::addNotification(Notification::PAYMENT, $this->deposit_entity, Notification::getSID($this), $notif_data);
+                Notification::addNotification(Notification::SELF_CHARGE, $this->charge_entity, Notification::getSID($this), $notif_data);
             } else {
-                Notification::addNotification(Notification::CHARGE, $this->charge_user, Notification::getSID($this), $notif_data);
+                Notification::addNotification(Notification::SELF_PAYMENT, $this->deposit_entity, Notification::getSID($this), $notif_data);
+                Notification::addNotification(Notification::CHARGE, $this->charge_entity, Notification::getSID($this), $notif_data);
             }
         }
 
         if ($this->class == Transaction::CLASS_SALARY) {
-            Notification::addNotification(Notification::SALARY, $this->deposit_user, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SALARY, Entity::get($this->depositUser)->id, Notification::getSID($this), $notif_data);
         }
         if ($this->class == Transaction::CLASS_TAX) {
-            Notification::addNotification(Notification::TAX, $this->charge_user, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::TAX, Entity::get($this->charge_user)->id, Notification::getSID($this), $notif_data);
         }
 
         if ($this->class == Transaction::CLASS_SYSTEM) {
-            Notification::addNotification(Notification::SYSTEM, $this->deposit_user, Notification::getSID($this), $notif_data);
-            Notification::addNotification(Notification::SYSTEM, $this->charge_user, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SYSTEM, Entity::get($this->depositUser)->id, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SYSTEM, Entity::get($this->chargeUser)->id, Notification::getSID($this), $notif_data);
         }
     }
 
@@ -383,13 +384,13 @@ class Transaction extends TransactionBase {
     public function getChargeAccountNumber() {
         if ($this->charge_account_number != null)
             return $this->charge_account_number;
-        return Authorization::formAccountNumber($this->charge_user, $this->charge_account);
+        return Authorization::formAccountNumber($this->charge_entity, $this->charge_account);
     }
 
     public function getDepositAccountNumber() {
         if ($this->deposit_account_number != null)
             return $this->deposit_account_number;
-        return Authorization::formAccountNumber($this->deposit_user, $this->deposit_account);
+        return Authorization::formAccountNumber($this->deposit_entity, $this->deposit_account);
     }
 
     public static function actionsToTxt($action) {

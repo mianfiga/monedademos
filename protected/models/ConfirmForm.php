@@ -50,7 +50,7 @@ class ConfirmForm extends CFormModel
 				case 'charge':
 				case 'movement':
 					$model = Yii::app()->session['operations'][$this->sid]['model'];
-					$auth = Authorization::model()->findByPk(array('user_id' => $model['charge_user'],
+					$auth = Authorization::model()->findByPk(array('entity_id' => $model['charge_entity'],
 						'account_id' => $model['charge_account']));
 					if($auth->wrong_pass_count >= self::ATTEMPTS)
 					{

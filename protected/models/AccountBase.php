@@ -17,7 +17,8 @@
  * @property string $deleted
  *
  * The followings are the available model relations:
- * @property User[] $rbuUsers
+ * @property Entity[] $rbuEntities
+ * @property Invitation[] $invitations
  * @property Pending[] $pendings
  * @property Pending[] $pendings1
  * @property Transaction[] $transactions
@@ -70,7 +71,8 @@ class AccountBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'rbuUsers' => array(self::MANY_MANY, 'User', '{{authorization}}(account_id, user_id)'),
+			'rbuEntities' => array(self::MANY_MANY, 'Entity', '{{authorization}}(account_id, entity_id)'),
+			'invitations' => array(self::HAS_MANY, 'Invitation', 'user_id'),
 			'pendings' => array(self::HAS_MANY, 'Pending', 'charge_account'),
 			'pendings1' => array(self::HAS_MANY, 'Pending', 'deposit_account'),
 			'transactions' => array(self::HAS_MANY, 'Transaction', 'charge_account'),

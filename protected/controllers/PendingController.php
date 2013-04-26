@@ -55,7 +55,7 @@ class PendingController extends Controller
 			$user_id = Yii::app()->user->getId();
 
 			$model = $this->loadModel($id);
-			if($model->charge_user == $user_id || $model->deposit_user == $user_id) //falta ver si la cuenta es pública
+			if($model->charge_entity == $user_id || $model->deposit_entity == $user_id) //falta ver si la cuenta es pública
 			{
         Notification::shown($user_id, Notification::getSID($model));
 				$this->render('view',array(
@@ -145,7 +145,7 @@ class PendingController extends Controller
 	 */
 	public function actionIndex($id=null)
 	{
-		$user_id = Yii::app()->user->getId();
+		$entity_id = Yii::app()->user->getId();
 
 		$form_model=new AccountNumberFilterForm;
 
@@ -167,7 +167,7 @@ class PendingController extends Controller
 			$acc = Authorization::splitAccountNumber($account_number);
 			if($acc == null)
 				$account_number = null;
-			elseif($acc['user_id'] != $user_id)
+			elseif($acc['entity_id'] != $entity_id)
 				$account_number = null;
 			elseif(!Authorization::isValidAccountNumber($account_number))
 				$account_number = null;
@@ -175,7 +175,7 @@ class PendingController extends Controller
 
 		if($account_number == null)
 		{
-			$accounts = Authorization::getByUser($user_id /*,'class='.Authorization::CLASS_HOLDER*/);
+			$accounts = Authorization::getByEntity($entity_id /*,'class='.Authorization::CLASS_HOLDER*/);
 			foreach($accounts as $account)
 			{
 				$account_number = $account->getAccountNumber();
@@ -195,8 +195,8 @@ class PendingController extends Controller
 
 		$dataProvider = new CActiveDataProvider('Pending', array(
 				'criteria' => array(
-						'condition' => "(charge_account='".$acc['account_id']."' AND charge_user='".$acc['user_id']."')".
-								" OR (deposit_account='".$acc['account_id']."' AND deposit_user='".$acc['user_id']."')",
+						'condition' => "(charge_account='".$acc['account_id']."' AND charge_entity='".$acc['entity_id']."')".
+								" OR (deposit_account='".$acc['account_id']."' AND deposit_entity='".$acc['entity_id']."')",
 						'order' => 'id DESC',
 					),
 			));
@@ -204,7 +204,7 @@ class PendingController extends Controller
 		$this->render('index',array(
 			'dataProvider' => $dataProvider,
 			'form_model' => $form_model,
-			'accountList' => Authorization::getUserAccountList($user_id),
+			'accountList' => Authorization::getAccountList($entity_id),
 			'accountNumber' => $account_number,
 			'account' => $account,
 		));
