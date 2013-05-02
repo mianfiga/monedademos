@@ -74,3 +74,1996 @@ Stack trace:
 REQUEST_URI=/rbu/index.php?r=transaction/index
 in /var/www/rbu/protected/controllers/TransactionController.php (203)
 in /var/www/rbu/index.php (13)
+2013/04/18 21:08:47 [error] [php] Undefined variable: showingTransactions (/var/www/rbu/protected/views/transaction/_authorization.php:15)
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(870): TransactionController->renderFile()
+#1 /var/www/rbu/protected/views/transaction/index.php(95): TransactionController->renderPartial()
+#2 /var/www/yii/framework/web/CBaseController.php(127): require()
+#3 /var/www/yii/framework/web/CBaseController.php(96): TransactionController->renderInternal()
+#4 /var/www/yii/framework/web/CController.php(870): TransactionController->renderFile()
+#5 /var/www/yii/framework/web/CController.php(783): TransactionController->renderPartial()
+#6 /var/www/rbu/protected/controllers/TransactionController.php(271): TransactionController->render()
+#7 /var/www/yii/framework/web/actions/CInlineAction.php(50): TransactionController->actionIndex()
+#8 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#9 /var/www/yii/framework/web/filters/CFilterChain.php(134): TransactionController->runAction()
+#10 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#11 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#12 /var/www/yii/framework/web/filters/CInlineFilter.php(59): TransactionController->filterAccessControl()
+#13 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#14 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#15 /var/www/yii/framework/web/CController.php(266): TransactionController->runActionWithFilters()
+#16 /var/www/yii/framework/web/CWebApplication.php(283): TransactionController->run()
+#17 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#18 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#19 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=transaction/index
+in /var/www/rbu/protected/views/transaction/_authorization.php (15)
+in /var/www/rbu/protected/views/transaction/index.php (95)
+in /var/www/rbu/protected/controllers/TransactionController.php (271)
+2013/04/21 20:18:42 [error] [php] Undefined variable: auth (/var/www/rbu/protected/views/transaction/index.php:27)
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(870): TransactionController->renderFile()
+#1 /var/www/yii/framework/web/CController.php(783): TransactionController->renderPartial()
+#2 /var/www/rbu/protected/controllers/TransactionController.php(337): TransactionController->render()
+#3 unknown(0): TransactionController->actionList()
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): TransactionController->runAction()
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): TransactionController->filterAccessControl()
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): TransactionController->runActionWithFilters()
+#14 /var/www/yii/framework/web/CWebApplication.php(283): TransactionController->run()
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=transaction/list
+in /var/www/rbu/protected/views/transaction/index.php (27)
+in /var/www/rbu/protected/controllers/TransactionController.php (337)
+in /var/www/rbu/index.php (13)
+2013/04/22 17:42:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "gii/index".' in /var/www/yii/framework/web/CWebApplication.php:287
+Stack trace:
+#0 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('gii/index')
+#1 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#2 /var/www/rbu/index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/rbu/index.php?r=gii/index
+---
+2013/04/22 19:10:56 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1).
+in /var/www/rbu/protected/views/market/index.php (26)
+in /var/www/rbu/protected/controllers/MarketController.php (407)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:10:56 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1)' in /var/www/yii/framework/db/CDbCommand.php:528
+Stack trace:
+#0 /var/www/yii/framework/db/CDbCommand.php(425): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /var/www/yii/framework/db/ar/CActiveFinder.php(728): CDbCommand->queryScalar()
+#2 /var/www/yii/framework/db/ar/CActiveFinder.php(155): CJoinElement->count(Object(CDbCriteria))
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1544): CActiveFinder->count(Object(CDbCriteria))
+#4 /var/www/yii/framework/web/CActiveDataProvider.php(179): CActiveRecord->count(Object(CDbCriteria))
+#5 /var/www/yii/framework/web/CDataProvider.php(193): CActiveDataProvider->calculateTotalItemCount()
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(129): CDataProvider->getTotalItemCount()
+#7 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#9 /var/www/yii/framework/zii/widgets/CListView.php(182): CBaseListView->init()
+#10 /var/www/yii/framework/web/CBaseController.php(148): CListView->init()
+#11 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.CLi...', Array)
+#12 /var/www/rbu/protected/views/market/index.php(26): CBaseController->widget('zii.widgets.CLi...', Array)
+#13 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#14 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#16 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#17 /var/www/rbu/protected/controllers/MarketController.php(407): CController->render('index', Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(50): MarketController->actionIndex()
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=market/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=contribution/index
+---
+2013/04/22 19:12:59 [error] [exception.CException] exception 'CException' with message 'Property "MarketJoined.user_id" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('user_id')
+#1 /var/www/rbu/protected/models/NotificationMessage.php(146): CActiveRecord->__get('user_id')
+#2 /var/www/rbu/protected/views/notification/_view.php(11): NotificationMessage->getUrl()
+#3 /var/www/yii/framework/web/CBaseController.php(131): require('/var/www/rbu/pr...')
+#4 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, false)
+#5 /var/www/yii/framework/zii/widgets/CListView.php(260): CBaseController->renderFile('/var/www/rbu/pr...', Array)
+#6 /var/www/yii/framework/zii/widgets/CBaseListView.php(161): CListView->renderItems()
+#7 [internal function]: CBaseListView->renderSection(Array)
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(144): preg_replace_callback('/{(\w+)}/', Array, '{summary}?{sort...')
+#9 /var/www/yii/framework/zii/widgets/CBaseListView.php(129): CBaseListView->renderContent()
+#10 /var/www/yii/framework/web/CBaseController.php(174): CBaseListView->run()
+#11 /var/www/rbu/protected/views/notification/index.php(20): CBaseController->widget('zii.widgets.CLi...', Array)
+#12 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#13 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#14 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#16 /var/www/rbu/protected/controllers/NotificationController.php(139): CController->render('index', Array)
+#17 /var/www/yii/framework/web/actions/CInlineAction.php(50): NotificationController->actionIndex()
+#18 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#19 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#20 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#21 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#22 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#24 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#25 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#26 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#27 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('notification/in...')
+#28 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#29 /var/www/rbu/index.php(13): CApplication->run()
+#30 {main}
+REQUEST_URI=/rbu/index.php?r=notification/index
+---
+2013/04/22 19:14:03 [error] [exception.CException] exception 'CException' with message 'User and its behaviors do not have a method or closure named "getName".' in /var/www/yii/framework/base/CComponent.php:266
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(226): CComponent->__call('getName', Array)
+#1 /var/www/rbu/protected/models/Entity.php(97): CActiveRecord->__call('getName', Array)
+#2 /var/www/rbu/protected/models/Entity.php(97): User->getName()
+#3 /var/www/rbu/protected/models/NotificationMessage.php(193): Entity->getName()
+#4 /var/www/rbu/protected/models/NotificationMessage.php(202): NotificationMessage->get_message_extra()
+#5 /var/www/rbu/protected/views/notification/_view.php(32): NotificationMessage->message()
+#6 /var/www/yii/framework/web/CBaseController.php(131): require('/var/www/rbu/pr...')
+#7 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, false)
+#8 /var/www/yii/framework/zii/widgets/CListView.php(260): CBaseController->renderFile('/var/www/rbu/pr...', Array)
+#9 /var/www/yii/framework/zii/widgets/CBaseListView.php(161): CListView->renderItems()
+#10 [internal function]: CBaseListView->renderSection(Array)
+#11 /var/www/yii/framework/zii/widgets/CBaseListView.php(144): preg_replace_callback('/{(\w+)}/', Array, '{summary}?{sort...')
+#12 /var/www/yii/framework/zii/widgets/CBaseListView.php(129): CBaseListView->renderContent()
+#13 /var/www/yii/framework/web/CBaseController.php(174): CBaseListView->run()
+#14 /var/www/rbu/protected/views/notification/index.php(20): CBaseController->widget('zii.widgets.CLi...', Array)
+#15 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#16 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#17 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#18 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#19 /var/www/rbu/protected/controllers/NotificationController.php(139): CController->render('index', Array)
+#20 /var/www/yii/framework/web/actions/CInlineAction.php(50): NotificationController->actionIndex()
+#21 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#22 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#23 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#24 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#26 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#27 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#28 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#29 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#30 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('notification/in...')
+#31 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#32 /var/www/rbu/index.php(13): CApplication->run()
+#33 {main}
+REQUEST_URI=/rbu/index.php?r=notification/index
+---
+2013/04/22 19:16:18 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1).
+in /var/www/rbu/protected/views/market/index.php (26)
+in /var/www/rbu/protected/controllers/MarketController.php (407)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:16:18 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1)' in /var/www/yii/framework/db/CDbCommand.php:528
+Stack trace:
+#0 /var/www/yii/framework/db/CDbCommand.php(425): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /var/www/yii/framework/db/ar/CActiveFinder.php(728): CDbCommand->queryScalar()
+#2 /var/www/yii/framework/db/ar/CActiveFinder.php(155): CJoinElement->count(Object(CDbCriteria))
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1544): CActiveFinder->count(Object(CDbCriteria))
+#4 /var/www/yii/framework/web/CActiveDataProvider.php(179): CActiveRecord->count(Object(CDbCriteria))
+#5 /var/www/yii/framework/web/CDataProvider.php(193): CActiveDataProvider->calculateTotalItemCount()
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(129): CDataProvider->getTotalItemCount()
+#7 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#9 /var/www/yii/framework/zii/widgets/CListView.php(182): CBaseListView->init()
+#10 /var/www/yii/framework/web/CBaseController.php(148): CListView->init()
+#11 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.CLi...', Array)
+#12 /var/www/rbu/protected/views/market/index.php(26): CBaseController->widget('zii.widgets.CLi...', Array)
+#13 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#14 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#16 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#17 /var/www/rbu/protected/controllers/MarketController.php(407): CController->render('index', Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(50): MarketController->actionIndex()
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=market/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=notification/index
+---
+2013/04/22 19:18:52 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1).
+in /var/www/rbu/protected/views/market/index.php (26)
+in /var/www/rbu/protected/controllers/MarketController.php (407)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:18:52 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1)' in /var/www/yii/framework/db/CDbCommand.php:528
+Stack trace:
+#0 /var/www/yii/framework/db/CDbCommand.php(425): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /var/www/yii/framework/db/ar/CActiveFinder.php(728): CDbCommand->queryScalar()
+#2 /var/www/yii/framework/db/ar/CActiveFinder.php(155): CJoinElement->count(Object(CDbCriteria))
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1544): CActiveFinder->count(Object(CDbCriteria))
+#4 /var/www/yii/framework/web/CActiveDataProvider.php(179): CActiveRecord->count(Object(CDbCriteria))
+#5 /var/www/yii/framework/web/CDataProvider.php(193): CActiveDataProvider->calculateTotalItemCount()
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(129): CDataProvider->getTotalItemCount()
+#7 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#9 /var/www/yii/framework/zii/widgets/CListView.php(182): CBaseListView->init()
+#10 /var/www/yii/framework/web/CBaseController.php(148): CListView->init()
+#11 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.CLi...', Array)
+#12 /var/www/rbu/protected/views/market/index.php(26): CBaseController->widget('zii.widgets.CLi...', Array)
+#13 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#14 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#16 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#17 /var/www/rbu/protected/controllers/MarketController.php(407): CController->render('index', Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(50): MarketController->actionIndex()
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=market/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=notification/index
+---
+2013/04/22 19:28:12 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1 AND created_by='2').
+in /var/www/rbu/protected/views/market/index.php (26)
+in /var/www/rbu/protected/controllers/MarketController.php (362)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:28:12 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'joined.user_id' in 'on clause'. The SQL statement executed was: SELECT COUNT(DISTINCT `t`.`id`) FROM `rbu_market_ad` `t`  LEFT outer JOIN `rbu_market_joined` `joined` ON (`joined`.`ad_id`=`t`.`id`) AND (joined.user_id=2)  WHERE (visible=1 AND created_by='2')' in /var/www/yii/framework/db/CDbCommand.php:528
+Stack trace:
+#0 /var/www/yii/framework/db/CDbCommand.php(425): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /var/www/yii/framework/db/ar/CActiveFinder.php(728): CDbCommand->queryScalar()
+#2 /var/www/yii/framework/db/ar/CActiveFinder.php(155): CJoinElement->count(Object(CDbCriteria))
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1544): CActiveFinder->count(Object(CDbCriteria))
+#4 /var/www/yii/framework/web/CActiveDataProvider.php(179): CActiveRecord->count(Object(CDbCriteria))
+#5 /var/www/yii/framework/web/CDataProvider.php(193): CActiveDataProvider->calculateTotalItemCount()
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(129): CDataProvider->getTotalItemCount()
+#7 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#9 /var/www/yii/framework/zii/widgets/CListView.php(182): CBaseListView->init()
+#10 /var/www/yii/framework/web/CBaseController.php(148): CListView->init()
+#11 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.CLi...', Array)
+#12 /var/www/rbu/protected/views/market/index.php(26): CBaseController->widget('zii.widgets.CLi...', Array)
+#13 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#14 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#16 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#17 /var/www/rbu/protected/controllers/MarketController.php(362): CController->render('index', Array)
+#18 [internal function]: MarketController->actionList('1')
+#19 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(MarketController), Array)
+#20 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(MarketController), Object(ReflectionMethod), Array)
+#21 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#22 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#23 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#24 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#26 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#27 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#28 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#29 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('list')
+#30 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/list')
+#31 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#32 /var/www/rbu/index.php(13): CApplication->run()
+#33 {main}
+REQUEST_URI=/rbu/index.php?r=market/list&user=1
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/index
+---
+2013/04/22 19:34:43 [error] [exception.CDbException] exception 'CDbException' with message 'The value for the column "entity_id" is not supplied when querying the table "rbu_market_joined".' in /var/www/yii/framework/db/schema/CDbCommandBuilder.php:686
+Stack trace:
+#0 /var/www/yii/framework/db/schema/CDbCommandBuilder.php(498): CDbCommandBuilder->createInCondition(Object(CMysqlTableSchema), Array, Array, '`t`.')
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(1425): CDbCommandBuilder->createPkCriteria(Object(CMysqlTableSchema), Array, '', Array, '`t`.')
+#2 /var/www/rbu/protected/controllers/MarketController.php(265): CActiveRecord->findByPk(Array)
+#3 [internal function]: MarketController->actionJoin('19')
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(MarketController), Array)
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(MarketController), Object(ReflectionMethod), Array)
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('join')
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/join')
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/index
+---
+2013/04/22 19:39:08 [error] [php] Undefined variable: user_id (/var/www/rbu/protected/controllers/MarketController.php:297)
+Stack trace:
+#0 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#1 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#2 /var/www/yii/framework/web/filters/CFilterChain.php(134): MarketController->runAction()
+#3 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#4 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#5 /var/www/yii/framework/web/filters/CInlineFilter.php(59): MarketController->filterAccessControl()
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#7 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(266): MarketController->runActionWithFilters()
+#9 /var/www/yii/framework/web/CWebApplication.php(283): MarketController->run()
+#10 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#11 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#12 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+in /var/www/rbu/protected/controllers/MarketController.php (297)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:40:05 [error] [php] Undefined variable: user_id (/var/www/rbu/protected/controllers/MarketController.php:297)
+Stack trace:
+#0 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#1 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#2 /var/www/yii/framework/web/filters/CFilterChain.php(134): MarketController->runAction()
+#3 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#4 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#5 /var/www/yii/framework/web/filters/CInlineFilter.php(59): MarketController->filterAccessControl()
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#7 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(266): MarketController->runActionWithFilters()
+#9 /var/www/yii/framework/web/CWebApplication.php(283): MarketController->run()
+#10 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#11 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#12 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+in /var/www/rbu/protected/controllers/MarketController.php (297)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:42:26 [error] [php] Undefined variable: user_id (/var/www/rbu/protected/controllers/MarketController.php:297)
+Stack trace:
+#0 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#1 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#2 /var/www/yii/framework/web/filters/CFilterChain.php(134): MarketController->runAction()
+#3 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#4 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#5 /var/www/yii/framework/web/filters/CInlineFilter.php(59): MarketController->filterAccessControl()
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#7 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(266): MarketController->runActionWithFilters()
+#9 /var/www/yii/framework/web/CWebApplication.php(283): MarketController->run()
+#10 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#11 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#12 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+in /var/www/rbu/protected/controllers/MarketController.php (297)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:43:31 [error] [exception.CException] exception 'CException' with message 'Property "MarketJoined.user_id" is not defined.' in /var/www/yii/framework/base/CComponent.php:174
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(160): CComponent->__set('user_id', '2')
+#1 /var/www/rbu/protected/models/MarketJoined.php(112): CActiveRecord->__set('user_id', '2')
+#2 /var/www/yii/framework/db/ar/CActiveRecord.php(1011): MarketJoined->beforeSave()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#4 /var/www/rbu/protected/controllers/MarketController.php(291): CActiveRecord->save()
+#5 [internal function]: MarketController->actionJoin('19')
+#6 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(MarketController), Array)
+#7 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(MarketController), Object(ReflectionMethod), Array)
+#8 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#9 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#10 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#11 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#13 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#15 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('join')
+#17 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/join')
+#18 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#19 /var/www/rbu/index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/join&id=19
+---
+2013/04/22 19:44:47 [error] [exception.CException] exception 'CException' with message 'Property "MarketJoined.user_id" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('user_id')
+#1 /var/www/rbu/protected/models/MarketJoined.php(143): CActiveRecord->__get('user_id')
+#2 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): MarketJoined->afterSave()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#4 /var/www/rbu/protected/controllers/MarketController.php(291): CActiveRecord->save()
+#5 [internal function]: MarketController->actionJoin('19')
+#6 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(MarketController), Array)
+#7 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(MarketController), Object(ReflectionMethod), Array)
+#8 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#9 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#10 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#11 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#13 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#15 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('join')
+#17 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/join')
+#18 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#19 /var/www/rbu/index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/join&id=19
+---
+2013/04/22 19:47:57 [error] [exception.CException] exception 'CException' with message 'Property "NotificationMessage.user_id" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('user_id')
+#1 /var/www/yii/framework/validators/CRequiredValidator.php(52): CActiveRecord->__get('user_id')
+#2 /var/www/yii/framework/validators/CValidator.php(214): CRequiredValidator->validateAttribute(Object(NotificationMessage), 'user_id')
+#3 /var/www/yii/framework/base/CModel.php(158): CValidator->validate(Object(NotificationMessage), NULL)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(795): CModel->validate(NULL)
+#5 /var/www/rbu/protected/models/Notification.php(164): CActiveRecord->save()
+#6 /var/www/rbu/protected/models/MarketJoined.php(157): Notification::addNotification(8, '9', 'jo-19-2', Array)
+#7 /var/www/yii/framework/db/ar/CActiveRecord.php(1066): MarketJoined->afterSave()
+#8 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->update(NULL)
+#9 /var/www/rbu/protected/controllers/MarketController.php(291): CActiveRecord->save()
+#10 [internal function]: MarketController->actionJoin('19')
+#11 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(MarketController), Array)
+#12 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(MarketController), Object(ReflectionMethod), Array)
+#13 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#14 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#15 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#16 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#17 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#18 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#19 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#20 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('join')
+#22 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/join')
+#23 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#24 /var/www/rbu/index.php(13): CApplication->run()
+#25 {main}
+REQUEST_URI=/rbu/index.php?r=market/join&id=19
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/join&id=19
+---
+2013/04/22 19:50:19 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (201)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:50:19 [error] [php] Undefined variable: notif_ness (/var/www/rbu/protected/models/Notification.php:170)
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(796): MarketAd->update()
+#1 /var/www/rbu/protected/controllers/MarketController.php(202): MarketAd->save()
+#2 unknown(0): MarketController->actionUpdate()
+#3 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#4 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#5 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(134): MarketController->runAction()
+#7 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#9 /var/www/yii/framework/web/filters/CInlineFilter.php(59): MarketController->filterAccessControl()
+#10 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#11 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#12 /var/www/yii/framework/web/CController.php(266): MarketController->runActionWithFilters()
+#13 /var/www/yii/framework/web/CWebApplication.php(283): MarketController->run()
+#14 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#15 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#16 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=market/update&id=93
+in /var/www/rbu/protected/models/Notification.php (170)
+in /var/www/rbu/protected/models/MarketAd.php (198)
+in /var/www/rbu/protected/controllers/MarketController.php (202)
+2013/04/22 19:50:57 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (201)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:51:08 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (201)
+in /var/www/rbu/index.php (13)
+2013/04/22 19:51:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panel".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panel')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panel')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panel')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panel&id=93
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/view&id=93
+---
+2013/04/22 19:51:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panel".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panel')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panel')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panel')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panel&id=93
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/view&id=93
+---
+2013/04/22 19:51:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panel".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panel')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panel')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panel')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panel&id=93
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/view&id=93
+---
+2013/04/22 19:52:21 [error] [exception.CDbException] exception 'CDbException' with message 'The relation "marketAds" in active record class "User" is specified with an invalid foreign key "user_id". There is no such column in the table "rbu_market_joined".' in /var/www/yii/framework/db/ar/CActiveFinder.php:1108
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveFinder.php(1017): CJoinElement->joinManyMany(Object(CMysqlTableSchema), Array, Object(CJoinElement))
+#1 /var/www/yii/framework/db/ar/CActiveFinder.php(1266): CJoinElement->getJoinCondition()
+#2 /var/www/yii/framework/db/ar/CActiveFinder.php(771): CJoinQuery->join(Object(CJoinElement))
+#3 /var/www/yii/framework/db/ar/CActiveFinder.php(710): CJoinElement->buildQuery(Object(CJoinQuery))
+#4 /var/www/yii/framework/db/ar/CActiveFinder.php(155): CJoinElement->count(Object(CDbCriteria))
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(1544): CActiveFinder->count(Object(CDbCriteria))
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(179): CActiveRecord->count(Object(CDbCriteria))
+#7 /var/www/yii/framework/web/CDataProvider.php(193): CActiveDataProvider->calculateTotalItemCount()
+#8 /var/www/yii/framework/web/CActiveDataProvider.php(129): CDataProvider->getTotalItemCount()
+#9 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#10 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#11 /var/www/yii/framework/zii/widgets/grid/CGridView.php(289): CBaseListView->init()
+#12 /var/www/yii/framework/web/CBaseController.php(148): CGridView->init()
+#13 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.gri...', Array)
+#14 /var/www/rbu/protected/views/market/panel.php(69): CBaseController->widget('zii.widgets.gri...', Array)
+#15 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#16 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#17 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#18 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('panel', Array, true)
+#19 /var/www/rbu/protected/controllers/MarketController.php(92): CController->render('panel', Array)
+#20 [internal function]: MarketController->actionPanel('93')
+#21 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(MarketController), Array)
+#22 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(MarketController), Object(ReflectionMethod), Array)
+#23 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#25 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#27 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#28 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#29 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#30 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#31 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panel')
+#32 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panel')
+#33 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#34 /var/www/rbu/index.php(13): CApplication->run()
+#35 {main}
+REQUEST_URI=/rbu/index.php?r=market/panel&id=93
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/view&id=93
+---
+2013/04/22 19:58:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panelUser".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panelUser')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelUser')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelUse...')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelUser&ad_id=93&user_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 19:58:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panelUser".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panelUser')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelUser')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelUse...')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelUser&ad_id=93&user_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 20:01:15 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panelUser".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panelUser')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelUser')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelUse...')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelUser&ad_id=93&user_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 20:01:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panelViewr".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panelViewr')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelViewr')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelViewr&ad_id=93&user_id=4
+---
+2013/04/22 20:01:23 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /var/www/yii/framework/web/auth/CAccessControlFilter.php:170
+Stack trace:
+#0 /var/www/yii/framework/web/auth/CAccessControlFilter.php(133): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /var/www/yii/framework/web/filters/CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelView')
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&user_id=4
+---
+2013/04/22 20:03:13 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /var/www/yii/framework/web/auth/CAccessControlFilter.php:170
+Stack trace:
+#0 /var/www/yii/framework/web/auth/CAccessControlFilter.php(133): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /var/www/yii/framework/web/filters/CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelView')
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&user_id=4
+---
+2013/04/22 20:03:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panelViewr".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panelViewr')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelViewr')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelViewr&ad_id=93&user_id=4
+---
+2013/04/22 20:03:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "panelUser".' in /var/www/yii/framework/web/CController.php:484
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(271): CController->missingAction('panelUser')
+#1 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelUser')
+#2 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelUse...')
+#3 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#4 /var/www/rbu/index.php(13): CApplication->run()
+#5 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelUser&ad_id=93&user_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 20:03:20 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /var/www/yii/framework/web/auth/CAccessControlFilter.php:170
+Stack trace:
+#0 /var/www/yii/framework/web/auth/CAccessControlFilter.php(133): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /var/www/yii/framework/web/filters/CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelView')
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&entity_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 20:04:57 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /var/www/yii/framework/web/auth/CAccessControlFilter.php:170
+Stack trace:
+#0 /var/www/yii/framework/web/auth/CAccessControlFilter.php(133): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /var/www/yii/framework/web/filters/CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelView')
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&entity_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 20:05:00 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /var/www/yii/framework/web/auth/CAccessControlFilter.php:170
+Stack trace:
+#0 /var/www/yii/framework/web/auth/CAccessControlFilter.php(133): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /var/www/yii/framework/web/filters/CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('panelView')
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('market/panelVie...')
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&entity_id=4
+HTTP_REFERER=http://localhost/rbu/index.php?r=market/panel&id=93
+---
+2013/04/22 20:05:21 [error] [php] Undefined variable: user_id (/var/www/rbu/protected/controllers/MarketController.php:103)
+Stack trace:
+#0 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#1 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#2 /var/www/yii/framework/web/filters/CFilterChain.php(134): MarketController->runAction()
+#3 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#4 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#5 /var/www/yii/framework/web/filters/CInlineFilter.php(59): MarketController->filterAccessControl()
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#7 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(266): MarketController->runActionWithFilters()
+#9 /var/www/yii/framework/web/CWebApplication.php(283): MarketController->run()
+#10 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#11 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#12 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&entity_id=4
+in /var/www/rbu/protected/controllers/MarketController.php (103)
+in /var/www/rbu/index.php (13)
+2013/04/22 20:06:57 [error] [php] Undefined variable: user (/var/www/rbu/protected/controllers/MarketController.php:133)
+Stack trace:
+#0 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#1 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#2 /var/www/yii/framework/web/filters/CFilterChain.php(134): MarketController->runAction()
+#3 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#4 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#5 /var/www/yii/framework/web/filters/CInlineFilter.php(59): MarketController->filterAccessControl()
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#7 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(266): MarketController->runActionWithFilters()
+#9 /var/www/yii/framework/web/CWebApplication.php(283): MarketController->run()
+#10 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#11 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#12 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=market/panelView&ad_id=93&entity_id=4
+in /var/www/rbu/protected/controllers/MarketController.php (133)
+in /var/www/rbu/index.php (13)
+2013/04/22 20:44:35 [error] [php] Trying to get property of non-object (/var/www/rbu/protected/components/UserIdentity.php:23)
+Stack trace:
+#0 /var/www/yii/framework/validators/CValidator.php(214): CInlineValidator->validateAttribute()
+#1 /var/www/yii/framework/base/CModel.php(158): CInlineValidator->validate()
+#2 /var/www/rbu/protected/controllers/SiteController.php(135): LoginForm->validate()
+#3 /var/www/yii/framework/web/actions/CInlineAction.php(50): SiteController->actionLogin()
+#4 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#5 /var/www/yii/framework/web/CController.php(287): SiteController->runAction()
+#6 /var/www/yii/framework/web/CController.php(266): SiteController->runActionWithFilters()
+#7 /var/www/yii/framework/web/CWebApplication.php(283): SiteController->run()
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=site/login
+in /var/www/rbu/protected/components/UserIdentity.php (23)
+in /var/www/rbu/protected/models/LoginForm.php (55)
+in /var/www/rbu/protected/controllers/SiteController.php (135)
+2013/04/25 10:41:49 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/models/Notification.php (164)
+in /var/www/rbu/protected/models/Transaction.php (299)
+in /var/www/rbu/protected/models/Account.php (242)
+2013/04/25 10:41:49 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/models/Notification.php(164): CActiveRecord->save()
+#3 /var/www/rbu/protected/models/Transaction.php(299): Notification::addNotification(3, '127', 'tr-1456', Array)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#6 /var/www/rbu/protected/models/Account.php(242): CActiveRecord->save()
+#7 /var/www/rbu/protected/models/User.php(254): Account->addSalary()
+#8 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): User->afterSave()
+#9 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#10 /var/www/rbu/protected/controllers/UserController.php(124): CActiveRecord->save()
+#11 /var/www/yii/framework/web/actions/CInlineAction.php(50): UserController->actionCreate()
+#12 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#13 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#14 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#15 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#16 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#17 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#18 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#19 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#20 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#21 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('user/create')
+#22 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#23 /var/www/rbu/index.php(13): CApplication->run()
+#24 {main}
+REQUEST_URI=/rbu/index.php?r=user/create
+HTTP_REFERER=http://localhost/rbu/index.php?r=user/create
+---
+2013/04/25 11:19:57 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/models/Notification.php (164)
+in /var/www/rbu/protected/models/Transaction.php (299)
+in /var/www/rbu/protected/models/Account.php (242)
+2013/04/25 11:19:57 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/models/Notification.php(164): CActiveRecord->save()
+#3 /var/www/rbu/protected/models/Transaction.php(299): Notification::addNotification(3, '128', 'tr-1459', Array)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#6 /var/www/rbu/protected/models/Account.php(242): CActiveRecord->save()
+#7 /var/www/rbu/protected/models/User.php(254): Account->addSalary()
+#8 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): User->afterSave()
+#9 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#10 /var/www/rbu/protected/controllers/SiteController.php(124): CActiveRecord->save()
+#11 /var/www/yii/framework/web/actions/CInlineAction.php(50): SiteController->actionLogin()
+#12 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#13 /var/www/yii/framework/web/CController.php(287): CController->runAction(Object(CInlineAction))
+#14 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#15 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('login')
+#16 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('site/login')
+#17 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#18 /var/www/rbu/index.php(13): CApplication->run()
+#19 {main}
+REQUEST_URI=/rbu/index.php?r=site/login
+HTTP_REFERER=http://localhost/rbu/index.php?r=site/login
+---
+2013/04/25 11:23:31 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/models/Notification.php (164)
+in /var/www/rbu/protected/models/Transaction.php (299)
+in /var/www/rbu/protected/models/Account.php (242)
+2013/04/25 11:23:31 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/models/Notification.php(164): CActiveRecord->save()
+#3 /var/www/rbu/protected/models/Transaction.php(299): Notification::addNotification(3, '129', 'tr-1461', Array)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#6 /var/www/rbu/protected/models/Account.php(242): CActiveRecord->save()
+#7 /var/www/rbu/protected/models/User.php(259): Account->addSalary()
+#8 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): User->afterSave()
+#9 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#10 /var/www/rbu/protected/controllers/SiteController.php(124): CActiveRecord->save()
+#11 /var/www/yii/framework/web/actions/CInlineAction.php(50): SiteController->actionLogin()
+#12 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#13 /var/www/yii/framework/web/CController.php(287): CController->runAction(Object(CInlineAction))
+#14 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#15 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('login')
+#16 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('site/login')
+#17 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#18 /var/www/rbu/index.php(13): CApplication->run()
+#19 {main}
+REQUEST_URI=/rbu/index.php?r=site/login
+HTTP_REFERER=http://localhost/rbu/index.php?r=site/login
+---
+2013/04/25 11:37:01 [error] [php] Object of class Entity could not be converted to string (/var/www/yii/framework/db/schema/CDbColumnSchema.php:141)
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1425): CDbCommandBuilder->createPkCriteria()
+#1 /var/www/rbu/protected/models/Notification.php(145): NotificationMessage->findByPk()
+#2 /var/www/rbu/protected/models/Transaction.php(299): addNotification()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(796): Transaction->insert()
+#5 /var/www/rbu/protected/models/Account.php(450): Transaction->save()
+#6 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Account->afterSave()
+#7 /var/www/yii/framework/db/ar/CActiveRecord.php(796): Account->insert()
+#8 /var/www/rbu/protected/models/User.php(247): Account->save()
+#9 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): User->afterSave()
+#10 /var/www/yii/framework/db/ar/CActiveRecord.php(796): User->insert()
+#11 /var/www/rbu/protected/controllers/SiteController.php(124): User->save()
+#12 /var/www/yii/framework/web/actions/CInlineAction.php(50): SiteController->actionLogin()
+#13 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#14 /var/www/yii/framework/web/CController.php(287): SiteController->runAction()
+#15 /var/www/yii/framework/web/CController.php(266): SiteController->runActionWithFilters()
+#16 /var/www/yii/framework/web/CWebApplication.php(283): SiteController->run()
+#17 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#18 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#19 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=site/login
+in /var/www/rbu/protected/models/Notification.php (145)
+in /var/www/rbu/protected/models/Transaction.php (299)
+in /var/www/rbu/protected/models/Account.php (450)
+2013/04/25 11:39:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in /var/www/rbu/protected/controllers/AuthorizationController.php:165
+Stack trace:
+#0 [internal function]: AuthorizationController->actionConfirm('1366879625')
+#1 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#2 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#3 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#7 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#8 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#10 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#12 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#13 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#14 /var/www/rbu/index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366879625
+HTTP_REFERER=http://localhost/rbu/index.php?r=site/login
+---
+2013/04/26 17:31:54 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/models/Transaction.php(154): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/db/ar/CActiveRecord.php(1803): Transaction->afterFind()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1824): CActiveRecord->populateRecord(Array, true)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(1291): CActiveRecord->populateRecords(Array, true, NULL)
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(1410): CActiveRecord->query(Object(CDbCriteria), true)
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(150): CActiveRecord->findAll(Object(CDbCriteria))
+#7 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#9 /var/www/yii/framework/zii/widgets/grid/CGridView.php(289): CBaseListView->init()
+#10 /var/www/yii/framework/web/CBaseController.php(148): CGridView->init()
+#11 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.gri...', Array)
+#12 /var/www/rbu/protected/views/transaction/index.php(93): CBaseController->widget('zii.widgets.gri...', Array)
+#13 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#14 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#16 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#17 /var/www/rbu/protected/controllers/TransactionController.php(351): CController->render('index', Array)
+#18 [internal function]: TransactionController->actionList(NULL)
+#19 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(TransactionController), Array)
+#20 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(TransactionController), Object(ReflectionMethod), Array)
+#21 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#22 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#23 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#24 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#26 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#27 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#28 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#29 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('list')
+#30 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('transaction/lis...')
+#31 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#32 /var/www/rbu/index.php(13): CApplication->run()
+#33 {main}
+REQUEST_URI=/rbu/index.php?r=transaction/list
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/index
+---
+2013/04/26 18:49:43 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.deposit_entiy" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('deposit_entiy')
+#1 /var/www/rbu/protected/models/Transaction.php(154): CActiveRecord->__get('deposit_entiy')
+#2 /var/www/yii/framework/db/ar/CActiveRecord.php(1803): Transaction->afterFind()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1824): CActiveRecord->populateRecord(Array, true)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(1291): CActiveRecord->populateRecords(Array, true, NULL)
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(1410): CActiveRecord->query(Object(CDbCriteria), true)
+#6 /var/www/yii/framework/web/CActiveDataProvider.php(150): CActiveRecord->findAll(Object(CDbCriteria))
+#7 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#9 /var/www/yii/framework/zii/widgets/grid/CGridView.php(289): CBaseListView->init()
+#10 /var/www/yii/framework/web/CBaseController.php(148): CGridView->init()
+#11 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.gri...', Array)
+#12 /var/www/rbu/protected/views/transaction/index.php(93): CBaseController->widget('zii.widgets.gri...', Array)
+#13 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#14 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#15 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#16 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#17 /var/www/rbu/protected/controllers/TransactionController.php(361): CController->render('index', Array)
+#18 [internal function]: TransactionController->actionList(NULL)
+#19 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(TransactionController), Array)
+#20 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(TransactionController), Object(ReflectionMethod), Array)
+#21 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#22 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#23 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#24 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#26 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#27 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#28 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#29 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('list')
+#30 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('transaction/lis...')
+#31 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#32 /var/www/rbu/index.php(13): CApplication->run()
+#33 {main}
+REQUEST_URI=/rbu/index.php?r=transaction/list
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/index
+---
+2013/04/26 18:51:23 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/controllers/TransactionController.php(56): CActiveRecord->__get('charge_user')
+#2 [internal function]: TransactionController->actionView('1465', 0, 0)
+#3 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(TransactionController), Array)
+#4 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(TransactionController), Object(ReflectionMethod), Array)
+#5 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#7 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#10 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#11 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#12 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('view')
+#14 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('transaction/vie...')
+#15 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#16 /var/www/rbu/index.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/rbu/index.php?r=transaction/view&id=1465
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 18:54:01 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.chargeUser" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('chargeUser')
+#1 /var/www/rbu/protected/views/transaction/view.php(53): CActiveRecord->__get('chargeUser')
+#2 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#4 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#5 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('view', Array, true)
+#6 /var/www/rbu/protected/controllers/TransactionController.php(62): CController->render('view', Array)
+#7 [internal function]: TransactionController->actionView('1465', 0, 0)
+#8 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(TransactionController), Array)
+#9 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(TransactionController), Object(ReflectionMethod), Array)
+#10 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#15 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#17 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('view')
+#19 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('transaction/vie...')
+#20 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#21 /var/www/rbu/index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/rbu/index.php?r=transaction/view&id=1465
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 18:55:48 [error] [exception.CException] exception 'CException' with message 'Property "User.Surname" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('Surname')
+#1 /var/www/rbu/protected/models/Entity.php(110): CActiveRecord->__get('Surname')
+#2 /var/www/yii/framework/base/CComponent.php(112): Entity->getSurname()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('surname')
+#4 /var/www/rbu/protected/views/transaction/view.php(53): CActiveRecord->__get('surname')
+#5 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#6 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#7 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#8 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('view', Array, true)
+#9 /var/www/rbu/protected/controllers/TransactionController.php(62): CController->render('view', Array)
+#10 [internal function]: TransactionController->actionView('1465', 0, 0)
+#11 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(TransactionController), Array)
+#12 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(TransactionController), Object(ReflectionMethod), Array)
+#13 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#14 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#15 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#16 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#17 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#18 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#19 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#20 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#21 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('view')
+#22 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('transaction/vie...')
+#23 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#24 /var/www/rbu/index.php(13): CApplication->run()
+#25 {main}
+REQUEST_URI=/rbu/index.php?r=transaction/view&id=1465
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 18:55:59 [error] [php] Undefined index: user_id (/var/www/rbu/protected/views/transaction/view.php:72)
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(870): TransactionController->renderFile()
+#1 /var/www/yii/framework/web/CController.php(783): TransactionController->renderPartial()
+#2 /var/www/rbu/protected/controllers/TransactionController.php(62): TransactionController->render()
+#3 unknown(0): TransactionController->actionView()
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): TransactionController->runAction()
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): TransactionController->filterAccessControl()
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): TransactionController->runActionWithFilters()
+#14 /var/www/yii/framework/web/CWebApplication.php(283): TransactionController->run()
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=transaction/view&id=1465
+in /var/www/rbu/protected/views/transaction/view.php (72)
+in /var/www/rbu/protected/controllers/TransactionController.php (62)
+in /var/www/rbu/index.php (13)
+2013/04/26 19:01:42 [error] [system.db.CDbCommand] CDbCommand::fetchColumn() failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'charge_entity' in 'where clause'. The SQL statement executed was: SELECT COUNT(*) FROM `rbu_pending` `t` WHERE (charge_account='3' AND charge_entity='2') OR (deposit_account='3' AND deposit_entity='2').
+in /var/www/rbu/protected/views/pending/index.php (33)
+in /var/www/rbu/protected/controllers/PendingController.php (210)
+in /var/www/rbu/index.php (13)
+2013/04/26 19:01:42 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'charge_entity' in 'where clause'. The SQL statement executed was: SELECT COUNT(*) FROM `rbu_pending` `t` WHERE (charge_account='3' AND charge_entity='2') OR (deposit_account='3' AND deposit_entity='2')' in /var/www/yii/framework/db/CDbCommand.php:528
+Stack trace:
+#0 /var/www/yii/framework/db/CDbCommand.php(425): CDbCommand->queryInternal('fetchColumn', 0, Array)
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(1540): CDbCommand->queryScalar()
+#2 /var/www/yii/framework/web/CActiveDataProvider.php(179): CActiveRecord->count(Object(CDbCriteria))
+#3 /var/www/yii/framework/web/CDataProvider.php(193): CActiveDataProvider->calculateTotalItemCount()
+#4 /var/www/yii/framework/web/CActiveDataProvider.php(129): CDataProvider->getTotalItemCount()
+#5 /var/www/yii/framework/web/CDataProvider.php(137): CActiveDataProvider->fetchData()
+#6 /var/www/yii/framework/zii/widgets/CBaseListView.php(108): CDataProvider->getData()
+#7 /var/www/yii/framework/zii/widgets/CListView.php(182): CBaseListView->init()
+#8 /var/www/yii/framework/web/CBaseController.php(148): CListView->init()
+#9 /var/www/yii/framework/web/CBaseController.php(173): CBaseController->createWidget('zii.widgets.CLi...', Array)
+#10 /var/www/rbu/protected/views/pending/index.php(33): CBaseController->widget('zii.widgets.CLi...', Array)
+#11 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#12 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#13 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#14 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#15 /var/www/rbu/protected/controllers/PendingController.php(210): CController->render('index', Array)
+#16 [internal function]: PendingController->actionIndex(NULL)
+#17 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=pending/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 19:06:11 [error] [exception.CException] exception 'CException' with message 'Property "Pending.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/views/pending/_view.php(20): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/web/CBaseController.php(131): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, false)
+#4 /var/www/yii/framework/zii/widgets/CListView.php(260): CBaseController->renderFile('/var/www/rbu/pr...', Array)
+#5 /var/www/yii/framework/zii/widgets/CBaseListView.php(161): CListView->renderItems()
+#6 [internal function]: CBaseListView->renderSection(Array)
+#7 /var/www/yii/framework/zii/widgets/CBaseListView.php(144): preg_replace_callback('/{(\w+)}/', Array, '{summary}?{sort...')
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(129): CBaseListView->renderContent()
+#9 /var/www/yii/framework/web/CBaseController.php(174): CBaseListView->run()
+#10 /var/www/rbu/protected/views/pending/index.php(33): CBaseController->widget('zii.widgets.CLi...', Array)
+#11 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#12 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#13 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#14 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#15 /var/www/rbu/protected/controllers/PendingController.php(210): CController->render('index', Array)
+#16 [internal function]: PendingController->actionIndex(NULL)
+#17 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=pending/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 19:06:14 [error] [exception.CException] exception 'CException' with message 'Property "Pending.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/views/pending/_view.php(20): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/web/CBaseController.php(131): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, false)
+#4 /var/www/yii/framework/zii/widgets/CListView.php(260): CBaseController->renderFile('/var/www/rbu/pr...', Array)
+#5 /var/www/yii/framework/zii/widgets/CBaseListView.php(161): CListView->renderItems()
+#6 [internal function]: CBaseListView->renderSection(Array)
+#7 /var/www/yii/framework/zii/widgets/CBaseListView.php(144): preg_replace_callback('/{(\w+)}/', Array, '{summary}?{sort...')
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(129): CBaseListView->renderContent()
+#9 /var/www/yii/framework/web/CBaseController.php(174): CBaseListView->run()
+#10 /var/www/rbu/protected/views/pending/index.php(33): CBaseController->widget('zii.widgets.CLi...', Array)
+#11 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#12 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#13 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#14 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#15 /var/www/rbu/protected/controllers/PendingController.php(210): CController->render('index', Array)
+#16 [internal function]: PendingController->actionIndex(NULL)
+#17 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=pending/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 19:11:22 [error] [exception.CException] exception 'CException' with message 'Property "Pending.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/views/pending/_view.php(31): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/web/CBaseController.php(131): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, false)
+#4 /var/www/yii/framework/zii/widgets/CListView.php(260): CBaseController->renderFile('/var/www/rbu/pr...', Array)
+#5 /var/www/yii/framework/zii/widgets/CBaseListView.php(161): CListView->renderItems()
+#6 [internal function]: CBaseListView->renderSection(Array)
+#7 /var/www/yii/framework/zii/widgets/CBaseListView.php(144): preg_replace_callback('/{(\w+)}/', Array, '{summary}?{sort...')
+#8 /var/www/yii/framework/zii/widgets/CBaseListView.php(129): CBaseListView->renderContent()
+#9 /var/www/yii/framework/web/CBaseController.php(174): CBaseListView->run()
+#10 /var/www/rbu/protected/views/pending/index.php(33): CBaseController->widget('zii.widgets.CLi...', Array)
+#11 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#12 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#13 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#14 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('index', Array, true)
+#15 /var/www/rbu/protected/controllers/PendingController.php(210): CController->render('index', Array)
+#16 [internal function]: PendingController->actionIndex(NULL)
+#17 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#18 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#19 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#21 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#23 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#24 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#25 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#26 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#27 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('index')
+#28 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/index')
+#29 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#30 /var/www/rbu/index.php(13): CApplication->run()
+#31 {main}
+REQUEST_URI=/rbu/index.php?r=pending/index
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/list
+---
+2013/04/26 19:13:00 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/views/authorization/_confirmForm.php(55): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#4 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#5 /var/www/rbu/protected/views/authorization/confirm.php(30): CController->renderPartial('_confirmForm', Array)
+#6 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#7 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#8 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#9 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('confirm', Array, true)
+#10 /var/www/rbu/protected/controllers/AuthorizationController.php(244): CController->render('confirm', Array)
+#11 [internal function]: AuthorizationController->actionConfirm('1366996360')
+#12 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#13 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#14 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#15 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#16 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#17 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#18 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#19 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#20 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#21 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#22 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#23 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#24 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#25 /var/www/rbu/index.php(13): CApplication->run()
+#26 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366996360
+HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/transfer
+---
+2013/04/26 19:15:02 [error] [php] Undefined index: user_id (/var/www/rbu/protected/views/authorization/confirm.php:35)
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(870): AuthorizationController->renderFile()
+#1 /var/www/yii/framework/web/CController.php(783): AuthorizationController->renderPartial()
+#2 /var/www/rbu/protected/controllers/AuthorizationController.php(244): AuthorizationController->render()
+#3 unknown(0): AuthorizationController->actionConfirm()
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): AuthorizationController->runAction()
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): AuthorizationController->filterAccessControl()
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): AuthorizationController->runActionWithFilters()
+#14 /var/www/yii/framework/web/CWebApplication.php(283): AuthorizationController->run()
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366996360
+in /var/www/rbu/protected/views/authorization/confirm.php (35)
+in /var/www/rbu/protected/controllers/AuthorizationController.php (244)
+in /var/www/rbu/index.php (13)
+2013/04/26 19:19:35 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/yii/framework/base/CModel.php(593): CActiveRecord->__get('charge_user')
+#2 /var/www/rbu/protected/models/ConfirmForm.php(53): CModel->offsetGet('charge_user')
+#3 /var/www/yii/framework/validators/CInlineValidator.php(43): ConfirmForm->validatePassword('password', Array)
+#4 /var/www/yii/framework/validators/CValidator.php(214): CInlineValidator->validateAttribute(Object(ConfirmForm), 'password')
+#5 /var/www/yii/framework/base/CModel.php(158): CValidator->validate(Object(ConfirmForm), NULL)
+#6 /var/www/rbu/protected/controllers/AuthorizationController.php(217): CModel->validate()
+#7 [internal function]: AuthorizationController->actionConfirm('1366996360')
+#8 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#9 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#10 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#15 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#17 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#19 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#20 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#21 /var/www/rbu/index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366996360
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366996360
+---
+2013/04/26 19:21:08 [error] [exception.CException] exception 'CException' with message 'Property "Entity.last_action" is not defined.' in /var/www/yii/framework/base/CComponent.php:174
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(160): CComponent->__set('last_action', '20130426192108')
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(1102): CActiveRecord->__set('last_action', '20130426192108')
+#2 /var/www/rbu/protected/models/Transaction.php(285): CActiveRecord->saveAttributes(Array)
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#5 /var/www/rbu/protected/controllers/AuthorizationController.php(227): CActiveRecord->save()
+#6 [internal function]: AuthorizationController->actionConfirm('1366996360')
+#7 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#8 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#9 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#10 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#11 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#12 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#13 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#15 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#16 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#18 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#19 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#20 /var/www/rbu/index.php(13): CApplication->run()
+#21 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366996360
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366996360
+---
+2013/04/26 19:22:45 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1471' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `rbu_transaction` (`executed_at`, `subject`, `amount`, `charge_entity`, `charge_account`, `deposit_entity`, `deposit_account`, `class`, `id`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/controllers/AuthorizationController.php (227)
+in /var/www/rbu/index.php (13)
+2013/04/26 19:22:45 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1471' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `rbu_transaction` (`executed_at`, `subject`, `amount`, `charge_entity`, `charge_account`, `deposit_entity`, `deposit_account`, `class`, `id`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/controllers/AuthorizationController.php(227): CActiveRecord->save()
+#3 [internal function]: AuthorizationController->actionConfirm('1366996360')
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366996360
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366996360
+---
+2013/04/26 19:23:11 [error] [exception.CException] exception 'CException' with message 'Account and its behaviors do not have a method or closure named "getObject".' in /var/www/yii/framework/base/CComponent.php:266
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(226): CComponent->__call('getObject', Array)
+#1 /var/www/rbu/protected/models/Transaction.php(287): CActiveRecord->__call('getObject', Array)
+#2 /var/www/rbu/protected/models/Transaction.php(287): Account->getObject()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#5 /var/www/rbu/protected/controllers/AuthorizationController.php(227): CActiveRecord->save()
+#6 [internal function]: AuthorizationController->actionConfirm('1366996979')
+#7 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#8 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#9 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#10 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#11 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#12 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#13 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#15 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#16 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#18 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#19 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#20 /var/www/rbu/index.php(13): CApplication->run()
+#21 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366996979
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366996979
+---
+2013/04/26 19:24:00 [error] [php] Object of class Entity could not be converted to string (/var/www/yii/framework/db/schema/CDbColumnSchema.php:141)
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1425): CDbCommandBuilder->createPkCriteria()
+#1 /var/www/rbu/protected/models/Notification.php(136): NotificationMessage->findByPk()
+#2 /var/www/rbu/protected/models/Transaction.php(291): addNotification()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(796): Transaction->insert()
+#5 /var/www/rbu/protected/controllers/AuthorizationController.php(227): Transaction->save()
+#6 unknown(0): AuthorizationController->actionConfirm()
+#7 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#8 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#9 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#10 /var/www/yii/framework/web/filters/CFilterChain.php(134): AuthorizationController->runAction()
+#11 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#12 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#13 /var/www/yii/framework/web/filters/CInlineFilter.php(59): AuthorizationController->filterAccessControl()
+#14 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#15 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#16 /var/www/yii/framework/web/CController.php(266): AuthorizationController->runActionWithFilters()
+#17 /var/www/yii/framework/web/CWebApplication.php(283): AuthorizationController->run()
+#18 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#19 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#20 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366997030
+in /var/www/rbu/protected/models/Notification.php (136)
+in /var/www/rbu/protected/models/Transaction.php (291)
+in /var/www/rbu/protected/controllers/AuthorizationController.php (227)
+2013/04/26 19:25:14 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1473' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `rbu_transaction` (`executed_at`, `subject`, `amount`, `charge_entity`, `charge_account`, `deposit_entity`, `deposit_account`, `class`, `id`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/controllers/AuthorizationController.php (227)
+in /var/www/rbu/index.php (13)
+2013/04/26 19:25:14 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1473' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `rbu_transaction` (`executed_at`, `subject`, `amount`, `charge_entity`, `charge_account`, `deposit_entity`, `deposit_account`, `class`, `id`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/controllers/AuthorizationController.php(227): CActiveRecord->save()
+#3 [internal function]: AuthorizationController->actionConfirm('1366997030')
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366997030
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997030
+---
+2013/04/26 19:25:41 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/models/Transaction.php(292): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#4 /var/www/rbu/protected/controllers/AuthorizationController.php(227): CActiveRecord->save()
+#5 [internal function]: AuthorizationController->actionConfirm('1366997120')
+#6 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#7 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#8 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#9 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#10 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#11 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#13 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#15 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#17 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#18 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#19 /var/www/rbu/index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366997120
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997120
+---
+2013/04/26 19:26:19 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `FK_notification_user_noti` FOREIGN KEY (`notification_id`) REFERENCES `rbu_notification` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/models/Notification.php (151)
+in /var/www/rbu/protected/models/Transaction.php (292)
+in /var/www/rbu/protected/controllers/AuthorizationController.php (227)
+2013/04/26 19:26:19 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`rbu`.`rbu_notification_message`, CONSTRAINT `FK_notification_user_noti` FOREIGN KEY (`notification_id`) REFERENCES `rbu_notification` (`id`) ON DELETE CASCADE ON UPDATE CASCADE). The SQL statement executed was: INSERT INTO `rbu_notification_message` (`added`, `sent`, `read`, `updated`, `shown`, `notification_id`, `entity_id`, `sid`, `data`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/models/Notification.php(151): CActiveRecord->save()
+#3 /var/www/rbu/protected/models/Transaction.php(292): Notification::addNotification(16, '2', 'tr-1475', Array)
+#4 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Transaction->afterSave()
+#5 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#6 /var/www/rbu/protected/controllers/AuthorizationController.php(227): CActiveRecord->save()
+#7 [internal function]: AuthorizationController->actionConfirm('1366997167')
+#8 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#9 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#10 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#15 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#17 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#19 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#20 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#21 /var/www/rbu/index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366997167
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997167
+---
+2013/04/26 19:29:00 [error] [exception.CException] exception 'CException' with message 'Property "Pending.chargeUser" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('chargeUser')
+#1 /var/www/rbu/protected/models/Pending.php(135): CActiveRecord->__get('chargeUser')
+#2 /var/www/yii/framework/db/ar/CActiveRecord.php(1037): Pending->afterSave()
+#3 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#4 /var/www/rbu/protected/controllers/AuthorizationController.php(200): CActiveRecord->save()
+#5 [internal function]: AuthorizationController->actionConfirm('1366997331')
+#6 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#7 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#8 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#9 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#10 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#11 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#13 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#15 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#16 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#17 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#18 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#19 /var/www/rbu/index.php(13): CApplication->run()
+#20 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366997331
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997331
+---
+2013/04/26 19:30:18 [error] [exception.CException] exception 'CException' with message 'Property "Pending.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/controllers/PendingController.php(58): CActiveRecord->__get('charge_user')
+#2 [internal function]: PendingController->actionView('7')
+#3 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#4 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#5 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#6 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#7 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#8 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#10 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#11 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#12 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#13 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('view')
+#14 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/view')
+#15 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#16 /var/www/rbu/index.php(13): CApplication->run()
+#17 {main}
+REQUEST_URI=/rbu/index.php?r=pending/view&id=7&charge_errors=0&deposit_errors=0
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997331
+---
+2013/04/26 19:30:54 [error] [exception.CException] exception 'CException' with message 'Property "Pending.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/views/pending/view.php(51): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#4 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#5 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('view', Array, true)
+#6 /var/www/rbu/protected/controllers/PendingController.php(63): CController->render('view', Array)
+#7 [internal function]: PendingController->actionView('7')
+#8 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#9 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#10 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#15 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#17 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('view')
+#19 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/view')
+#20 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#21 /var/www/rbu/index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/rbu/index.php?r=pending/view&id=7&charge_errors=0&deposit_errors=0
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997331
+---
+2013/04/26 19:32:16 [error] [php] Undefined variable: data (/var/www/rbu/protected/views/pending/view.php:51)
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(870): PendingController->renderFile()
+#1 /var/www/yii/framework/web/CController.php(783): PendingController->renderPartial()
+#2 /var/www/rbu/protected/controllers/PendingController.php(63): PendingController->render()
+#3 unknown(0): PendingController->actionView()
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): PendingController->runAction()
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): PendingController->filterAccessControl()
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): PendingController->runActionWithFilters()
+#14 /var/www/yii/framework/web/CWebApplication.php(283): PendingController->run()
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=pending/view&id=7&charge_errors=0&deposit_errors=0
+in /var/www/rbu/protected/views/pending/view.php (51)
+in /var/www/rbu/protected/controllers/PendingController.php (63)
+in /var/www/rbu/index.php (13)
+2013/04/26 19:32:24 [error] [exception.CException] exception 'CException' with message 'Property "Pending.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/views/pending/view.php(61): CActiveRecord->__get('charge_user')
+#2 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#3 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#4 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#5 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('view', Array, true)
+#6 /var/www/rbu/protected/controllers/PendingController.php(63): CController->render('view', Array)
+#7 [internal function]: PendingController->actionView('7')
+#8 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(PendingController), Array)
+#9 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(PendingController), Object(ReflectionMethod), Array)
+#10 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#12 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#14 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#15 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#16 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#17 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#18 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('view')
+#19 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('pending/view')
+#20 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#21 /var/www/rbu/index.php(13): CApplication->run()
+#22 {main}
+REQUEST_URI=/rbu/index.php?r=pending/view&id=7&charge_errors=0&deposit_errors=0
+HTTP_REFERER=http://localhost/rbu/index.php?r=authorization/confirm&sid=1366997331
+---
+2013/04/26 19:32:52 [error] [exception.CException] exception 'CException' with message 'Property "Transaction.charge_user" is not defined.' in /var/www/yii/framework/base/CComponent.php:131
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(144): CComponent->__get('charge_user')
+#1 /var/www/rbu/protected/models/Transaction.php(387): CActiveRecord->__get('charge_user')
+#2 /var/www/rbu/protected/views/authorization/_confirmForm.php(19): Transaction->getChargeAccountNumber()
+#3 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#4 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#5 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#6 /var/www/rbu/protected/views/authorization/confirm.php(30): CController->renderPartial('_confirmForm', Array)
+#7 /var/www/yii/framework/web/CBaseController.php(127): require('/var/www/rbu/pr...')
+#8 /var/www/yii/framework/web/CBaseController.php(96): CBaseController->renderInternal('/var/www/rbu/pr...', Array, true)
+#9 /var/www/yii/framework/web/CController.php(870): CBaseController->renderFile('/var/www/rbu/pr...', Array, true)
+#10 /var/www/yii/framework/web/CController.php(783): CController->renderPartial('confirm', Array, true)
+#11 /var/www/rbu/protected/controllers/AuthorizationController.php(244): CController->render('confirm', Array)
+#12 [internal function]: AuthorizationController->actionConfirm('1366997572')
+#13 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(AuthorizationController), Array)
+#14 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(AuthorizationController), Object(ReflectionMethod), Array)
+#15 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#16 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#17 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#18 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#19 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#20 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#21 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#22 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#23 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('confirm')
+#24 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('authorization/c...')
+#25 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#26 /var/www/rbu/index.php(13): CApplication->run()
+#27 {main}
+REQUEST_URI=/rbu/index.php?r=authorization/confirm&sid=1366997572
+HTTP_REFERER=http://localhost/rbu/index.php?r=pending/view&id=7&charge_errors=0&deposit_errors=0
+---
+2013/04/27 00:34:53 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (155)
+in /var/www/rbu/index.php (13)
+2013/04/29 13:00:26 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (155)
+in /var/www/rbu/index.php (13)
+2013/05/02 18:51:40 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in /var/www/yii/framework/web/CController.php:337
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(310): CController->invalidActionParams(Object(CInlineAction))
+#1 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#2 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#3 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#5 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#6 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#7 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#9 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#10 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#11 /var/www/rbu/index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create
+HTTP_REFERER=http://localhost/rbu/index.php?r=rate
+---
+2013/05/02 18:52:08 [error] [php] Undefined variable: sid (/var/www/rbu/protected/models/Rate.php:150)
+Stack trace:
+#0 unknown(0): RateController->actionCreate()
+#1 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#2 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#3 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(134): RateController->runAction()
+#5 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#7 /var/www/yii/framework/web/filters/CInlineFilter.php(59): RateController->filterAccessControl()
+#8 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#9 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#10 /var/www/yii/framework/web/CController.php(266): RateController->runActionWithFilters()
+#11 /var/www/yii/framework/web/CWebApplication.php(283): RateController->run()
+#12 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#13 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#14 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+in /var/www/rbu/protected/models/Rate.php (150)
+in /var/www/rbu/protected/models/Rate.php (162)
+in /var/www/rbu/protected/controllers/RateController.php (66)
+2013/05/02 18:58:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in /var/www/rbu/protected/controllers/RateController.php:67
+Stack trace:
+#0 [internal function]: RateController->actionCreate('tr-1480')
+#1 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(RateController), Array)
+#2 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(RateController), Object(ReflectionMethod), Array)
+#3 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#7 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#8 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#10 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#12 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#13 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#14 /var/www/rbu/index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+---
+2013/05/02 18:58:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in /var/www/rbu/protected/controllers/RateController.php:67
+Stack trace:
+#0 [internal function]: RateController->actionCreate('tr-1480')
+#1 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(RateController), Array)
+#2 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(RateController), Object(ReflectionMethod), Array)
+#3 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#7 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#8 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#10 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#12 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#13 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#14 /var/www/rbu/index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+---
+2013/05/02 18:59:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in /var/www/rbu/protected/controllers/RateController.php:67
+Stack trace:
+#0 [internal function]: RateController->actionCreate('tr-1480')
+#1 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(RateController), Array)
+#2 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(RateController), Object(ReflectionMethod), Array)
+#3 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#7 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#8 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#10 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#12 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#13 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#14 /var/www/rbu/index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+---
+2013/05/02 18:59:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The requested page does not exist.' in /var/www/rbu/protected/controllers/RateController.php:67
+Stack trace:
+#0 [internal function]: RateController->actionCreate('tr-1480')
+#1 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(RateController), Array)
+#2 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(RateController), Object(ReflectionMethod), Array)
+#3 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#5 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#7 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#8 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#9 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#10 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#12 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#13 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#14 /var/www/rbu/index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+---
+2013/05/02 19:43:17 [warning] [application] Failed to set unsafe attribute "to_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:43:17 [warning] [application] Failed to set unsafe attribute "from_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:43:17 [warning] [application] Failed to set unsafe attribute "type" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:43:17 [warning] [application] Failed to set unsafe attribute "added" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:43:17 [warning] [application] Failed to set unsafe attribute "updated" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [warning] [application] Failed to set unsafe attribute "to_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [warning] [application] Failed to set unsafe attribute "from_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [warning] [application] Failed to set unsafe attribute "type" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [warning] [application] Failed to set unsafe attribute "added" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [warning] [application] Failed to set unsafe attribute "updated" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `rbu_rate` (`id`, `to_id`, `from_id`, `sid`, `type`, `puntuation`, `comment`, `added`, `updated`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8).
+in /var/www/rbu/protected/controllers/RateController.php (77)
+in /var/www/rbu/index.php (13)
+2013/05/02 19:56:15 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'PRIMARY'. The SQL statement executed was: INSERT INTO `rbu_rate` (`id`, `to_id`, `from_id`, `sid`, `type`, `puntuation`, `comment`, `added`, `updated`) VALUES (:yp0, :yp1, :yp2, :yp3, :yp4, :yp5, :yp6, :yp7, :yp8)' in /var/www/yii/framework/db/CDbCommand.php:354
+Stack trace:
+#0 /var/www/yii/framework/db/ar/CActiveRecord.php(1017): CDbCommand->execute()
+#1 /var/www/yii/framework/db/ar/CActiveRecord.php(796): CActiveRecord->insert(NULL)
+#2 /var/www/rbu/protected/controllers/RateController.php(77): CActiveRecord->save()
+#3 [internal function]: RateController->actionCreate('tr-1480')
+#4 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs(Object(RateController), Array)
+#5 /var/www/yii/framework/web/actions/CInlineAction.php(48): CAction->runWithParamsInternal(Object(RateController), Object(ReflectionMethod), Array)
+#6 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams(Array)
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#8 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#10 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#11 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#12 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#13 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#15 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#16 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#17 /var/www/rbu/index.php(13): CApplication->run()
+#18 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+HTTP_REFERER=http://localhost/rbu/index.php?r=rate/create&sid=tr-1480
+---
+2013/05/02 19:59:25 [error] [php] Undefined variable: record (/var/www/rbu/protected/models/Rate.php:139)
+Stack trace:
+#0 /var/www/yii/framework/web/actions/CAction.php(107): ReflectionMethod->invokeArgs()
+#1 /var/www/yii/framework/web/actions/CInlineAction.php(48): CInlineAction->runWithParamsInternal()
+#2 /var/www/yii/framework/web/CController.php(309): CInlineAction->runWithParams()
+#3 /var/www/yii/framework/web/filters/CFilterChain.php(134): RateController->runAction()
+#4 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#5 /var/www/yii/framework/web/CController.php(1146): CAccessControlFilter->filter()
+#6 /var/www/yii/framework/web/filters/CInlineFilter.php(59): RateController->filterAccessControl()
+#7 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter()
+#8 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#9 /var/www/yii/framework/web/CController.php(266): RateController->runActionWithFilters()
+#10 /var/www/yii/framework/web/CWebApplication.php(283): RateController->run()
+#11 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController()
+#12 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#13 /var/www/rbu/index.php(13): CWebApplication->run()
+REQUEST_URI=/rbu/index.php?r=rate/create&sid=tr-1480
+in /var/www/rbu/protected/models/Rate.php (139)
+in /var/www/rbu/protected/controllers/RateController.php (69)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:00:08 [warning] [application] Failed to set unsafe attribute "to_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:00:08 [warning] [application] Failed to set unsafe attribute "from_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:00:08 [warning] [application] Failed to set unsafe attribute "type" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:00:08 [warning] [application] Failed to set unsafe attribute "added" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:00:08 [warning] [application] Failed to set unsafe attribute "updated" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:34 [warning] [application] Failed to set unsafe attribute "to_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:34 [warning] [application] Failed to set unsafe attribute "from_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:34 [warning] [application] Failed to set unsafe attribute "type" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:34 [warning] [application] Failed to set unsafe attribute "added" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:34 [warning] [application] Failed to set unsafe attribute "updated" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:50 [warning] [application] Failed to set unsafe attribute "to_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:50 [warning] [application] Failed to set unsafe attribute "from_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:50 [warning] [application] Failed to set unsafe attribute "type" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:50 [warning] [application] Failed to set unsafe attribute "added" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:02:50 [warning] [application] Failed to set unsafe attribute "updated" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (75)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:03:36 [warning] [application] Failed to set unsafe attribute "to_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:03:36 [warning] [application] Failed to set unsafe attribute "from_id" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:03:36 [warning] [application] Failed to set unsafe attribute "type" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:03:36 [warning] [application] Failed to set unsafe attribute "added" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 20:03:36 [warning] [application] Failed to set unsafe attribute "updated" of "Rate".
+in /var/www/rbu/protected/controllers/RateController.php (76)
+in /var/www/rbu/index.php (13)
+2013/05/02 23:58:24 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in /var/www/yii/framework/web/CController.php:337
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(310): CController->invalidActionParams(Object(CInlineAction))
+#1 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#2 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#3 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#5 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#6 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#7 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#9 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#10 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#11 /var/www/rbu/index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create
+HTTP_REFERER=http://localhost/rbu/index.php?r=site/login
+---
+2013/05/02 23:58:32 [error] [exception.CHttpException.403] exception 'CHttpException' with message 'You are not authorized to perform this action.' in /var/www/yii/framework/web/auth/CAccessControlFilter.php:170
+Stack trace:
+#0 /var/www/yii/framework/web/auth/CAccessControlFilter.php(133): CAccessControlFilter->accessDenied(Object(CWebUser), 'You are not aut...')
+#1 /var/www/yii/framework/web/filters/CFilter.php(39): CAccessControlFilter->preFilter(Object(CFilterChain))
+#2 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#3 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#5 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#6 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#7 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('admin')
+#8 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/admin')
+#9 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#10 /var/www/rbu/index.php(13): CApplication->run()
+#11 {main}
+REQUEST_URI=/rbu/index.php?r=rate/admin
+HTTP_REFERER=http://localhost/rbu/index.php?r=rate
+---
+2013/05/02 23:58:35 [error] [exception.CHttpException.400] exception 'CHttpException' with message 'Your request is invalid.' in /var/www/yii/framework/web/CController.php:337
+Stack trace:
+#0 /var/www/yii/framework/web/CController.php(310): CController->invalidActionParams(Object(CInlineAction))
+#1 /var/www/yii/framework/web/filters/CFilterChain.php(134): CController->runAction(Object(CInlineAction))
+#2 /var/www/yii/framework/web/filters/CFilter.php(41): CFilterChain->run()
+#3 /var/www/yii/framework/web/CController.php(1146): CFilter->filter(Object(CFilterChain))
+#4 /var/www/yii/framework/web/filters/CInlineFilter.php(59): CController->filterAccessControl(Object(CFilterChain))
+#5 /var/www/yii/framework/web/filters/CFilterChain.php(131): CInlineFilter->filter(Object(CFilterChain))
+#6 /var/www/yii/framework/web/CController.php(292): CFilterChain->run()
+#7 /var/www/yii/framework/web/CController.php(266): CController->runActionWithFilters(Object(CInlineAction), Array)
+#8 /var/www/yii/framework/web/CWebApplication.php(283): CController->run('create')
+#9 /var/www/yii/framework/web/CWebApplication.php(142): CWebApplication->runController('rate/create')
+#10 /var/www/yii/framework/base/CApplication.php(162): CWebApplication->processRequest()
+#11 /var/www/rbu/index.php(13): CApplication->run()
+#12 {main}
+REQUEST_URI=/rbu/index.php?r=rate/create
+HTTP_REFERER=http://localhost/rbu/index.php?r=rate
+---

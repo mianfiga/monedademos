@@ -300,8 +300,9 @@ class Account extends AccountBase {
         }
 
         //Assign compensed salaries
+        $dateLastPeriod = Period::getLastDate();
         foreach ($accounts as $acc) {
-            if ((isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
+            if ( $dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
                     && (($acc->earned - $acc->spended) >= 0)) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
                 $compensation += $ret['compensation'];

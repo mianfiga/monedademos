@@ -7,6 +7,8 @@
  * @property string $id
  * @property string $class
  * @property string $object_id
+ * @property integer $points
+ * @property integer $rates
  *
  * The followings are the available model relations:
  * @property Account[] $rbuAccounts
@@ -16,6 +18,8 @@
  * @property NotificationMessage[] $notificationMessages
  * @property Pending[] $pendings
  * @property Pending[] $pendings1
+ * @property Rate[] $rates0
+ * @property Rate[] $rates01
  * @property Transaction[] $transactions
  * @property Transaction[] $transactions1
  */
@@ -48,11 +52,12 @@ class EntityBase extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('class, object_id', 'required'),
+			array('points, rates', 'numerical', 'integerOnly'=>true),
 			array('class', 'length', 'max'=>32),
 			array('object_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, class, object_id', 'safe', 'on'=>'search'),
+			array('id, class, object_id, points, rates', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,10 +74,12 @@ class EntityBase extends CActiveRecord
 			'rbuMarketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_joined}}(entity_id, ad_id)'),
 			'rbuNotifications' => array(self::MANY_MANY, 'Notification', '{{notification_configuration}}(entity_id, notification_id)'),
 			'notificationMessages' => array(self::HAS_MANY, 'NotificationMessage', 'entity_id'),
-			'pendings' => array(self::HAS_MANY, 'Pending', 'deposit_entity'),
-			'pendings1' => array(self::HAS_MANY, 'Pending', 'charge_entity'),
-			'transactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
-			'transactions1' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
+			'pendings' => array(self::HAS_MANY, 'Pending', 'charge_entity'),
+			'pendings1' => array(self::HAS_MANY, 'Pending', 'deposit_entity'),
+			'rates0' => array(self::HAS_MANY, 'Rate', 'to_id'),
+			'rates01' => array(self::HAS_MANY, 'Rate', 'from_id'),
+			'transactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
+			'transactions1' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
 		);
 	}
 
@@ -85,6 +92,8 @@ class EntityBase extends CActiveRecord
 			'id' => 'ID',
 			'class' => 'Class',
 			'object_id' => 'Object',
+			'points' => 'Points',
+			'rates' => 'Rates',
 		);
 	}
 
@@ -102,6 +111,8 @@ class EntityBase extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('class',$this->class,true);
 		$criteria->compare('object_id',$this->object_id,true);
+		$criteria->compare('points',$this->points);
+		$criteria->compare('rates',$this->rates);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -247,7 +247,7 @@ class User extends UserBase {
             $acc->save();
 
             $auth = new Authorization;
-            $auth->user_id = $this->id;
+            $auth->entity_id = $entity->id;
             $auth->account_id = $acc->id;
             $auth->code = self::randCode();
             $auth->title = $acc->title;
