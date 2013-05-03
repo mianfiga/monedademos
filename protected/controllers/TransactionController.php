@@ -80,17 +80,17 @@ class TransactionController extends Controller {
     }
 
     public function actionCharge() {
-        $condition = 'class=' . Authorization::CLASS_HOLDER . ' OR class=' . Authorization::CLASS_AUTHORIZED;
+        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class=\'' . Authorization::CLASS_AUTHORIZED.'\'';
         $this->actionFill('charge', null, Authorization::getAccountList(Yii::app()->user->getId(), $condition));
     }
 
     public function actionTransfer() {
-        $condition = 'class=' . Authorization::CLASS_HOLDER . ' OR class=' . Authorization::CLASS_AUTHORIZED;
+        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class=\'' . Authorization::CLASS_AUTHORIZED.'\'';
         $this->actionFill('transfer', Authorization::getAccountList(Yii::app()->user->getId(), $condition), null);
     }
 
     public function actionMovement() {
-        $condition = 'class=' . Authorization::CLASS_HOLDER . ' OR class=' . Authorization::CLASS_AUTHORIZED;
+        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class= \'' . Authorization::CLASS_AUTHORIZED.'\'';
         $accountlist = Authorization::getAccountList(Yii::app()->user->getId(), $condition);
         $this->actionFill('movement', $accountlist, $accountlist);
     }
@@ -195,7 +195,7 @@ class TransactionController extends Controller {
         }
 
         if ($account_number == null) {
-            $accounts = Authorization::getByEntity($entity_id, 'class=' . Authorization::CLASS_HOLDER);
+            $accounts = Authorization::getByEntity($entity_id, 'class=\'' . Authorization::CLASS_HOLDER.'\'');
             foreach ($accounts as $account) {
                 $auth = $account;
                 $account_number = $account->getAccountNumber();

@@ -34,7 +34,7 @@ class Account extends AccountBase {
     const CLASS_USER = 'user';    //3;
     const CLASS_GROUP = 'group';   //4;
     const FUND_ACCOUNT = 1;
-    const FUND_USER = 1;
+    const FUND_ENTITY = 1;
 
     protected $_isNew = false;
 
@@ -74,14 +74,14 @@ class Account extends AccountBase {
         return array(
             'holders' => array(
                 self::MANY_MANY,
-                'User',
-                '{{authorization}}(account_id, user_id)',
-                'on' => 'class=' . Authorization::CLASS_HOLDER
+                'Entity',
+                '{{authorization}}(account_id, entity_id)',
+                'on' => '`holders_holders`.`class`=\'' . Authorization::CLASS_HOLDER . '\''
             ),
-            'users' => array(
+            'entities' => array(
                 self::MANY_MANY,
-                'User',
-                '{{authorization}}(account_id, user_id)',
+                'Entity',
+                '{{authorization}}(account_id, entity_id)',
             ),
             'chargeTransactions' => array(
                 self::HAS_MANY,
@@ -161,8 +161,8 @@ class Account extends AccountBase {
         $transaction->class = Transaction::CLASS_TAX;
         $transaction->deposit_account = self::FUND_ACCOUNT;
         $transaction->charge_account = $this->id;
-        $transaction->charge_user = $this->getHolder()->id;
-        $transaction->deposit_user = self::FUND_USER;
+        $transaction->charge_entity = $this->getHolder()->id;
+        $transaction->deposit_entity = self::FUND_ENTITY;
 
         if (!$transaction->save()) {
 //			echo "ERROR";
@@ -233,9 +233,9 @@ class Account extends AccountBase {
         //Add salary transaction
         $transaction->amount = round($salary);
         $transaction->class = Transaction::CLASS_SALARY;
-        $transaction->deposit_user = $this->getHolder()->id;
+        $transaction->deposit_entity = $this->getHolder()->id;
         $transaction->deposit_account = $this->id;
-        $transaction->charge_user = self::FUND_USER;
+        $transaction->charge_entity = self::FUND_ENTITY;
         $transaction->charge_account = self::FUND_ACCOUNT;
 
 
@@ -443,8 +443,8 @@ class Account extends AccountBase {
                     $tran = new Transaction;
                     $tran->charge_account = $fund->id;
                     $tran->deposit_account = $sysAcc->id;
-                    $tran->charge_user = self::FUND_USER;
-                    $tran->deposit_user = self::FUND_USER;
+                    $tran->charge_entity = self::FUND_ENTITY;
+                    $tran->deposit_entity = self::FUND_ENTITY;
                     $tran->class = Transaction::CLASS_SALARY;
                     $tran->amount = $rule->salary;
                     $tran->subject = 'New user payment';
@@ -470,7 +470,7 @@ class Account extends AccountBase {
     public function reload() {
         $holders = $this->holders;
         foreach ($holders as $holder) {
-            $charge_user = $holder->id;
+            $charge_entity = $holder->id;
         }
 
         //set account to 0
@@ -479,8 +479,8 @@ class Account extends AccountBase {
         $to_zero->charge_account = $this->id;
         $to_zero->deposit_account = self::FUND_ACCOUNT;
 
-        $to_zero->charge_user = $charge_user;
-        $to_zero->deposit_user = self::FUND_USER;
+        $to_zero->charge_entity = $charge_entity;
+        $to_zero->deposit_entity = self::FUND_ENTITY;
         $to_zero->class = Transaction::CLASS_SYSTEM;
         $to_zero->amount = $this->credit;
         $to_zero->subject = Yii::t('app,', 'Account reset');
@@ -495,8 +495,8 @@ class Account extends AccountBase {
         $reset = new Transaction;
         $reset->charge_account = self::FUND_ACCOUNT;
         $reset->deposit_account = $this->id;
-        $reset->charge_user = self::FUND_USER;
-        $reset->deposit_user = $charge_user;
+        $reset->charge_entity = self::FUND_ENTITY;
+        $reset->deposit_entity = $charge_entity;
         $reset->class = Transaction::CLASS_SYSTEM;
         $reset->amount = ($amount > 0 ? $amount : 0);
         $reset->subject = Yii::t('app', 'Earned ({earned}) - Expended ({expended}) = {total}', array(

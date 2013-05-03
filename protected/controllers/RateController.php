@@ -71,6 +71,7 @@ class RateController extends Controller {
         if (isset($_POST['Rate'])) {
             $model->attributes = $_POST['Rate'];
             if ($model->save()){
+                Yii::app()->user->setFlash('success', Yii::t('app', 'Thanks for rating'));
                 $this->redirect($model->url!=''?$model->url:'create');
             }
                 

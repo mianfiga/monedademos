@@ -297,15 +297,15 @@ class Transaction extends TransactionBase {
         }
 
         if ($this->class == Transaction::CLASS_SALARY) {
-            Notification::addNotification(Notification::SALARY, Entity::get($this->depositUser)->id, Sid::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SALARY, $this->deposit_entity, Sid::getSID($this), $notif_data);
         }
         if ($this->class == Transaction::CLASS_TAX) {
-            Notification::addNotification(Notification::TAX, Entity::get($this->charge_user)->id, Sid::getSID($this), $notif_data);
+            Notification::addNotification(Notification::TAX, $this->charge_entity, Sid::getSID($this), $notif_data);
         }
 
         if ($this->class == Transaction::CLASS_SYSTEM) {
-            Notification::addNotification(Notification::SYSTEM, Entity::get($this->depositUser)->id, Sid::getSID($this), $notif_data);
-            Notification::addNotification(Notification::SYSTEM, Entity::get($this->chargeUser)->id, Sid::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SYSTEM, $this->deposit_entity, Sid::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SYSTEM, $this->charge_entity, Sid::getSID($this), $notif_data);
         }
     }
 

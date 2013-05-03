@@ -19,9 +19,9 @@
 class Authorization extends AuthorizationBase
 {
 
-		const CLASS_HOLDER   = 1;
-		const CLASS_AUTHORIZED      = 2;
-		const CLASS_CONSULTANT = 3;
+		const CLASS_HOLDER   = 'holder'; //1;
+		const CLASS_AUTHORIZED = 'authorized'; //2;
+		const CLASS_CONSULTANT = 'consultant'; //3;
 
 	public $user_password;
 	public $plain_password;

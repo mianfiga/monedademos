@@ -138,5 +138,6 @@ return array(
     'Rate {name} in this {object}' => 'Valora a {name} en esta {object}',
     'Send rate' => 'Envía la valoración',
     'Rates & Comments' => 'Valoraciones y Comentarios',
+    'Thanks for rating' => 'Gracias por valorar',
 );
 ?>
