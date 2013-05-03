@@ -60,9 +60,6 @@ class RbuCommand extends CConsoleCommand {
         $acc->addSalary($date);
     }
 
-    //posible problema:
-    // que se añada una regla cuando se ha adaptado el sistema a una regla posterior
-    // a la que se tomará como referencia (tomorrow rule)
     public function actionNewRule($date = null, $salary = null, $min_salary = null, $multiplier = null) {
         if ($date == null) {
             $date = time();
@@ -112,7 +109,7 @@ class RbuCommand extends CConsoleCommand {
             $notif_data = array();
             $notif_data['{title}'] = $ad->title;
             $notif_data['{id}'] = $ad->id;
-            Notification::addNotification(Notification::MARKET_AD_EXPIRATION, $ad->created_by, Notification::getSID($ad), $notif_data);
+            Notification::addNotification(Notification::MARKET_AD_EXPIRATION, $ad->created_by, Sid::getSID($ad), $notif_data);
         }
 
         $ads = MarketAd::model()->findAll('expiration = CURDATE()');
@@ -120,7 +117,7 @@ class RbuCommand extends CConsoleCommand {
             $notif_data = array();
             $notif_data['{title}'] = $ad->title;
             $notif_data['{id}'] = $ad->id;
-            Notification::addNotification(Notification::MARKET_AD_EXPIRED, $ad->created_by, Notification::getSID($ad), $notif_data);
+            Notification::addNotification(Notification::MARKET_AD_EXPIRED, $ad->created_by, Sid::getSID($ad), $notif_data);
         }
 
         $newRule = Rule::getTomorrowRule();

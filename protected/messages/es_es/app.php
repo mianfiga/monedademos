@@ -133,5 +133,10 @@ return array(
     'Are you sure you want to delete this ad?' => '¿Estás seguro de que deseas eliminar este anuncio?',
     'The account {account} is blocked reset account by clicking in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>' => 'La cuenta {account} está bloqueada, desbloquéala haciendo clic en "Editar cuenta" o haciendo clic <a href="{edit_account_link}">aquí</a>',
     'Account updated' => 'Cuenta actualizada',
+    'transaction' => 'transacción',
+    'Updated' => 'Actualizado',
+    'Rate {name} in this {object}' => 'Valora a {name} en esta {object}',
+    'Send rate' => 'Envía la valoración',
+    'Rates & Comments' => 'Valoraciones y Comentarios',
 );
 ?>

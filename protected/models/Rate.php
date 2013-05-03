@@ -4,7 +4,6 @@
  * This is the model class for table "{{rate}}".
  *
  * The followings are the available columns in table '{{rate}}':
- * @property string $id
  * @property string $to_id
  * @property string $from_id
  * @property string $sid
@@ -19,11 +18,14 @@
  * @property Entity $from
  */
 class Rate extends RateBase {
-
+    
+    const DEFAULT_VALUE = 3;
     const TYPE_NEUTRAL = 'neutral';
     const TYPE_CLIENT = 'client';
     const TYPE_VENDOR = 'vendor';
-
+    
+	public $url;
+    
     private $_object;
     private $_isNew;
     private $_puntuation;
@@ -61,12 +63,12 @@ class Rate extends RateBase {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            //array('to_id, from_id', 'required'),
+            array('puntuation', 'required'),
             array('puntuation', 'numerical', 'integerOnly' => true),
             //array('to_id, from_id', 'length', 'max' => 11),
             array('sid', 'length', 'max' => 127),
             //array('type', 'length', 'max' => 7),
-            array('comment', 'safe'),
+            array('comment, url', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('to_id, from_id, sid, type, puntuation, comment, added, updated', 'safe', 'on' => 'search'),
@@ -90,7 +92,6 @@ class Rate extends RateBase {
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
             'to_id' => 'To',
             'from_id' => 'From',
             'sid' => 'Sid',
@@ -112,7 +113,6 @@ class Rate extends RateBase {
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->id, true);
         $criteria->compare('to_id', $this->to_id, true);
         $criteria->compare('from_id', $this->from_id, true);
         $criteria->compare('sid', $this->sid, true);
@@ -128,15 +128,9 @@ class Rate extends RateBase {
     }
     
     public function alreadyExists(){
-        $found = self::model()->findByAttributes(array(
-            'sid' => $this->sid,
-            'to_id' => $this->to_id,
-            'from_id' => $this->from_id,
-            ));
-        if ($found){
-            $this->id=$found->id;
-            $this->refresh();
+        if ($this->refresh()){
             $this->setIsNewRecord(false);
+            $this->_puntuation = $this->puntuation;
             return true;
         }
         return false;
@@ -144,14 +138,13 @@ class Rate extends RateBase {
 
     public function getObject() {
         if ($this->_object == null) {
-            $this->_object = Notification::getObject($this->sid);
+            $this->_object = Sid::getObject($this->sid);
         }
         return $this->_object;
     }
 
     public function fillPartial() {
         $data = explode('-', $this->sid);
-        echo $data[0];
         switch ($data[0]) {
             case 'tr':
                 if ($this->object->charge_entity == $this->from_id) {
@@ -181,6 +174,7 @@ class Rate extends RateBase {
         }
 
         return $this->fillPartial();
+            
     }
 
     protected function afterFind() {

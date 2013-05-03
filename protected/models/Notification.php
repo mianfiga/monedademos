@@ -102,36 +102,6 @@ class Notification extends NotificationBase {
                 ));
     }
 
-    public static function getSID($object) {
-        switch (get_class($object)) {
-            case 'Transaction':
-                return 'tr-' . $object->id;
-            case 'Pending':
-                return 'pe-' . $object->id;
-            case 'MarketAd':
-                return 'ad-' . $object->id;
-            case 'MarketJoined':
-                return 'jo-' . $object->ad_id . '-' . $object->entity_id;
-        }
-    }
-
-    public static function getObject($SID) {
-        if ($SID == null)
-            return null;
-
-        $data = explode('-', $SID);
-        switch ($data[0]) {
-            case 'tr':
-                return Transaction::model()->findByPk($data[1]);
-            case 'pe':
-                return Pending::model()->findByPk($data[1]);
-            case 'ad':
-                return MarketAd::model()->findByPk($data[1]);
-            case 'jo':
-                return MarketJoined::model()->findByPk(array('ad_id' => $data[1], 'entity_id' => $data[2]));
-        }
-    }
-
     public static function addNotification($notification_id, $entity_id, $SID, $data) {
         $notif_mess = NotificationMessage::model()->findByPk(array('notification_id' => $notification_id, 'entity_id' => $entity_id, 'sid' => $SID));
         if ($notif_mess === null) {

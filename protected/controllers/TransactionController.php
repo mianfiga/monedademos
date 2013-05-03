@@ -52,13 +52,21 @@ class TransactionController extends Controller {
         if ($id != null) {
             $entity_id = Yii::app()->user->getId();
 
+
             $model = $this->loadModel($id);
+            $msid = Sid::getSID($model);
+            
+            $rate = new Rate();            
+            $rate->fill($msid);
+            $rate->alreadyExists();
+            $rate->url = Yii::app()->request->url;
             if ($model->charge_entity == $entity_id || $model->deposit_entity == $entity_id) { //falta ver si la cuenta es pública
-                Notification::shown($entity_id, Notification::getSID($model));
+                Notification::shown($entity_id, $msid);
                 $this->render('view', array(
                     'model' => $model,
                     'charge_errors' => $charge_errors,
                     'deposit_errors' => $deposit_errors,
+                    'rate' => $rate,
                 ));
                 return;
             }

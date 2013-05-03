@@ -85,7 +85,7 @@ class MarketController extends Controller {
                         'criteria' => $criteria,
                     ));
 
-            Notification::shown($model->created_by, Notification::getSID($model));
+            Notification::shown($model->created_by, Sid::getSID($model));
             $this->render('panel', array(
                 'model' => $model,
                 'dataProvider' => $dataProvider,
@@ -128,7 +128,7 @@ class MarketController extends Controller {
                 }
             }
 
-            Notification::shown($ad->created_by, Notification::getSID($joined));
+            Notification::shown($ad->created_by, Sid::getSID($joined));
             $this->render('panelView', array(
                 'entity' => $entity,
                 'joined' => $joined,
@@ -294,7 +294,7 @@ class MarketController extends Controller {
                 }
             }
         }
-        Notification::shown($entity_id, Notification::getSID($model));
+        Notification::shown($entity_id, Sid::getSID($model));
         $this->render('join', array('model' => $model, 'ad' => $ad));
     }
 

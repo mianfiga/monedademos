@@ -123,7 +123,7 @@ class NotificationMessage extends NotificationMessageBase {
 
     public function getObject() {
         if ($this->_object === null)
-            return $this->_object = Notification::getObject($this->sid);
+            return $this->_object = Sid::getObject($this->sid);
         else
             return $this->_object;
     }

@@ -288,24 +288,24 @@ class Transaction extends TransactionBase {
             $this->depositAccount->saveAttributes(array('last_action' => date('YmdHis')));
 
             if ($entity_id == $this->charge_entity) {
-                Notification::addNotification(Notification::PAYMENT, $this->deposit_entity, Notification::getSID($this), $notif_data);
-                Notification::addNotification(Notification::SELF_CHARGE, $this->charge_entity, Notification::getSID($this), $notif_data);
+                Notification::addNotification(Notification::PAYMENT, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                Notification::addNotification(Notification::SELF_CHARGE, $this->charge_entity, Sid::getSID($this), $notif_data);
             } else {
-                Notification::addNotification(Notification::SELF_PAYMENT, $this->deposit_entity, Notification::getSID($this), $notif_data);
-                Notification::addNotification(Notification::CHARGE, $this->charge_entity, Notification::getSID($this), $notif_data);
+                Notification::addNotification(Notification::SELF_PAYMENT, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                Notification::addNotification(Notification::CHARGE, $this->charge_entity, Sid::getSID($this), $notif_data);
             }
         }
 
         if ($this->class == Transaction::CLASS_SALARY) {
-            Notification::addNotification(Notification::SALARY, Entity::get($this->depositUser)->id, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SALARY, Entity::get($this->depositUser)->id, Sid::getSID($this), $notif_data);
         }
         if ($this->class == Transaction::CLASS_TAX) {
-            Notification::addNotification(Notification::TAX, Entity::get($this->charge_user)->id, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::TAX, Entity::get($this->charge_user)->id, Sid::getSID($this), $notif_data);
         }
 
         if ($this->class == Transaction::CLASS_SYSTEM) {
-            Notification::addNotification(Notification::SYSTEM, Entity::get($this->depositUser)->id, Notification::getSID($this), $notif_data);
-            Notification::addNotification(Notification::SYSTEM, Entity::get($this->chargeUser)->id, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SYSTEM, Entity::get($this->depositUser)->id, Sid::getSID($this), $notif_data);
+            Notification::addNotification(Notification::SYSTEM, Entity::get($this->chargeUser)->id, Sid::getSID($this), $notif_data);
         }
     }
 

@@ -136,12 +136,12 @@ class Pending extends PendingBase {
             '{deposit_account_number}' => $this->getDepositAccountNumber(),
             '{deposit_user_name}' => $this->depositEntity->name,
             '{subject}' => $this->subject);
-        Notification::addNotification(Notification::PENDING, $this->charge_entity, Notification::getSID($this), $notif_data);
+        Notification::addNotification(Notification::PENDING, $this->charge_entity, Sid::getSID($this), $notif_data);
     }
 
     protected function afterDelete() {
         parent::afterSave();
-        Notification::removeNotification(Notification::PENDING, $this->charge_entity, Notification::getSID($this));
+        Notification::removeNotification(Notification::PENDING, $this->charge_entity, Sid::getSID($this));
     }
 
 }

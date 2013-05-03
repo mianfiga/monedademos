@@ -65,7 +65,8 @@ $this->menu=array(
 <br/>
 <?php echo CHtml::link(Yii::t('app','View movements'), array('transaction/list'),array('class' => 'button')); ?> 
 <?php echo CHtml::link(Yii::t('app','Back to Account'), array('transaction/index'),array('class' => 'button secondary')); ?>
-<br /><br />
+<br/>
+<?php $this->renderPartial('/rate/_embedded', array('model'=> $rate)); ?>
 <?php $this->renderPartial('/contribution/_contributions', array('model'=> $model)); ?>
 
 

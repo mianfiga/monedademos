@@ -144,7 +144,7 @@ class MarketJoined extends MarketJoinedBase
                                                   '{user_name}' => $this->entity->getName(),
                                                   '{added}' => date('YmdHis')));
       
-      Notification::addNotification(Notification::MARKET_JOINED, $this->ad->created_by, Notification::getSID($this->ad), $notif_data);
+      Notification::addNotification(Notification::MARKET_JOINED, $this->ad->created_by, Sid::getSID($this->ad), $notif_data);
     }
     
     if($this->form_comment != '')
@@ -152,9 +152,9 @@ class MarketJoined extends MarketJoinedBase
       $notif_data = array('{comment}' => $this->form_comment,
                                 '{added}' => date('YmdHis'));
       if($this->ad->created_by == Yii::app()->user->getId())
-        Notification::addNotification(Notification::MARKET_CREATOR_COMM, $this->entity_id, Notification::getSID($this), $notif_data);
+        Notification::addNotification(Notification::MARKET_CREATOR_COMM, $this->entity_id, Sid::getSID($this), $notif_data);
       else
-        Notification::addNotification(Notification::MARKET_JOINED_COMM, $this->ad->created_by, Notification::getSID($this), $notif_data);
+        Notification::addNotification(Notification::MARKET_JOINED_COMM, $this->ad->created_by, Sid::getSID($this), $notif_data);
     }
   }
 

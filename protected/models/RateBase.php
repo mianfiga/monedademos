@@ -4,7 +4,6 @@
  * This is the model class for table "{{rate}}".
  *
  * The followings are the available columns in table '{{rate}}':
- * @property string $id
  * @property string $to_id
  * @property string $from_id
  * @property string $sid
@@ -54,7 +53,7 @@ class RateBase extends CActiveRecord
 			array('comment, added, updated', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, to_id, from_id, sid, type, puntuation, comment, added, updated', 'safe', 'on'=>'search'),
+			array('to_id, from_id, sid, type, puntuation, comment, added, updated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,7 +76,6 @@ class RateBase extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
 			'to_id' => 'To',
 			'from_id' => 'From',
 			'sid' => 'Sid',
@@ -100,7 +98,6 @@ class RateBase extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
 		$criteria->compare('to_id',$this->to_id,true);
 		$criteria->compare('from_id',$this->from_id,true);
 		$criteria->compare('sid',$this->sid,true);

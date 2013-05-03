@@ -10,6 +10,7 @@
  */
 class Entity extends EntityBase {
 
+    public $rate;
     protected $_object;
 
     /**
@@ -86,13 +87,13 @@ class Entity extends EntityBase {
                     'criteria' => $criteria,
                 ));
     }
-    
-    public static function get($object){
+
+    public static function get($object) {
         return self::model()->findByAttributes(array(
-            'class' => get_class($object),
-            'object_id' => $object->id));
+                    'class' => get_class($object),
+                    'object_id' => $object->id));
     }
-    
+
     public function getObject() {
         if ($this->_object == null) {
             $classname = $this->class;
@@ -105,7 +106,7 @@ class Entity extends EntityBase {
     public function getName() {
         return $this->getObject()->name;
     }
-    
+
     public function getSurname() {
         return $this->getObject()->surname;
     }
@@ -116,6 +117,17 @@ class Entity extends EntityBase {
 
     public function getCulture() {
         return $this->getObject()->culture;
+    }
+
+    protected function afterFind() {
+        parent::afterFind();
+        if($this->rates == 0){
+            $this->rate = Rate::DEFAULT_VALUE;
+        }else{
+            $this->rate = round($this->points / $this->rates);
+        }
+            
+        
     }
 
 }

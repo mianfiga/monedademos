@@ -193,9 +193,9 @@ class MarketAd extends MarketAdBase {
         $this->expired = $this->expiration < date('Y-m-d');
         if ($this->expired) {
             $notif_data = array('{title}' => $this->title);
-            Notification::addNotification(Notification::MARKET_AD_EXPIRED, $this->created_by, Notification::getSID($this), $notif_data);
+            Notification::addNotification(Notification::MARKET_AD_EXPIRED, $this->created_by, Sid::getSID($this), $notif_data);
         } else {
-            Notification::removeNotification(Notification::MARKET_AD_EXPIRED, $this->created_by, Notification::getSID($this));
+            Notification::removeNotification(Notification::MARKET_AD_EXPIRED, $this->created_by, Sid::getSID($this));
         }
     }
 
