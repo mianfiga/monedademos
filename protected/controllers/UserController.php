@@ -56,12 +56,26 @@ class UserController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        if (Yii::app()->user->getId() == $id)
+        if (Yii::app()->user->getId() == $id) {
+            $model = $this->loadModel($id);
+            $entity = Entity::get($model);
+            $dataProvider = new CActiveDataProvider('Rate', array(
+                        'criteria' => array(
+                            'condition' => 'to_id = ' . $entity->id,
+                        ),
+                        'sort' => array(
+                            'defaultOrder' => 't.updated DESC',
+                        ),
+                    ));
+
             $this->render('view', array(
-                'model' => $this->loadModel($id),
+                'model' => $model,
+                'entity' => $entity,
+                'dataProvider' => $dataProvider,
             ));
-        else
+        } else {
             $this->redirect(array('site/index'));
+        }
     }
 
     /**
@@ -113,7 +127,7 @@ class UserController extends Controller {
             $this->redirect(array(Yii::app()->defaultController));
         }
         $this->layout = '//layouts/column1';
-        
+
         $model = new User('register');
 
         // Uncomment the following line if AJAX validation is needed

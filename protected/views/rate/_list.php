@@ -1,6 +1,6 @@
 <?php
 /* @var $this RateController */
-/* @var $model Rate */
+/* @var $dataProvider CActiveDataProvider */
 /* @var $entity Entity */
 ?>
 <br/>

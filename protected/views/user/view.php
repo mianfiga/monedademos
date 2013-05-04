@@ -28,3 +28,9 @@ $this->menu=array(
 		'zip',
 	),
 )); ?>
+
+<?php
+echo $this->renderPartial('/rate/_list', array(
+    'entity' => $entity,
+    'dataProvider' => $dataProvider));
+?>
