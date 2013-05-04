@@ -90,7 +90,7 @@ class Rule extends RuleBase {
     }
 
     public static function getTomorrowRule() {
-        return self::model()->find('added <= ' . date(Common::DATETIME_FORMAT, strtotime('tomorrow')) . ' ORDER BY id DESC');
+        return self::model()->find('added <= \'' . date(Common::DATETIME_FORMAT, strtotime('tomorrow')) . '\' ORDER BY id DESC');
     }
 
     public static function getCurrentRule() {

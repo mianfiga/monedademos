@@ -99,7 +99,7 @@ class RbuCommand extends CConsoleCommand {
             $date = date('Y-m-d');
         }
 
-        $notifs = NotificationUser::model()->findAll('updated < DATE_SUB(CURDATE(), INTERVAL ' . Notification::EXPIRATION . ' SECOND)');
+        $notifs = NotificationMessage::model()->findAll('updated < DATE_SUB(CURDATE(), INTERVAL ' . Notification::EXPIRATION . ' SECOND)');
         foreach ($notifs as $notif) {
             $notif->delete();
         }
@@ -121,7 +121,7 @@ class RbuCommand extends CConsoleCommand {
         }
 
         $newRule = Rule::getTomorrowRule();
-        $rule = Rule::getCurrentRule();
+        $rule = Rule::getAdaptedRule();
         if ($newRule->id != $rule->id) {
             //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
             Account::adaptFunds($newRule);
@@ -136,4 +136,3 @@ class RbuCommand extends CConsoleCommand {
     }
 
 }
-

@@ -20,7 +20,7 @@
                 'starWidth' => '64',
             ));
         }
-        echo '&nbsp;&nbsp;' . Yii::t('app', 'Average rate');
+        echo '&nbsp;&nbsp;' . Yii::t('app', 'In {count} rates', array('{count}'=> $entity->rates));
         ?>
     </div>
 

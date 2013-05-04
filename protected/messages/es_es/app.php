@@ -139,5 +139,6 @@ return array(
     'Send rate' => 'Envía la valoración',
     'Rates & Comments' => 'Valoraciones y Comentarios',
     'Thanks for rating' => 'Gracias por valorar',
+    'In {count} rates' => 'En {count} valoraciones',
 );
 ?>

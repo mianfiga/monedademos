@@ -18,14 +18,13 @@
  * @property Entity $from
  */
 class Rate extends RateBase {
-    
+
     const DEFAULT_VALUE = 3;
     const TYPE_NEUTRAL = 'neutral';
     const TYPE_CLIENT = 'client';
     const TYPE_VENDOR = 'vendor';
-    
-	public $url;
-    
+
+    public $url;
     private $_object;
     private $_isNew;
     private $_puntuation;
@@ -126,11 +125,19 @@ class Rate extends RateBase {
                     'criteria' => $criteria,
                 ));
     }
-    
-    public function alreadyExists(){
-        if ($this->refresh()){
+
+    public function alreadyExists() {
+        $found = self::model()->findByPk(array(
+        'to_id' => $this->to_id,
+        'from_id' => $this->from_id,
+        'sid' => $this->sid));
+        
+        if ($found) {
             $this->setIsNewRecord(false);
-            $this->_puntuation = $this->puntuation;
+            $this->_puntuation = $this->puntuation = $found->puntuation;
+            $this->comment = $found->comment;
+            $this->updated = $found->updated;
+            $this->added = $found->added;
             return true;
         }
         return false;
@@ -174,7 +181,6 @@ class Rate extends RateBase {
         }
 
         return $this->fillPartial();
-            
     }
 
     protected function afterFind() {
