@@ -6,8 +6,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Edit User', 'url'=>array('edit', 'id'=>$model->id)),
-	array('label'=>'Update User', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>Yii::t('app','Edit contribution'), 'url'=>array('edit', 'id'=>$model->id)),
+    array('label'=>Yii::t('app','Update user info'), 'url'=>array('update', 'id'=>$model->id)),
 /*	array('label'=>'List User', 'url'=>array('index')),
 	array('label'=>'Create User', 'url'=>array('create')),
 	array('label'=>'View User', 'url'=>array('view', 'id'=>$model->id)),
@@ -15,6 +15,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update User <?php echo $model->id; ?></h1>
+<h1>Update User <?php echo $model->username; ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

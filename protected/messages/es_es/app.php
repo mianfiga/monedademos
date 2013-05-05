@@ -140,5 +140,7 @@ return array(
     'Rates & Comments' => 'Valoraciones y Comentarios',
     'Thanks for rating' => 'Gracias por valorar',
     'In {count} rates' => 'En {count} valoraciones',
+    'Edit contribution' => 'Editar aportación',
+    'Update user info' => 'Actualizar usuario',
 );
 ?>

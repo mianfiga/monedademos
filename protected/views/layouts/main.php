@@ -100,7 +100,7 @@
                     <div class="social_box">
                         <ul class="inline-list">
                             <li class="social twitter"><a href="http://twitter.com/monedademos">@monedademos</a></li>
-                            <?php /*<li class="social facebook"><a href="http://facebook.com/monedademos">MonedaDemos</a></li>*/ ?>
+                            <li class="social facebook"><a href="http://facebook.com/monedaDemos">Moneda Demos</a></li>
                             <li class="social blog"><a href="http://blog.monedademos.es">Blog de DEMOS</a></li>
                         </ul>
                     </div>
