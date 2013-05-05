@@ -66,7 +66,7 @@ class SiteController extends Controller {
         $this->render('index', array(
             'record' => Record::getLastRecord(),
             'rule' => Rule::getCurrentRule(),
-            'next_rule' => Rule::getDateRule(date('Y-m-d H:i:s', strtotime('first day of next month'))),
+            'next_rule' => Rule::getDateRule(date('Y-m-d H:i:s', mktime (0, 0, 0, date("n")+1))),
             'dataProviderMarketAd' => $dataProviderMarketAd,
         ));
     }
