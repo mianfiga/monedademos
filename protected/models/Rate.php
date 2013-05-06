@@ -154,6 +154,10 @@ class Rate extends RateBase {
         $data = explode('-', $this->sid);
         switch ($data[0]) {
             case 'tr':
+                if($this->object->charge_entity == $this->object->deposit_entity){
+                    return false;
+                }
+
                 if ($this->object->charge_entity == $this->from_id) {
                     $this->type = self::TYPE_VENDOR;
                     $this->to_id = $this->object->deposit_entity;
@@ -207,6 +211,7 @@ class Rate extends RateBase {
                 'points' => $this->to->points + $this->puntuation,
                 'rates' => $this->to->rates + 1
             ));
+            
         } else {
             $this->to->saveAttributes(array(
                 'points' => $this->to->points + $this->puntuation - $this->_puntuation,

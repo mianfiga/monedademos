@@ -50,18 +50,30 @@ class TransactionController extends Controller {
      */
     public function actionView($id, $charge_errors = 0, $deposit_errors = 0) {
         if ($id != null) {
-            $entity_id = Yii::app()->user->getId();
-
 
             $model = $this->loadModel($id);
             $msid = Sid::getSID($model);
-            
-            $rate = new Rate();            
-            $rate->fill($msid);
-            $rate->alreadyExists();
-            $rate->url = Yii::app()->request->url;
-            if ($model->charge_entity == $entity_id || $model->deposit_entity == $entity_id) { //falta ver si la cuenta es pública
-                Notification::shown($entity_id, $msid);
+
+            $rate = new Rate();
+            if ($rate->fill($msid)) {
+                $rate->alreadyExists();
+                $rate->url = Yii::app()->request->url;
+            } else {
+                $rate = null;
+            }
+
+
+            if (isset(Yii::app()->session['accountNumber'])) {
+                $account_number = Yii::app()->session['accountNumber'];
+                $acc = Authorization::splitAccountNumber($account_number);
+                $account_id = $acc['account_id'];
+            } else {
+                $account_id = null;
+            }
+
+            if ($model->charge_account == $account_id
+                    || $model->deposit_account == $account_id) { //($model->charge_entity == $entity_id || $model->deposit_entity == $entity_id) { //falta ver si la cuenta es pública
+                Notification::shown(Yii::app()->user->getId(), $msid);
                 $this->render('view', array(
                     'model' => $model,
                     'charge_errors' => $charge_errors,
@@ -70,27 +82,23 @@ class TransactionController extends Controller {
                 ));
                 return;
             }
-        }
 
-        $this->render('view', array(
-            'model' => null,
-            'charge_errors' => $charge_errors,
-            'deposit_errors' => $deposit_errors,
-        ));
+            $this->redirect(array('index'));
+        }
     }
 
     public function actionCharge() {
-        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class=\'' . Authorization::CLASS_AUTHORIZED.'\'';
+        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class=\'' . Authorization::CLASS_AUTHORIZED . '\'';
         $this->actionFill('charge', null, Authorization::getAccountList(Yii::app()->user->getId(), $condition));
     }
 
     public function actionTransfer() {
-        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class=\'' . Authorization::CLASS_AUTHORIZED.'\'';
+        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class=\'' . Authorization::CLASS_AUTHORIZED . '\'';
         $this->actionFill('transfer', Authorization::getAccountList(Yii::app()->user->getId(), $condition), null);
     }
 
     public function actionMovement() {
-        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class= \'' . Authorization::CLASS_AUTHORIZED.'\'';
+        $condition = 'class=\'' . Authorization::CLASS_HOLDER . '\' OR class= \'' . Authorization::CLASS_AUTHORIZED . '\'';
         $accountlist = Authorization::getAccountList(Yii::app()->user->getId(), $condition);
         $this->actionFill('movement', $accountlist, $accountlist);
     }
@@ -103,8 +111,8 @@ class TransactionController extends Controller {
 
         $model = new Transaction('form');
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+// Uncomment the following line if AJAX validation is needed
+// $this->performAjaxValidation($model);
 
         if (isset($_POST['Transaction'])) {
             $model->attributes = $_POST['Transaction'];
@@ -142,10 +150,10 @@ class TransactionController extends Controller {
      */
     public function actionDelete($id) {
         if (Yii::app()->request->isPostRequest) {
-            // we only allow deletion via POST request
+// we only allow deletion via POST request
             $this->loadModel($id)->delete();
 
-            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
         }
@@ -195,7 +203,7 @@ class TransactionController extends Controller {
         }
 
         if ($account_number == null) {
-            $accounts = Authorization::getByEntity($entity_id, 'class=\'' . Authorization::CLASS_HOLDER.'\'');
+            $accounts = Authorization::getByEntity($entity_id, 'class=\'' . Authorization::CLASS_HOLDER . '\'');
             foreach ($accounts as $account) {
                 $auth = $account;
                 $account_number = $account->getAccountNumber();
@@ -217,7 +225,7 @@ class TransactionController extends Controller {
 
         Yii::app()->session['accountNumber'] = $account_number;
 
-        //$acc = Authorization::splitAccountNumber($account_number);
+//$acc = Authorization::splitAccountNumber($account_number);
 
         $account = $auth->account; //Account::model()->findByPk($acc['account_id']);
 //        $auth = Authorization::getAuthorization($account_number);

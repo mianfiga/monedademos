@@ -49,7 +49,7 @@ class AuthorizationController extends Controller
 	{
 		$accno=Authorization::splitAccountNumber($id);
 		$this->render('view',array(
-			'model'=>$this->loadModel($accno['user_id'],$accno['account_id']),
+			'model'=>$this->loadModel($accno['entity_id'],$accno['account_id']),
 		));
 	}
 
@@ -84,11 +84,11 @@ class AuthorizationController extends Controller
 	public function actionUpdate($id)
 	{
 		$accno=Authorization::splitAccountNumber($id);
-		if($accno['user_id'] != Yii::app()->user->getId())
+		if($accno['entity_id'] != Yii::app()->user->getId())
 			throw new CHttpException(403,'You are not authorized to perform this action.');
 
 
-		$model=$this->loadModel($accno['user_id'],$accno['account_id']);
+		$model=$this->loadModel($accno['entity_id'],$accno['account_id']);
 		$model->setScenario('update');
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -119,7 +119,7 @@ class AuthorizationController extends Controller
 		{
 			// we only allow deletion via POST request
 			$accno=Authorization::splitAccountNumber($account_number);
-			$this->loadModel($accno['user_id'],$accno['account_id'])->delete();
+			$this->loadModel($accno['entity_id'],$accno['account_id'])->delete();
 
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
@@ -145,9 +145,9 @@ class AuthorizationController extends Controller
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer the ID of the model to be loaded
 	 */
-	public function loadModel($user_id, $account_id)
+	public function loadModel($entity_id, $account_id)
 	{
-		$model=Authorization::model()->findByPk(array("user_id" => $user_id, "account_id" => $account_id));
+		$model=Authorization::model()->findByPk(array("entity_id" => $entity_id, "account_id" => $account_id));
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 
