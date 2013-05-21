@@ -16,6 +16,7 @@ return array(
     'Notifications' => 'Notificaciones',
     'Sign in' => 'Iniciar sesión',
     'Sign up' => 'Regístrate',
+    'Sign up for Demos' => 'Regístrate en Demos',
     'New to Demos?' => '¿Eres nuevo en Demos?',
     'Fields with <span class="required">*</span> are required' => 'Los campos con <span class="required">*</span> son obligatorios',
     'Username' => 'Usuario',

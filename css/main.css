@@ -415,9 +415,15 @@ div.search-form
     background-image: url('../images/fc-webicon-facebook-s.png');
 }
 
+.social.googleplus{
+    background-image: url('../images/fc-webicon-googleplus-s.png');
+}
+
 .social.blog{
     background-image: url('../images/fc-webicon-rss-s.png');
 }
+
+fc-webicon-googleplus-s
 
 .news_list{
     margin-left: 20px;

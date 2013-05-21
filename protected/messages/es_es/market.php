@@ -51,7 +51,7 @@ return array(
     'Comment not sent by e-mail' => 'Comentario no enviado por e-mail',
     'You have successfully joined' => 'Te has apuntado correctamente',
     'You are already joined, update anything you need.' => 'Ya se encuentra inscrito, actualize lo que quiera',
-    'Uncheck this field in case you don\'t want to share your e-mail account with the person that created this advertisement' => 'Desmarque este campo si no desea compartir su dirección de e-mail con la persona que ha cread este anuncio',
+    'Uncheck this field in case you don\'t want to share your e-mail account with the person that created this advertisement' => 'Desmarque este campo si no desea compartir su dirección de e-mail con la persona que ha creado este anuncio',
     'Join now' => 'Apúntate ya',
     'Comment' => 'Comentario',
     'Show Mail' => 'Mostar E-mail',

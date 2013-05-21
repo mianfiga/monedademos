@@ -5,8 +5,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=> Yii::t('app','List Market'), 'url'=>array('index')),
-	array('label'=>'Create MarketAd', 'url'=>array('create')),
+   	array('label'=>Yii::t('market','List Advertisements'), 'url'=>array('index')),
+	array('label'=>Yii::t('market','Create Advertisement'), 'url'=>array('create')),
 	/*array('label'=>'Manage Transaction', 'url'=>array('admin')),*/
 );
 ?>
