@@ -1,3 +1,13 @@
+<?php
+//Reveal javascript
+$baseUrl = Yii::app()->baseUrl;
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl . '/js/vendor/custom.modernizr.js');
+$cs->registerScriptFile($baseUrl . '/js/foundation.min.js');
+$cs->registerScriptFile($baseUrl . '/js/vendor/custom.modernizr.js');
+$cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { closeOnBackgroundClick: false, close: function(){return false;}});', CClientScript::POS_READY);
+
+?>
 <div class="form">
 
     <?php
@@ -197,10 +207,14 @@
     <br/><br/>
     <div class="row">
         <div class="small-10 large-8 columns form_row buttons small-centered">
-            <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('app', 'Sign up for Demos') : Yii::t('app', 'Save changes'), array('class' => 'button large expand')); ?>
+            <?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('app', 'Sign up for Demos') : Yii::t('app', 'Save changes'), array('class' => 'button large expand', 'onclick' => '$("#procesingmodal").foundation(\'reveal\', \'open\');')); ?>
         </div>
     </div>
 
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<div id="procesingmodal" class="reveal-modal">
+  <h2><?php echo Yii::t('app','Processing') ?></h2>
+  <p><?php echo Yii::t('app','It will take just a moment, wait please') ?>.</p>
+</div>

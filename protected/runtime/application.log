@@ -3457,3 +3457,9 @@ Stack trace:
 REQUEST_URI=/rbu/index.php?r=authorization/update&id=2.107.M
 HTTP_REFERER=http://localhost/rbu/index.php?r=transaction/index
 ---
+2013/05/23 21:05:23 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (155)
+in /var/www/rbu/index.php (13)
+2013/05/23 21:07:50 [warning] [application] Failed to set unsafe attribute "form_image" of "MarketAd".
+in /var/www/rbu/protected/controllers/MarketController.php (155)
+in /var/www/rbu/index.php (13)

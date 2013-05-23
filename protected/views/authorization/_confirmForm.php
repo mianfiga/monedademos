@@ -1,4 +1,13 @@
 <?php
+//Reveal javascript
+$baseUrl = Yii::app()->baseUrl;
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl . '/js/vendor/custom.modernizr.js');
+$cs->registerScriptFile($baseUrl . '/js/foundation.min.js');
+$cs->registerScriptFile($baseUrl . '/js/vendor/custom.modernizr.js');
+$cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { closeOnBackgroundClick: false, close: function(){return false;}});', CClientScript::POS_READY);
+
+
 $opmodel = Yii::app()->session['operations'][$model->sid]['model'];
 ?>
 <div class="form">
@@ -30,7 +39,8 @@ $opmodel = Yii::app()->session['operations'][$model->sid]['model'];
                     <div class="form_row buttons">
                         <?php echo $form->hiddenField($model, 'sid'); ?>
                         <?php echo CHtml::submitButton(Yii::t('app', 'Confirm'),
-                                array('class' => 'button large expand')); ?>
+                                array('class' => 'button large expand',
+                                    'onclick' => '$("#procesingmodal").foundation(\'reveal\', \'open\');')); ?>
                     </div>
                 </li>
             </ul>
@@ -54,9 +64,13 @@ $opmodel = Yii::app()->session['operations'][$model->sid]['model'];
         <?php
         $isChargeEntity = Yii::app()->user->getId() == Yii::app()->session['operations'][$model->sid]['model']->charge_entity;
         ?>
-        <?php echo CHtml::submitButton($isChargeEntity ? Yii::t('app', 'Confirm Later, add to pending transaction') : Yii::t('app', 'Send to Client as pending transaction'), array('class' => 'button secondary')); ?>
+        <?php echo CHtml::submitButton($isChargeEntity ? Yii::t('app', 'Confirm Later, add to pending transaction') : Yii::t('app', 'Send to Client as pending transaction'), array('class' => 'button secondary', 'onclick' => '$("#procesingmodal").foundation(\'reveal\', \'open\');')); ?>
     </div>
 
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<div id="procesingmodal" class="reveal-modal">
+  <h2><?php echo Yii::t('app','Processing') ?></h2>
+  <p><?php echo Yii::t('app','It will take just a moment, wait please') ?>.</p>
+</div>

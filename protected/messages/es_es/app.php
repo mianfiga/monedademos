@@ -143,5 +143,7 @@ return array(
     'In {count} rates' => 'En {count} valoraciones',
     'Edit contribution' => 'Editar aportación',
     'Update user info' => 'Actualizar usuario',
+    'Processing' => 'Procesando',
+    'It will take just a moment, wait please' => 'Sólo tardará un momento, espera por favor',
 );
 ?>
