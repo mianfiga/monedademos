@@ -93,8 +93,6 @@ class User extends UserBase {
             'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(user_id, account_id)'),
             'chargePendings' => array(self::HAS_MANY, 'Pending', 'charge_user'),
             'depositPendings' => array(self::HAS_MANY, 'Pending', 'deposit_user'),
-            'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_user'),
-            'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_user'),
             'exemption' => array(self::BELONGS_TO, 'Exemption', 'exemption_id'),
             'createdBy' => array(self::BELONGS_TO, 'User', 'created_by'),
             'hasCreated' => array(self::HAS_MANY, 'User', 'created_by'),

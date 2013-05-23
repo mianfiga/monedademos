@@ -55,6 +55,16 @@ class Entity extends EntityBase {
             'marketAdCreator' => array(self::HAS_MANY, 'MarketAd', 'created_by'),
             'marketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_joined}}(entity_id, ad_id)'),
             'marketJoined' => array(self::HAS_MANY, 'MarketJoined', 'entity_id'),
+
+            'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(user_id, account_id)'),
+            'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
+            'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
+
+//            'UserChargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity', 
+//                'on' => 'UserChargeTransactions.class in (\''. Transaction::CLASS_TRANSFER .'\', \''. Transaction::CLASS_CHARGE .'\''),
+//            'UserDepositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity',
+//                'on' => 'UserDepositTransactions.class in (\''. Transaction::CLASS_TRANSFER .'\', \''. Transaction::CLASS_CHARGE .'\''),
+
         );
     }
 

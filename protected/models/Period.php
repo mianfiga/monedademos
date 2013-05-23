@@ -88,7 +88,7 @@ class Period extends PeriodBase {
     public static function getLast() {
         return self::model()->find('1 ORDER BY added DESC');
     }
-    
+
     /**
      * @return String The date when the last period was registered.
      */
@@ -97,12 +97,18 @@ class Period extends PeriodBase {
         return $period->added;
     }
 
-
     public static function calculate($save = false) {
         $period = new Period;
-        $oldperiod = self::getLast();
+        $oldPeriodDate = self::getLastDate();
 
-        $period->active_users = count(User::model()->with('chargeTransactions', 'depositTransactions')->findAll('last_action > \'' . $oldperiod->added . '\' AND (chargeTransactions.executed_at > \'' . $oldperiod->added . '\' OR chargeTransactions.executed_at > \'' . $oldperiod->added . '\')'));
+
+        $period->active_users = Entity::model()->with(
+                        'chargeTransactions', 'depositTransactions')->count(
+                't.class=\'User\'AND
+                   (   (chargeTransactions.executed_at > \'' . $oldPeriodDate . '\' AND 
+                        chargeTransactions.class in (\'' . Transaction::CLASS_TRANSFER . '\', \'' . Transaction::CLASS_CHARGE . '\'))
+                    OR (depositTransactions.executed_at > \'' . $oldPeriodDate . '\' AND
+                        depositTransactions.class in (\'' . Transaction::CLASS_TRANSFER . '\', \'' . Transaction::CLASS_CHARGE . '\')))');
 
         $sum = Account::model()->findBySql('select sum(`spended`) as `spended` from ' . Account::model()->tableSchema->name, array());
         $period->movements = $sum->spended;
