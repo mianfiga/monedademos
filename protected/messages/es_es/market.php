@@ -2,6 +2,7 @@
 
 return array(
     'Join' => 'Apúntate',
+    'Update' => 'Actualizar',
     'Updated' => 'Actualizado',
     'EXPIRED' => 'CADUCADO',
     'Join this Ad' => 'Apúntate a este anuncio',

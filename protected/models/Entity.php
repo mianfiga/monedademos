@@ -59,12 +59,6 @@ class Entity extends EntityBase {
             'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(user_id, account_id)'),
             'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
             'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
-
-//            'UserChargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity', 
-//                'on' => 'UserChargeTransactions.class in (\''. Transaction::CLASS_TRANSFER .'\', \''. Transaction::CLASS_CHARGE .'\''),
-//            'UserDepositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity',
-//                'on' => 'UserDepositTransactions.class in (\''. Transaction::CLASS_TRANSFER .'\', \''. Transaction::CLASS_CHARGE .'\''),
-
         );
     }
 
