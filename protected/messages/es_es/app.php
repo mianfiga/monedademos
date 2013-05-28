@@ -145,5 +145,10 @@ return array(
     'Update user info' => 'Actualizar usuario',
     'Processing' => 'Procesando',
     'It will take just a moment, wait please' => 'Sólo tardará un momento, espera por favor',
+    'Transaction NOT completed' => 'Transacción NO completada',
+    'Transaction not accessible' => 'Transacción no accesible',
+    'Errors found in the charge (source) account' => 'Errores encontrados en la cuenta de cargo (origen)',
+    'Errors found in the deposit (destination) account' => 'Errores encontrados en la cuenta de depósito (destino)',
+    
 );
 ?>

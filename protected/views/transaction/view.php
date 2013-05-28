@@ -17,12 +17,12 @@ $this->menu = array(
 <?php
 if ($model == null) {
     ?>
-    <h1><?php echo (($charge_errors | $deposit_errors) != 0 ? 'Transaction NOT completed' : 'Transaction not accessible') ?></h1>
+    <h1><?php echo (($charge_errors | $deposit_errors) != 0 ? Yii::t('app','Transaction NOT completed') : Yii::t('app','Transaction not accessible')) ?></h1>
     <?php
     if ($charge_errors != 0)
-        echo "Errors found in the charge (source) account." . "<br/>";
+        echo Yii::t('app','Errors found in the charge (source) account') . ".<br/>";
     if ($deposit_errors != 0)
-        echo "Errors found in the deposit (destination) account." . "<br/>";
+        echo Yii::t('app','Errors found in the deposit (destination) account') . ".<br/>";
 }
 else {
     ?>
@@ -62,26 +62,34 @@ else {
 <br/>
 <div class="row">
     <div class="small-6 large-3 columns">
-        <?php echo CHtml::link(Yii::t('app', 'View movements'),
-                array('transaction/list'), array('class' => 'button expand')); ?> 
+        <?php echo CHtml::link(Yii::t('app', 'View movements'), array('transaction/list'), array('class' => 'button expand'));
+        ?> 
     </div>
     <div class="small-6 large-3 columns">
-        <?php echo CHtml::link(Yii::t('app', 'Back to Account'),
-                array('transaction/index'), array('class' => 'button expand secondary')); ?>
+        <?php echo CHtml::link(Yii::t('app', 'Back to Account'), array('transaction/index'), array('class' => 'button expand secondary'));
+        ?>
     </div>
 
     <div class="small-6 large-3 columns">
-        <?php echo CHtml::link(Yii::t('app', 'Pay'),
-                array('transfer'), array('class' => 'site_join_button expand button')); ?>
+        <?php echo CHtml::link(Yii::t('app', 'Pay'), array('transfer'), array('class' => 'site_join_button expand button'));
+        ?>
     </div>
     <div class="small-6 large-3 columns">
-        <?php echo CHtml::link(Yii::t('app', 'Charge'),
-                array('charge'), array('class' => 'site_join_button expand button secondary')); ?>
+        <?php echo CHtml::link(Yii::t('app', 'Charge'), array('charge'), array('class' => 'site_join_button expand button secondary'));
+        ?>
     </div>
 </div>
 <br/>
-<?php $this->renderPartial('/rate/_embedded', array('model' => $rate)); ?>
-<?php $this->renderPartial('/contribution/_contributions', array('model' => $model)); ?>
+<?php
+if (isset($rate)) {
+    $this->renderPartial('/rate/_embedded', array('model' => $rate));
+}
+?>
+<?php
+if (isset($model) && $model !== null) {
+    $this->renderPartial('/contribution/_contributions', array('model' => $model));
+}
+?>
 
 
 

@@ -84,6 +84,12 @@ class TransactionController extends Controller {
             }
 
             $this->redirect(array('index'));
+        } else {
+            $this->render('view', array(
+                'model' => null,
+                'charge_errors' => $charge_errors,
+                'deposit_errors' => $deposit_errors,
+            ));
         }
     }
 

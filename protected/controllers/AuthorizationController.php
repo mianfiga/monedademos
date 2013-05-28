@@ -224,13 +224,14 @@ class AuthorizationController extends Controller
 
 						$opmodel = Yii::app()->session['operations'][$sid]['model'];
 
-						$opmodel->save();
-
-						$url = Yii::app()->session['operations'][$sid]['url'];
-						$array= Yii::app()->session['operations'];
-						unset($array[$sid]);
-						Yii::app()->session['operations'] = $array;
-
+						if($opmodel->save()){
+                            $array= Yii::app()->session['operations'];
+                            unset($array[$sid]);
+                            Yii::app()->session['operations'] = $array;
+                        }
+                        
+                        $url = Yii::app()->session['operations'][$sid]['url'];
+                        
 						$this->redirect(array($url,
 								'id' => $opmodel->id,
 								'charge_errors' => $opmodel->charge_errors,
