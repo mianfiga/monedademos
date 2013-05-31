@@ -11,7 +11,9 @@
  */
 class Rule extends RuleBase {
 
-    const MIN_SALARY_DIVIDER = 2.5;
+    const MIN_SALARY_DIVIDER_LOW = 2.5;
+    const MIN_SALARY_DIVIDER_HIGH = 5;
+    const SALARY_HIGH = 10;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -123,7 +125,14 @@ class Rule extends RuleBase {
 
         $newRule->multiplier = $curRule->multiplier;
         $newRule->salary = $period->movements / $period->active_users;
-        $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER;
+        if ($newRule->salary < Transaction::amountUserToSystem(Rule::SALARY_HIGH))
+        {
+            $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_LOW;
+        }
+        else
+        {
+            $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_HIGH;
+        }
         $newRule->added = date('Y-m-d H:i:s', mktime (0, 0, 0, date("n")+1));
         $newRule->system_adapted = 0;
 
