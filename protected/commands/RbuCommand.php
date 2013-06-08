@@ -30,6 +30,38 @@ class RbuCommand extends CConsoleCommand {
         }
     }
 
+    //rollbackPeriod()
+    public function actionRollbackPeriod($date = null) {
+        if ($date == null) {
+            $date = date(Common::DATETIME_FORMAT,strtotime('today'));
+        }
+        $prePeriod = Period::getPrevious();
+        $period = Period::getLast();
+        $lastDate = $period->added;
+        $period->saveAttributes(array('added' => $prePeriod->added));
+        echo $date."\n";
+        $accounts = Account::getSalaryAccounts();
+        foreach ($accounts as $account) {
+            if ($account->lastSalary->executed_at < $date) {
+                continue;
+            }
+
+            //return salary
+            $account->rollbackSalary();
+        }
+
+        Account::paySalaries();
+        $period->saveAttributes(array('added' => $lastDate));
+    }
+    
+    public function actionPaySalaries($date=null){
+        if ($date == null) {
+            $date = strtotime('first day of this month');
+        }
+        $rule = Rule::getCurrentRule();
+        Account::paySalaries($date, $rule);
+    }
+
     //reload
     public function actionReload($date = null) {
         $accounts = Account::getSalaryAccounts();

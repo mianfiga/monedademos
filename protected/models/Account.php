@@ -302,7 +302,7 @@ class Account extends AccountBase {
         //Assign compensed salaries
         $dateLastPeriod = Period::getLastDate();
         foreach ($accounts as $acc) {
-            if ( $dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
+            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
                     && (($acc->earned - $acc->spended) >= 0)) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
                 $compensation += $ret['compensation'];
@@ -505,4 +505,27 @@ class Account extends AccountBase {
                     '{total}' => Transaction::amountSystemToUser($amount)));
         $reset->save();
     }
+
+    public function rollbackSalary() {
+        foreach ($this->holders as $holder) {
+            $charge_entity = $holder->id;
+        }
+        
+        $rb = new Transaction;
+        $rb->charge_account = $this->id;
+        $rb->deposit_account = Account::FUND_ACCOUNT;
+
+        $rb->charge_entity = $charge_entity;
+        $rb->deposit_entity = Account::FUND_ENTITY;
+        $rb->class = Transaction::CLASS_SYSTEM;
+        $rb->amount = $this->lastSalary->amount;
+        $rb->subject = Yii::t('app,', 'Rollback salary and try again.');
+        $rb->save();
+
+        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \'2013-05-01 00:00:00\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \'2013-05-01 00:00:00\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+
+        $this->saveAttributes(array('earned'=> $earned->amount, 'spended' => $spended->amount));
+    }
+
 }

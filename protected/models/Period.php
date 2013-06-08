@@ -88,6 +88,14 @@ class Period extends PeriodBase {
     public static function getLast() {
         return self::model()->find('1 ORDER BY added DESC');
     }
+    /**
+     * @return Period The pre-last period registered.
+     */
+    
+    public static function getPrevious() {
+        $periods = self::model()->findAll('1 ORDER BY id DESC');
+        return next($periods);
+    }
 
     /**
      * @return String The date when the last period was registered.
