@@ -522,8 +522,8 @@ class Account extends AccountBase {
         $rb->subject = Yii::t('app,', 'Rollback salary and try again.');
         $rb->save();
 
-        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \'2013-05-01 00:00:00\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
-        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \'2013-05-01 00:00:00\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \''. Period::getPrevious()->added .'\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \''. Period::getPrevious()->added .'\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
 
         $this->saveAttributes(array('earned'=> $earned->amount, 'spended' => $spended->amount));
     }
