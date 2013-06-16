@@ -307,6 +307,8 @@ class Transaction extends TransactionBase {
             Notification::addNotification(Notification::SYSTEM, $this->deposit_entity, Sid::getSID($this), $notif_data);
             Notification::addNotification(Notification::SYSTEM, $this->charge_entity, Sid::getSID($this), $notif_data);
         }
+        
+        ActivityLog::add($entity_id,  ActivityLog::TRANSACTION, Sid::getSID($this));
     }
 
     public function check_account_number($attribute, $params) {

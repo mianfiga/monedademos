@@ -24,6 +24,7 @@ class UserIdentity extends CUserIdentity
             $this->username=$user->username;
             $this->errorCode=self::ERROR_NONE;
             $user->saveAttributes(array('last_login'=> date('YmdHis')));
+            ActivityLog::add($this->_id, ActivityLog::LOGIN);
         }
         return $this->errorCode==self::ERROR_NONE;
     }
