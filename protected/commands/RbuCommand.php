@@ -136,7 +136,7 @@ class RbuCommand extends CConsoleCommand {
             $notif->delete();
         }
 
-        $ads = MarketAd::model()->findAll('expiration = CURDATE()+' . MarketAd::EXPIRATION_PRENOTIFICATION_DAYS);
+        $ads = MarketAd::model()->findAll('visible = 1 AND expiration = CURDATE()+' . MarketAd::EXPIRATION_PRENOTIFICATION_DAYS);
         foreach ($ads as $ad) {
             $notif_data = array();
             $notif_data['{title}'] = $ad->title;
@@ -144,7 +144,7 @@ class RbuCommand extends CConsoleCommand {
             Notification::addNotification(Notification::MARKET_AD_EXPIRATION, $ad->created_by, Sid::getSID($ad), $notif_data);
         }
 
-        $ads = MarketAd::model()->findAll('expiration = CURDATE()');
+        $ads = MarketAd::model()->findAll('visible = 1 AND expiration = CURDATE()');
         foreach ($ads as $ad) {
             $notif_data = array();
             $notif_data['{title}'] = $ad->title;
