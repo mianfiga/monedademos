@@ -190,4 +190,24 @@ class SiteController extends Controller {
         }
     }
 
+    /**
+     * 
+     */
+    public function actionRoles() {
+        if (isset($_POST['RolesForm'])) {
+            $model = new RolesForm;
+            $model->attributes = $_POST['RolesForm'];
+            // validate user input and redirect to the previous page if valid
+            if ($model->validate()) {
+                if (Yii::app()->user->getId() != null) {
+                    Yii::app()->user->setId($model->role);
+                    Yii::app()->user->setName(Yii::app()->user->roles[$model->role]);
+                }
+                $this->redirect($model->url);
+            }
+        }
+    }
+
+    
+    
 }

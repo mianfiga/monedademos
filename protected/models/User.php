@@ -204,7 +204,7 @@ class User extends UserBase {
         if (parent::beforeSave()) {
             if ($this->isNewRecord) {
                 $this->_isNew = true;
-                $date = date('YmdHis');
+                $date = Common::datetime();
                 $this->salt = md5(self::randString(64));
                 $this->password = self::hashPassword($this->plain_password, $this->salt);
                 $this->created = $date;
@@ -235,7 +235,7 @@ class User extends UserBase {
             $entity->object_id = $this->id;
             $entity->save();
             
-            $date = date('YmdHis');
+            $date = Common::datetime();
             $this->_isNew = false;
             $acc = new Account;
             $acc->title = Yii::t('app', 'Personal account');

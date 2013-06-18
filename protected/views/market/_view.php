@@ -10,10 +10,10 @@
         ?>
         <img class="mk_img" src="<?php echo Yii::app()->request->baseUrl . '/images/market/' . MarketAd::THUMB_PREFIX . $data->image ?>" alt="<?php echo CHtml::encode($data->title) ?>"/>
     <?php } ?>
-    <?php echo CHtml::link('<img class="mk_button_join" src="' . Yii::app()->request->baseUrl . '/images/join.png" alt="Join" title="Join"/>', array('join', 'id' => $data->id)); ?>
-    <h4 class="no-space"><?php echo CHtml::link(CHtml::encode($data->title), array('view', 'id' => $data->id)); ?></h4>
+    <?php echo CHtml::link('<img class="mk_button_join" src="' . Yii::app()->request->baseUrl . '/images/join.png" alt="Join" title="Join"/>', array('market/join', 'id' => $data->id)); ?>
+    <h4 class="no-space"><?php echo CHtml::link(CHtml::encode($data->title), array('market/view', 'id' => $data->id)); ?></h4>
     <?php echo CHtml::encode($data->summary); ?>
-    <?php echo CHtml::link(Yii::t('market', 'view more'), array('view', 'id' => $data->id)); ?>
+    <?php echo CHtml::link(Yii::t('market', 'view more'), array('market/view', 'id' => $data->id)); ?>
 
     <div class="mk_bottom_bar">
         <div class="mk_data mk_price"><?php echo Transaction::amountSystemToUser($data->price) ?></div>
@@ -28,8 +28,8 @@
         <?php } ?>
         <?php
         if ($data->created_by == Yii::app()->user->getId()) {
-            echo '&nbsp;'. CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $data->id), array('class' => "small button"));
-            echo '&nbsp;'. CHtml::link(Yii::t('app', 'Manage'), array('panel', 'id' => $data->id), array('class' => "small button secondary"));
+            echo '&nbsp;'. CHtml::link(Yii::t('app', 'Edit'), array('market/update', 'id' => $data->id), array('class' => "small button"));
+            echo '&nbsp;'. CHtml::link(Yii::t('app', 'Manage'), array('market/panel', 'id' => $data->id), array('class' => "small button secondary"));
         }
         ?>
     </div>

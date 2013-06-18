@@ -491,3 +491,9 @@ fc-webicon-googleplus-s
 .amounts{
     text-align: right;
 }
+
+.br_img{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

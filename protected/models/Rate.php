@@ -128,10 +128,10 @@ class Rate extends RateBase {
 
     public function alreadyExists() {
         $found = self::model()->findByPk(array(
-        'to_id' => $this->to_id,
-        'from_id' => $this->from_id,
-        'sid' => $this->sid));
-        
+            'to_id' => $this->to_id,
+            'from_id' => $this->from_id,
+            'sid' => $this->sid));
+
         if ($found) {
             $this->setIsNewRecord(false);
             $this->_puntuation = $this->puntuation = $found->puntuation;
@@ -154,7 +154,7 @@ class Rate extends RateBase {
         $data = explode('-', $this->sid);
         switch ($data[0]) {
             case 'tr':
-                if($this->object->charge_entity == $this->object->deposit_entity){
+                if ($this->object->charge_entity == $this->object->deposit_entity) {
                     return false;
                 }
 
@@ -211,12 +211,22 @@ class Rate extends RateBase {
                 'points' => $this->to->points + $this->puntuation,
                 'rates' => $this->to->rates + 1
             ));
-            
         } else {
             $this->to->saveAttributes(array(
                 'points' => $this->to->points + $this->puntuation - $this->_puntuation,
             ));
         }
+    }
+
+    static public function getTo($entity_id) {
+        return new CActiveDataProvider('Rate', array(
+                    'criteria' => array(
+                        'condition' => 'to_id = ' . $entity_id,
+                    ),
+                    'sort' => array(
+                        'defaultOrder' => 't.updated DESC',
+                    ),
+                ));
     }
 
 }

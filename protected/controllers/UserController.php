@@ -57,16 +57,16 @@ class UserController extends Controller {
      */
     public function actionView($id) {
         if (Yii::app()->user->getId() == $id) {
-            $model = $this->loadModel($id);
-            $entity = Entity::get($model);
-            $dataProvider = new CActiveDataProvider('Rate', array(
-                        'criteria' => array(
-                            'condition' => 'to_id = ' . $entity->id,
-                        ),
-                        'sort' => array(
-                            'defaultOrder' => 't.updated DESC',
-                        ),
-                    ));
+            $entity = Entity::model()->findByPk($id);
+            if ($entity === null){
+                throw new CHttpException(404, 'The requested page does not exist.');
+            }
+            if($entity->class == 'Brand'){
+                $this->redirect(array('brand/view', 'id' => $entity->object_id));
+            }
+               
+            $model = $entity->getObject();
+            $dataProvider = Rate::getTo($entity->id);
 
             $this->render('view', array(
                 'model' => $model,

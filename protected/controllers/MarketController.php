@@ -154,22 +154,7 @@ class MarketController extends Controller {
         if (isset($_POST['MarketAd'])) {
             $model->attributes = $_POST['MarketAd'];
 
-            /* 			$model->image = EUploadedImage::getInstance($model,'image');
-              $model->image->maxWidth = 500;
-              $model->image->maxHeight = 400;
-
-              $model->image->thumb = array(
-              'maxWidth' => 150,
-              'maxHeight' => 120,
-              //			    'dir' => Yii::getPathOfAlias('webroot.images.market'),
-              'prefix' => MarketAd::THUMB_PREFIX,
-              ); */
-
             if ($model->save()) {
-                /* 				$ext = substr($model->image,strrpos($model->image,'.'));
-                  $model->image->saveAs(Yii::getPathOfAlias('webroot.images.market').'/'. $model->id . $ext);
-                  $model->image = $model->id.$ext;
-                  $model->saveAttributes(array('image')); */
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }
@@ -339,21 +324,7 @@ class MarketController extends Controller {
     public function actionIndex($mode = null) {
         $entity_id = Yii::app()->user->getId();
 
-        $dataProvider = new CActiveDataProvider('MarketAd', array(
-                    'criteria' => array(
-                        'condition' => 'visible=1' . ($mode == 1 ? ' AND created_by=\'' . $entity_id . '\'' : ''),
-                        'with' => ($entity_id == null ? array() : array(
-                            'joined' => array(
-                                'together' => true,
-                                'joinType' => 'LEFT outer JOIN',
-                                ($mode == 2 ? 'condition' : 'on') => 'joined.entity_id=' . $entity_id,
-                            )
-                                )),
-                    ),
-                    'sort' => array(
-                        'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
-                    ),
-                ));
+        $dataProvider = MarketAd::getAds($mode, $entity_id);
 
 
         $model = new MarketAd('search');

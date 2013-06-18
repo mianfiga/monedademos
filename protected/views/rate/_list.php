@@ -5,24 +5,16 @@
 ?>
 <br/>
 <div class="row">
-    <div class="small-12 large-6 columns"><h3><?php echo Yii::t('app', 'Rates & Comments') ?></h3></div>
-    <div class="small-12 large-6 columns">
-        <?php
-        if (isset($entity)) {
-            $this->widget('CStarRating', array(
-                'name' => 'rating',
-                'model' => $entity,
-                'attribute' => 'rate',
-                'minRating' => 1,
-                'maxRating' => 5,
-                'starCount' => 5,
-                'readOnly' => true,
-                'starWidth' => '64',
+    <div class="small-12 <?php echo (isset($entity) ? 'large-6' : '') ?> columns"><h3><?php echo Yii::t('app', 'Rates & Comments') ?></h3></div>
+    <?php if (isset($entity)) { ?>
+        <div class="small-12 large-6 columns">
+            <?php
+            echo $this->renderPartial('/rate/_average', array(
+                'entity' => $entity,
             ));
-        }
-        echo '&nbsp;&nbsp;' . Yii::t('app', 'In {count} rates', array('{count}'=> $entity->rates));
-        ?>
-    </div>
+            ?>
+        </div>
+    <?php } ?>
 
 </div>
 <br/>

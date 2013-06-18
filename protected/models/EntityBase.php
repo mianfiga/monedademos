@@ -11,7 +11,9 @@
  * @property integer $rates
  *
  * The followings are the available model relations:
+ * @property ActivityLog[] $activityLogs
  * @property Account[] $rbuAccounts
+ * @property Brand[] $brands
  * @property MarketAd[] $marketAds
  * @property MarketAd[] $rbuMarketAds
  * @property Notification[] $rbuNotifications
@@ -20,6 +22,8 @@
  * @property Pending[] $pendings1
  * @property Rate[] $rates0
  * @property Rate[] $rates01
+ * @property Role[] $roles
+ * @property Role[] $roles1
  * @property Transaction[] $transactions
  * @property Transaction[] $transactions1
  */
@@ -69,15 +73,19 @@ class EntityBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'activityLogs' => array(self::HAS_MANY, 'ActivityLog', 'entity_id'),
 			'rbuAccounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(entity_id, account_id)'),
+			'brands' => array(self::HAS_MANY, 'Brand', 'created_by'),
 			'marketAds' => array(self::HAS_MANY, 'MarketAd', 'created_by'),
 			'rbuMarketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_joined}}(entity_id, ad_id)'),
 			'rbuNotifications' => array(self::MANY_MANY, 'Notification', '{{notification_configuration}}(entity_id, notification_id)'),
 			'notificationMessages' => array(self::HAS_MANY, 'NotificationMessage', 'entity_id'),
 			'pendings' => array(self::HAS_MANY, 'Pending', 'charge_entity'),
 			'pendings1' => array(self::HAS_MANY, 'Pending', 'deposit_entity'),
-			'rates0' => array(self::HAS_MANY, 'Rate', 'to_id'),
-			'rates01' => array(self::HAS_MANY, 'Rate', 'from_id'),
+			'rates0' => array(self::HAS_MANY, 'Rate', 'from_id'),
+			'rates01' => array(self::HAS_MANY, 'Rate', 'to_id'),
+			'roles' => array(self::HAS_MANY, 'Role', 'actor_id'),
+			'roles1' => array(self::HAS_MANY, 'Role', 'part_id'),
 			'transactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
 			'transactions1' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
 		);
