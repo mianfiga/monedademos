@@ -3,7 +3,7 @@
 /* @var $model Brand */
 
 $this->breadcrumbs=array(
-	'Brands'=>array('index'),
+	Yii::t('brand','Contributors')=>array('index'),
 	$model->name=>array('view','id'=>$model->id),
 	'Update',
 );
@@ -15,6 +15,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Brand <?php echo $model->id; ?></h1>
+<h1><?php echo Yii::t('brand','Update Organization')?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

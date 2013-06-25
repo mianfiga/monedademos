@@ -3,13 +3,18 @@
 /* @var $data Brand */
 ?>
 <div class="small-12 large-3 columns">
-    <div class="view">
+    <div class="view br_block">
         <h5><?php echo CHtml::link(CHtml::encode($data->name), array('view', 'id' => $data->id)); ?></h5>
-        <?php if ($data->image != '') { ?>
-            <img class="br_img" src="<?php echo Yii::app()->request->baseUrl . '/images/brands/' . Brand::THUMB_PREFIX . $data->image ?>" alt="<?php echo CHtml::encode($data->summary) ?>"/>
-        <?php } ?>
-
-        <?php echo CHtml::encode($data->summary); ?>
+        <div class="row transparent">
+            <?php if ($data->image != '') { ?>
+                <div class="small-5 large-12 columns">
+                    <?php echo CHtml::link('<img class="br_img" src="'. Yii::app()->request->baseUrl . '/images/brands/' . Brand::THUMB_PREFIX . $data->image .'" alt="'. CHtml::encode($data->summary).'"/>', array('view', 'id' => $data->id)); ?>
+                </div>
+            <?php } ?>
+            <div class="small-7 large-12 columns">
+                <?php echo CHtml::encode($data->summary); ?>
+            </div>
+        </div>
     </div>
 </div>
 

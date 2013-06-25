@@ -196,6 +196,11 @@ class MarketAd extends MarketAdBase {
         } else {
             Notification::removeNotification(Notification::MARKET_AD_EXPIRED, $this->created_by, Sid::getSID($this));
         }
+
+        if ($this->createdBy->class == 'Brand') {
+            $this->createdBy->getObject()->saveAttributes(array(
+                'updated' => Common::datetime()));
+        }
     }
 
     protected function afterFind() {

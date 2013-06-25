@@ -381,9 +381,11 @@ div.search-form
     background: white;
     max-width: 70em;
 }
-/*.row .row{
-    margin: 0px;
-}*/
+
+.transparent{
+    background: none !important;
+}
+
 
 .yii-feed-widget-item{
     width: 100% !important;
@@ -496,4 +498,9 @@ fc-webicon-googleplus-s
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+.br_block{
+    height: 220px;
+    overflow: hidden;
 }

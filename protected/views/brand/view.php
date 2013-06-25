@@ -1,9 +1,10 @@
+<?php $this->pageTitle = Site::TITLE . Yii::t('brand','Contributors') .' | '. $model->name; ?>
 <?php
 /* @var $this BrandController */
 /* @var $model Brand */
 
 $this->breadcrumbs = array(
-    'Brands' => array('index'),
+    Yii::t('brand','Contributors') => array('index'),
     $model->name,
 );
 
@@ -49,7 +50,7 @@ $this->breadcrumbs = array(
         ?>
     </div>
     <div class="small-12 large-5 columns">
-<?php if ($model->created_by == Yii::app()->user->getId()) { ?>
+<?php if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) { ?>
             <br/>
             <div class="row">
                 <div class="small-12 columns">

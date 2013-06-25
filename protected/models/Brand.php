@@ -79,12 +79,11 @@ class Brand extends BrandBase {
      */
     public function attributeLabels() {
         return array(
-            'id' => 'ID',
-            'name' => 'Name',
-            'email' => 'Email',
-            'summary' => 'Summary',
-            'description' => 'Description',
-            'form_image' => 'Image',
+            'name' => Yii::t('app', 'Name'),
+            'email' => Yii::t('app', 'Email'),
+            'summary' => Yii::t('market', 'Summary'),
+            'description' => Yii::t('market', 'Description'),
+            'form_image' => Yii::t('market', 'Image'),
             'contribution_title' => Yii::t('app', 'Name'),
             'contribution_text' => Yii::t('app', 'Summary'),
         );

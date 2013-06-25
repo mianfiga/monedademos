@@ -7,7 +7,7 @@
             			array('label'=> Yii::t('app','Account'), 'url'=>array('/transaction/index'), 'visible'=>!Yii::app()->user->isGuest),
                 		array('label'=> Yii::t('app','Contributions'), 'url'=>array('/contribution/index')),
                     	array('label'=>Yii::t('app','Market'), 'url'=>array('market/index'), 'visible'=>true),
-
+                		array('label'=> Yii::t('app','Contributors'), 'url'=>array('/brand/index')),
 //                      array('label'=> Yii::t('app','Contributions'), 'url'=>array('/contribution/index'), 'items'=>array(
 //                     array('label'=>Yii::t('app','Market'), 'url'=>array('market/index'), 'visible'=>true),
 //                  array('label'=>Yii::t('app','Profiles'), 'url'=>array('/contribution/index'), 'visible'=>true),

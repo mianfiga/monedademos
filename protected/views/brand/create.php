@@ -3,7 +3,7 @@
 /* @var $model Brand */
 
 $this->breadcrumbs=array(
-	'Brands'=>array('index'),
+	Yii::t('brand','Contributors') => array('index'),
 	'Create',
 );
 
@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Brand</h1>
+<h1><?php echo Yii::t('brand','Add Contributor')?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

@@ -89,11 +89,12 @@ class BrandController extends Controller {
      */
     public function actionUpdate($id) {
 
-        if (Yii::app()->user->getId() != $id)
+        $model = $this->loadModel($id);
+        if (Yii::app()->user->logged != $model->created_by) {
             $this->redirect(array('site/index'));
+        }
 
         $this->layout = '//layouts/column2';
-        $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);

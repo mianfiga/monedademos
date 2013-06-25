@@ -150,6 +150,7 @@ return array(
     'Errors found in the charge (source) account' => 'Errores encontrados en la cuenta de cargo (origen)',
     'Errors found in the deposit (destination) account' => 'Errores encontrados en la cuenta de depósito (destino)',
     'Promos & Ads' => 'Promos y Anuncios',
+    'Contributors' => 'Colaboradores',
     
 );
 ?>
