@@ -198,6 +198,11 @@ class User extends UserBase {
         $this->identification_method = $ids[0];
         unset($ids[0]);
         $this->identification_number = implode(': ', $ids);
+        if (strlen($this->contribution_text) < strlen($this->contribution_title)){
+            $aux = $this->contribution_text;
+            $this->contribution_text = $this->contribution_title;
+            $this->contribution_title = $aux;
+        }
     }
 
     protected function beforeSave() {

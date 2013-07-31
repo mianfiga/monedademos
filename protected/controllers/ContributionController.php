@@ -57,12 +57,12 @@ class ContributionController extends Controller {
      */
     public function actionView($id) {
         $this->layout = '//layouts/column1';
-        
+
         $model = $this->loadModel($id);
         $entity = Entity::get($model);
         $dataProvider = new CActiveDataProvider('Rate', array(
                     'criteria' => array(
-                        'condition' => 'to_id = '. $entity->id,
+                        'condition' => 'to_id = ' . $entity->id,
                     ),
                     'sort' => array(
                         'defaultOrder' => 't.updated DESC',
@@ -82,8 +82,8 @@ class ContributionController extends Controller {
      */
     public function actionContact($id) {
         $model = new ContributionContactForm;
-        $logged = $this->loadModel(Yii::app()->user->getId());
-
+        $entity = Entity::model()->findByPk(Yii::app()->user->getId());
+        $logged = $entity->getObject();
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
