@@ -182,8 +182,8 @@ class SiteController extends Controller {
                 $cookie->expire = time() + 60 * 60 * 24 * 180;
                 Yii::app()->request->cookies['language'] = $cookie;
                 if (Yii::app()->user->getId() != null) {
-                    $user = User::model()->findByPk(Yii::app()->user->getId());
-                    $user->saveAttributes(array('culture' => $model->language));
+                    $entity = Entity::model()->findByPk(Yii::app()->user->getId());  
+                    $entity->getObject()->saveAttributes(array('culture' => $model->language));
                 }
                 $this->redirect($model->url);
             }

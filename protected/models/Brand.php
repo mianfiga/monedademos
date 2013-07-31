@@ -120,7 +120,9 @@ class Brand extends BrandBase {
             if ($this->isNewRecord) {
                 $this->_isNew = true;
                 $this->added = Common::datetime();
-                $this->created_by = Yii::app()->user->getId();
+                $this->created_by = Yii::app()->user->logged;
+                $creator = Entity::model()->findByPk($this->created_by);
+                $this->culture = $creator->culture;
             } else {
                 $this->_isNew = false;
             }
