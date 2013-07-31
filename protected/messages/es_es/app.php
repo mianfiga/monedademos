@@ -129,7 +129,7 @@ return array(
     'Edit' => 'Editar',
     'Manage' => 'Gestionar',
     'End advertisement' => 'Finalizar anuncio',
-    'When you end an advertisement it gets expired, you can change expiration date to make it available again' =>'Cuando terminas un anuncio lo caducas, puedes cambiar la fecha de caducidad para hacerlo disponible de nuevo',
+    'When you end an advertisement it gets expired, you can change expiration date to make it available again' => 'Cuando terminas un anuncio lo caducas, puedes cambiar la fecha de caducidad para hacerlo disponible de nuevo',
     'Are you sure you want to expire this ad?' => '¿Estás seguro de que deseas caducar este anuncio?',
     'Are you sure you want to delete this ad?' => '¿Estás seguro de que deseas eliminar este anuncio?',
     'The account {account} is blocked reset account by clicking in the "Edit account" link or clicking <a href="{edit_account_link}">here</a>' => 'La cuenta {account} está bloqueada, desbloquéala haciendo clic en "Editar cuenta" o haciendo clic <a href="{edit_account_link}">aquí</a>',
@@ -151,6 +151,9 @@ return array(
     'Errors found in the deposit (destination) account' => 'Errores encontrados en la cuenta de depósito (destino)',
     'Promos & Ads' => 'Promos y Anuncios',
     'Contributors' => 'Colaboradores',
-    
+    'Change Pin & Unlock account' => 'Cambio de Pin y desbloqueo de cuenta',
+    '<strong>1st</strong> Write your user password.' => '<strong>1º</strong> Escribe tu contraseña de usuario.',
+    '<strong>2nd</strong> Write your new account pin twice (will be asked to confirm your future payments).' => '<strong>2º</strong> Escribe tu nuevo pin dos veces (te lo pedirá para confirmar tus pagos futuros).',
+    '<strong>3rd</strong> Saves changes.' => '<strong>3º</strong> Guarda los cambios.',
 );
 ?>
