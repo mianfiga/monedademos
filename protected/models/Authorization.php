@@ -187,10 +187,10 @@ class Authorization extends AuthorizationBase
 				$this->_isNew = false;
 
 				if ($this->user_password!=null || $this->plain_password!=null)
-				{
+				{   //falta comprobar si la entidad es un usuario
 					if($this->getScenario()=='update' &&
 							Yii::app()->user->getId() == $this->entity_id &&
-							User::model()->findByPk(Yii::app()->user->getId())->validatePassword($this->user_password) )
+							User::model()->findByPk($this->entity->object_id)->validatePassword($this->user_password) )
 					{
 						$this->salt = md5(self::randString(64));
 						$this->password = self::hashPassword($this->plain_password,$this->salt);
