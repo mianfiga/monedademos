@@ -9,7 +9,7 @@ $this->menu=array(
 	array('label'=>Yii::t('market','List Advertisements'), 'url'=>array('index')),
 	array('label'=>Yii::t('market','View this Ad'), 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>Yii::t('market','Update Advertisement'), 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>Yii::t('market','Delete Advertisement'), 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label' => Yii::t('market', 'Delete Advertisement'), 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => Yii::t('app','Are you sure you want to delete this ad?'), 'csrf' => true)),
 );
 ?>
 <?php echo Yii::t('app',($model->type=='offer'?'Offering':'Looking for').' '.$model->class) ?><br/>
