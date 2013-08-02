@@ -8,8 +8,8 @@ $this->breadcrumbs = array(
 $this->menu = array(
     array('label' => Yii::t('market', 'Join this Ad'), 'url' => array('join', 'id' => $model->id)),
     array('label' => Yii::t('market', 'List Advertisements'), 'url' => array('index')),
-    array('label' => Yii::t('market', 'Manage Advertisement'), 'url' => array('panel', 'id' => $model->id), 'visible' => $model->created_by == Yii::app()->user->getId()),
-    array('label' => Yii::t('market', 'Update Advertisement'), 'url' => array('update', 'id' => $model->id), 'visible' => $model->created_by == Yii::app()->user->getId()),
+    array('label' => Yii::t('market', 'Manage Advertisement'), 'url' => array('panel', 'id' => $model->id), 'visible' => isset(Yii::app()->user->roles[$model->created_by])),
+    array('label' => Yii::t('market', 'Update Advertisement'), 'url' => array('update', 'id' => $model->id), 'visible' => isset(Yii::app()->user->roles[$model->created_by])),
 );
 ?>
 <div class="mk_updated"><?php echo Yii::t('market', 'Updated') . ':&nbsp;' . date('d/m/Y', strtotime($model->updated)); ?></div>

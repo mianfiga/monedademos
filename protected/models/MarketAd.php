@@ -154,8 +154,9 @@ class MarketAd extends MarketAdBase {
             }
             if ($this->isNewRecord) {
                 $this->added = date('YmdHis');
-                $this->created_by = Yii::app()->user->getId();
-                //registramos la transacción
+                if ($this->created_by == null) {
+                    $this->created_by = Yii::app()->user->getId();
+                }
             }
 
             $this->form_image = EUploadedImage::getInstance($this, 'form_image');

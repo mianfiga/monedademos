@@ -65,7 +65,7 @@ class MarketController extends Controller {
      */
     public function actionPanel($id) {
         $model = $this->loadModel($id); //MarketAd::model()->with('users')->findByPk($id);
-        if ($model->created_by == Yii::app()->user->getId()) {
+        if (isset(Yii::app()->user->roles[$model->created_by])) {
             $criteria = new CDbCriteria;
 
             $criteria->with = array(
@@ -98,7 +98,7 @@ class MarketController extends Controller {
 
     public function actionPanelView($ad_id, $entity_id) {
         $ad = $this->loadModel($ad_id);
-        if ($ad->created_by == Yii::app()->user->getId()) {
+        if (!isset(Yii::app()->user->roles[$model->created_by])) {
             $entity = Entity::model()->findByPk($entity_id);
             $joined = MarketJoined::model()->with('entity')->findByPk(array('ad_id' => $ad_id, 'entity_id' => $entity_id));
             $joined->setScenario('panel');
@@ -145,11 +145,18 @@ class MarketController extends Controller {
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
-    public function actionCreate() {
+    public function actionCreate($id = null) {
         $model = new MarketAd;
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
+        if ($id != null) {
+            if (isset(Yii::app()->user->roles[$id])) {
+                $model->created_by = $id;
+            } else {
+                throw new CHttpException(404, 'Access denied.');
+            }
+        }
 
         if (isset($_POST['MarketAd'])) {
             $model->attributes = $_POST['MarketAd'];
@@ -173,7 +180,7 @@ class MarketController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-        if ($model->created_by != Yii::app()->user->getId()) {
+        if (!isset(Yii::app()->user->roles[$model->created_by])) {
             Yii::app()->user->setFlash('error', Yii::t('market', 'You can not update this advertisement'));
             $this->redirect(array('view', 'id' => $id));
             return;
@@ -200,7 +207,8 @@ class MarketController extends Controller {
      */
     public function actionExpire($id) {
         $model = $this->loadModel($id);
-        if ($model->created_by != Yii::app()->user->getId()) {
+        
+        if (!isset(Yii::app()->user->roles[$model->created_by])) {
             Yii::app()->user->setFlash('error', Yii::t('market', 'You can not update this advertisement'));
             $this->redirect(array('view', 'id' => $id));
             return;
@@ -221,7 +229,7 @@ class MarketController extends Controller {
      */
     public function actionDelete($id) {
         $model = $this->loadModel($id);
-        if ($model->created_by != Yii::app()->user->getId()) {
+        if (!isset(Yii::app()->user->roles[$model->created_by])) {
             Yii::app()->user->setFlash('error', Yii::t('market', 'You can not delete this advertisement'));
             $this->redirect(array('view', 'id' => $id));
             return;

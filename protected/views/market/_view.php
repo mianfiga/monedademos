@@ -27,7 +27,7 @@
             <div class="mk_data mk_zip"><?php echo $data->zip ?></div>
         <?php } ?>
         <?php
-        if ($data->created_by == Yii::app()->user->getId()) {
+        if (isset(Yii::app()->user->roles[$data->created_by])){
             echo '&nbsp;'. CHtml::link(Yii::t('app', 'Edit'), array('market/update', 'id' => $data->id), array('class' => "small button"));
             echo '&nbsp;'. CHtml::link(Yii::t('app', 'Manage'), array('market/panel', 'id' => $data->id), array('class' => "small button secondary"));
         }

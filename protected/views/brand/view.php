@@ -1,10 +1,10 @@
-<?php $this->pageTitle = Site::TITLE . Yii::t('brand','Contributors') .' | '. $model->name; ?>
+<?php $this->pageTitle = Site::TITLE . Yii::t('brand', 'Contributors') . ' | ' . $model->name; ?>
 <?php
 /* @var $this BrandController */
 /* @var $model Brand */
 
 $this->breadcrumbs = array(
-    Yii::t('brand','Contributors') => array('index'),
+    Yii::t('brand', 'Contributors') => array('index'),
     $model->name,
 );
 
@@ -38,29 +38,33 @@ $this->breadcrumbs = array(
                 <h3 class="subheader"><?php echo Yii::t('app', 'Promos & Ads'); ?></h3>
             </div>
             <div class="small-12 large-3 columns">
-                <?php if ($entity->id == Yii::app()->user->getId()) {
-                    echo '&nbsp;' . CHtml::link(Yii::t('market', 'Create Advertisement'), array('market/create'), array('class' => "button small secondary"));
-                } ?>
+                <?php
+                if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) {
+                    echo '&nbsp;' . CHtml::link(Yii::t('market', 'Create Advertisement'), array(
+                        'market/create', 'id' => Entity::get($model)->id), array('class' => "button small secondary")
+                    );
+                }
+                ?>
             </div>
         </div>
-        <?php
-        echo $this->renderPartial('/market/_list', array(
-            'dataProvider' => $adsDataProvider,
-        ));
-        ?>
+<?php
+echo $this->renderPartial('/market/_list', array(
+    'dataProvider' => $adsDataProvider,
+));
+?>
     </div>
     <div class="small-12 large-5 columns">
 <?php if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) { ?>
             <br/>
             <div class="row">
                 <div class="small-12 columns">
-            <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $model->id), array('class' => "button")); ?>
+    <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $model->id), array('class' => "button")); ?>
                 </div>
             </div>
-        <?php } ?>
+<?php } ?>
 
 
-        <?php if ($model->image != '') { ?>
+<?php if ($model->image != '') { ?>
             <img src="<?php echo Yii::app()->request->baseUrl . '/images/brands/' . $model->image ?>" alt="<?php echo CHtml::encode($model->name) ?>"/>
         <?php } ?>
         <?php
