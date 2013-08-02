@@ -310,15 +310,16 @@ class Account extends AccountBase {
         }
 
         //log penalties & compensations to check everything is shared
-        //Reset earned and spended
-        foreach ($accounts as $acc) {
-            $acc->saveAttributes(array('earned' => 0, 'spended' => 0));
-        }
 
         //System accounts
         $accounts = self::getSystemAccounts();
         foreach ($accounts as $acc) {
             $ret = $acc->addSalary($date, $rule);
+        }
+        
+        //Reset earned and spended
+        $accounts = self::getTaxesAccounts();
+        foreach ($accounts as $acc) {
             $acc->saveAttributes(array('earned' => 0, 'spended' => 0));
         }
     }
@@ -510,7 +511,7 @@ class Account extends AccountBase {
         foreach ($this->holders as $holder) {
             $charge_entity = $holder->id;
         }
-        
+
         $rb = new Transaction;
         $rb->charge_account = $this->id;
         $rb->deposit_account = Account::FUND_ACCOUNT;
@@ -522,10 +523,10 @@ class Account extends AccountBase {
         $rb->subject = Yii::t('app,', 'Rollback salary and try again.');
         $rb->save();
 
-        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \''. Period::getPrevious()->added .'\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
-        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \''. Period::getPrevious()->added .'\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \'' . Period::getPrevious()->added . '\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \'' . Period::getPrevious()->added . '\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
 
-        $this->saveAttributes(array('earned'=> $earned->amount, 'spended' => $spended->amount));
+        $this->saveAttributes(array('earned' => $earned->amount, 'spended' => $spended->amount));
     }
 
 }
