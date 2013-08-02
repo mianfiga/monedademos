@@ -17,18 +17,39 @@ $this->menu = array(
 <?php
 if ($model == null) {
     ?>
-    <h1><?php echo (($charge_errors | $deposit_errors) != 0 ? Yii::t('app','Transaction NOT completed') : Yii::t('app','Transaction not accessible')) ?></h1>
+    <h1><?php echo (($charge_errors | $deposit_errors) != 0 ? Yii::t('app', 'Transaction NOT completed') : Yii::t('app', 'Transaction not accessible')) ?></h1>
     <?php
     if ($charge_errors != 0)
-        echo Yii::t('app','Errors found in the charge (source) account') . ".<br/>";
+        echo Yii::t('app', 'Errors found in the charge (source) account') . ".<br/>";
     if ($deposit_errors != 0)
-        echo Yii::t('app','Errors found in the deposit (destination) account') . ".<br/>";
+        echo Yii::t('app', 'Errors found in the deposit (destination) account') . ".<br/>";
 }
 else {
     ?>
     <h1>View Transaction #<?php echo $model->id; ?></h1>
 
     <?php
+    $chargeHolders = $model->chargeAccount->holders;
+    $depositHolders = $model->depositAccount->holders;
+    $isChargeHolder = false;
+    $isDepositHolder = false;
+
+    foreach ($chargeHolders as $holder) {
+        $chargeHolder = $holder;
+        if ($holder->id == $model->charge_entity) {
+            $isChargeHolder = true;
+            break;
+        }
+    }
+
+    foreach ($depositHolders as $holder) {
+        $depositHolder = $holder;
+        if ($holder->id == $model->deposit_entity) {
+            $isDepositHolder = true;
+            break;
+        }
+    }
+
     $this->widget('zii.widgets.CDetailView', array(
         'data' => $model,
         'attributes' => array(
@@ -47,12 +68,16 @@ else {
             array(
                 'label' => Yii::t('app', 'Charge Account (Source)'),
                 'type' => 'raw',
-                'value' => CHtml::encode($model->getChargeAccountNumber()) . '; ' . $model->chargeEntity->name . ' ' . $model->chargeEntity->surname
+                'value' => CHtml::encode($model->getChargeAccountNumber())
+                . '; ' . $model->chargeEntity->name . ' ' . $model->chargeEntity->surname
+                . (!$isChargeHolder ? ' (' . $chargeHolder->name . ' ' . $chargeHolder->surname . ')' : ''),
             ),
             array(
                 'label' => Yii::t('app', 'Deposit Account (Destination)'),
                 'type' => 'raw',
-                'value' => CHtml::encode($model->getDepositAccountNumber()) . '; ' . $model->depositEntity->name . ' ' . $model->depositEntity->surname
+                'value' => CHtml::encode($model->getDepositAccountNumber())
+                . '; ' . $model->depositEntity->name . ' ' . $model->depositEntity->surname
+                . (!$isDepositHolder ? ' (' . $depositHolder->name . ' ' . $depositHolder->surname . ')' : ''),
             ),
             'subject',
         ),
