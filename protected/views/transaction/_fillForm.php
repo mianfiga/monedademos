@@ -52,7 +52,7 @@
         </div>
         <div class="row">
             <div class="small-12 columns">
-                <?php echo $form->error($model, 'deposit_account_number'); ?>
+                <?php echo $form->error($model, 'charge_account_number'); ?>
             </div>
         </div>
     </div>
