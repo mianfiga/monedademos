@@ -5,8 +5,8 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => Yii::t('app', 'Edit contribution'), 'url' => array('edit', 'id' => $model->id)),
-    array('label' => Yii::t('app', 'Update user info'), 'url' => array('update', 'id' => $model->id)),
+    array('label' => Yii::t('app', 'Edit contribution'), 'url' => array('edit', 'id' => Yii::app()->user->getId())),
+    array('label' => Yii::t('app', 'Update user info'), 'url' => array('update', 'id' => Yii::app()->user->getId())),
 //	array('label'=>'Delete User', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 //	array('label'=>'Manage User', 'url'=>array('admin')),
 );

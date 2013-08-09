@@ -58,13 +58,13 @@ class UserController extends Controller {
     public function actionView($id) {
         if (Yii::app()->user->getId() == $id) {
             $entity = Entity::model()->findByPk($id);
-            if ($entity === null){
+            if ($entity === null) {
                 throw new CHttpException(404, 'The requested page does not exist.');
             }
-            if($entity->class == 'Brand'){
+            if ($entity->class == 'Brand') {
                 $this->redirect(array('brand/view', 'id' => $entity->object_id));
             }
-               
+
             $model = $entity->getObject();
             $dataProvider = Rate::getTo($entity->id);
 
@@ -154,7 +154,16 @@ class UserController extends Controller {
         if (Yii::app()->user->getId() != $id)
             $this->redirect(array('site/index'));
 
-        $model = $this->loadModel($id);
+        $entity = Entity::model()->findByPk($id);
+        if ($entity === null) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+        if ($entity->class == 'Brand') {
+            $this->redirect(array('brand/view', 'id' => $entity->object_id));
+        }
+
+        $model = $entity->getObject();
+
         $model->setScenario('edit');
 
         // Uncomment the following line if AJAX validation is needed
@@ -181,7 +190,15 @@ class UserController extends Controller {
         if (Yii::app()->user->getId() != $id)
             $this->redirect(array('site/index'));
 
-        $model = $this->loadModel($id);
+        $entity = Entity::model()->findByPk($id);
+        if ($entity === null) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+        if ($entity->class == 'Brand') {
+            $this->redirect(array('brand/view', 'id' => $entity->object_id));
+        }
+
+        $model = $entity->getObject();
         $model->setScenario('update');
 //		$model->password = null;
         // Uncomment the following line if AJAX validation is needed
