@@ -1,4 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php 
+//Top Bar javascript
+$baseUrl = Yii::app()->baseUrl;
+$cs = Yii::app()->getClientScript();
+$cs->registerScriptFile($baseUrl . '/js/vendor/custom.modernizr.js');
+$cs->registerScriptFile($baseUrl . '/js/foundation.min.js');
+$cs->registerScriptFile($baseUrl . '/js/vendor/custom.modernizr.js');
+$cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', CClientScript::POS_READY);
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -27,11 +35,23 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="small-12 columns"id="mainmenu">
-                    <?php echo $this->renderPartial('/site/_menu'); ?>
-                </div><!-- mainmenu -->
-            </div>
+            <div id="mainmenu" class="row">
+                <nav class="top-bar contain-to-grid ">
+                    <ul class="title-area">
+                        <!-- Title Area -->
+                        <li class="name">
+                            <h1><a href="http://monedademos.es">Demos</a></h1>
+                        </li>
+                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                    </ul>
+                    <section class="top-bar-section">
+                        <?php echo $this->renderPartial('/site/_menu'); ?>
+                    </section>
+                </nav>
+
+            </div><!-- mainmenu -->
+
             <?php if (isset($this->breadcrumbs)): ?>
                 <div class="row">
                     <div class="small-12 columns">

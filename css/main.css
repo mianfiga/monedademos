@@ -7,13 +7,13 @@ body
     background: #EFEFEF;
 }
 
-#page
+/*#page
 {
     margin-top: 5px;
     margin-bottom: 5px;
-    /*background: white;*/
+    /*background: white;
     border: 1px solid #C9E0ED;
-}
+}*/
 
 #header
 {
@@ -55,7 +55,9 @@ body
     font-size: 200%;
 }
 
-#mainmenu
+
+/*
+#mainmenu .top-bar
 {
     clear: both;
     background:white url(bg.gif) repeat-x left top;
@@ -87,6 +89,14 @@ body
 {
     color: #6399cd;
     background-color:#EFF4FA;
+    text-decoration:none;
+}
+*/
+
+#mainmenu ul li a:hover, #mainmenu ul li.active a
+{
+    font-weight: bold;
+    background-color: rgb(43, 166, 203);
     text-decoration:none;
 }
 
@@ -339,6 +349,13 @@ div.search-form
 
 .mk_join a{
     color: #0066A4;
+}
+
+.mk_autor{
+    border: none;
+    background-color: transparent;
+    float: right;
+    font-size: 0.9em;
 }
 .video{
     margin: 0px auto;
