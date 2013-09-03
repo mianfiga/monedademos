@@ -38,5 +38,14 @@ $this->menu = array(
     <?php if ($model->zip != '') { ?>    
         <div class="mk_data mk_zip"><?php echo $model->zip ?></div>
     <?php } ?>
+    <?php
+    if ($model->createdBy->class == 'Brand') {
+        $brandname = $model->createdBy->getObject()->name;
+        $brandid = $model->createdBy->getObject()->id;
+        ?>
+        <div class="mk_data mk_autor">
+        <?php echo Yii::t('market', 'By') . ': ' . CHtml::link((strlen($brandname) > 30 ? substr($brandname, 0, 30) . '…' : $brandname), array('brand/view', 'id' => $brandid)); ?>
+        </div>
+<?php } ?>
 </div>
 

@@ -61,5 +61,6 @@ return array(
     '{name} has joined to {ad_title}.' => '{name} se ha unido a {ad_title}.',
     'New comment' => 'Nuevo comentario',
     'Reply at: {link}' => 'Responde en: {link}',
+    'By' => 'Por',
 );
 ?>

@@ -27,11 +27,21 @@
             <div class="mk_data mk_zip"><?php echo $data->zip ?></div>
         <?php } ?>
         <?php
-        if (isset(Yii::app()->user->roles) && isset(Yii::app()->user->roles[$data->created_by])){
-            echo '&nbsp;'. CHtml::link(Yii::t('app', 'Edit'), array('market/update', 'id' => $data->id), array('class' => "small button"));
-            echo '&nbsp;'. CHtml::link(Yii::t('app', 'Manage'), array('market/panel', 'id' => $data->id), array('class' => "small button secondary"));
+        if (isset(Yii::app()->user->roles) && isset(Yii::app()->user->roles[$data->created_by])) {
+            echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('market/update', 'id' => $data->id), array('class' => "small button"));
+            echo '&nbsp;' . CHtml::link(Yii::t('app', 'Manage'), array('market/panel', 'id' => $data->id), array('class' => "small button secondary"));
         }
         ?>
+        <?php
+        if ($data->createdBy->class == 'Brand') {
+            $brandname = $data->createdBy->getObject()->name;
+            $brandid = $data->createdBy->getObject()->id;
+            ?>
+            <div class="mk_data mk_autor">
+                <?php echo Yii::t('market', 'By'). ': '.CHtml::link((strlen($brandname) > 30 ? substr($brandname, 0, 30) . '…' : $brandname), array('brand/view', 'id' => $brandid)); ?>
+            </div>
+<?php  } ?>
+
     </div>
     <div class="mk_posbottom"> </div>
     <?php /*
