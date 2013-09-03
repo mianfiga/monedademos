@@ -247,6 +247,7 @@ class Transaction extends TransactionBase {
                     if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX
                             && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
                         $deposit->earned += $this->amount;
+                        $deposit->balance = 0;
                     }
                     $deposit->credit += $this->amount;
                     $deposit->save();

@@ -5,18 +5,9 @@
             Demos es una moneda social alternativa al euro que funciona a través de <?php echo CHtml::link('monedademos.es', array('/site/index')); ?>.
         </div>
     </div>
-    <?php /*            <div class="small-12 large-2 columns">
-      <div class="social_box">
-      <ul class="inline-list">
-      <li class="social twitter"><a href="http://twitter.com/monedademos">@monedademos</a></li>
-      <li class="social facebook"><a href="http://facebook.com/monedademos">MonedaDemos</a></li>
-      <li class="social blog"><a href="http://blog.monedademos.es">Blog de DEMOS</a></li>
-      </ul>
-      </div>
-      </div>
-      </div>
-      <div class="row">
-     */ ?>
+</div>
+<div class="row">
+
     <?php /*            <div class="small-12 large-6 columns">
       <img class="site_img_steps" src="<?php echo Yii::app()->request->baseUrl?>/images/3pasos.png" alt="1º Cobrar, 2º Comerciar, 3º Colaborar" />
       </div> */ ?>
@@ -46,6 +37,17 @@
         </div>
     </div>
 </div>
+<?php /*<div class="row">
+    <div class="small-12 large-12 columns">
+        <ul class="inline-list">
+            <li><strong>No te pierdas nada:</strong> </li>
+            <li class="social twitter"><a href="http://twitter.com/monedademos">@monedademos</a></li>
+            <li class="social facebook"><a href="http://facebook.com/monedaDemos">Moneda Demos</a></li>
+            <li class="social googleplus"><a href="https://plus.google.com/113493943316049288613" rel="publisher">Moneda Demos</a></li>
+            <li class="social blog"><a href="http://blog.monedademos.es">Blog de DEMOS</a></li>
+        </ul>
+    </div>
+</div> */ ?>
 <div class="row">
     <div class="small-12 columns">
         <div class="panel amount_data">

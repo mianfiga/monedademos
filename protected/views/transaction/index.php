@@ -46,7 +46,14 @@ $cs->registerScript('foundation_tooltip', '$(document).foundation(\'tooltips\');
         <h3><?php echo Yii::t('app', 'Credit') ?>: <?php echo Transaction::amountSystemToUser($account->credit) ?></h3>
     </div>
     <div class="small-12 large-7 columns">
-        <h3><?php echo Yii::t('app', 'This month balance') ?>: <?php echo Transaction::amountSystemToUser($account->earned - $account->spended) ?></h3>
+        <h3><?php echo Yii::t('app', 'Balance') ?>:
+            <span class="subheader has-tip" data-tooltip title="<?php
+        echo Yii::t('app', 'Earned: (+) %earned%, Paid: (-) %spended%, Previous month balance: (-) %balance% (Previous month balance is set to 0 when you get to sell something or when you finish the month with positive balance)', array(
+            '%earned%' => Transaction::amountSystemToUser($account->earned),
+            '%spended%' => Transaction::amountSystemToUser($account->spended),
+            '%balance%' => Transaction::amountSystemToUser($account->balance)));
+        ?>">
+            <?php echo Transaction::amountSystemToUser($account->earned - $account->spended - $account->balance) ?></h3>
     </div>    
 </div>
 
@@ -55,7 +62,7 @@ echo $this->renderPartial('_buttons', array('showingTransactions' => isset($mode
 ?>
 
 
-<?php //echo Yii::t('app', 'You should copy your Account Number and save it to your mobile or wallet, you will need it in th future to pay and charge to other users'); ?>
+<?php //echo Yii::t('app', 'You should copy your Account Number and save it to your mobile or wallet, you will need it in th future to pay and charge to other users');  ?>
 
 <?php
 /* if ($dataProvider !== null)
@@ -91,9 +98,10 @@ if (isset($model)) {
             )
         ),
     ));
-} else { ?>
+} else {
+    ?>
     <hr />
-<?php
+    <?php
     echo $this->renderPartial('_authorization', array('account' => $account,
         'accountNumber' => $accountNumber));
 }

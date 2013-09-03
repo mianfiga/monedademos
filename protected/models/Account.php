@@ -198,7 +198,7 @@ class Account extends AccountBase {
         //Adding the salary
         $salary = $rule->salary * $percent;
 
-        $amount = $this->earned - $this->spended + 0.0;
+        $amount = $this->earned - $this->spended - $this->balance + 0.0;
         //If have wasted more than have earned: penalty
         if ($amount < 0) {
             $max_penalty = $rule->salary - $rule->min_salary;
@@ -215,7 +215,7 @@ class Account extends AccountBase {
             $transaction->subject = "Salary (" . Transaction::amountSystemToUser($rule->salary) . ')' . ($penalty > 0 ? ' - Penalty (' .
                             Transaction::amountSystemToUser($penalty) . ')' : '');
         } else { //Don't have wasted more than have earned: compensation
-            $compensation = ($related_value == 0 ? 0 : abs($amount / $related_value * $global_amount));
+            $compensation = ($related_value == 0 ? 0 : min(abs($amount / $related_value * $global_amount), $amount/2));
             $salary += $compensation;
 
             //returning el array
@@ -274,7 +274,7 @@ class Account extends AccountBase {
         foreach ($accounts as $acc) {
             //uncomment in case we want all user to earn the salary
             //$acc->last_action = date('Y-m-d');
-            $amount = $acc->earned - $acc->spended;
+            $amount = $acc->earned - $acc->spended - $acc->balance;
 
             if ($amount < 0) {
                 $negative -= $amount;
@@ -293,7 +293,7 @@ class Account extends AccountBase {
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
-            if (($acc->earned - $acc->spended) < 0) {
+            if (($acc->earned - $acc->spended - $acc->balance) < 0) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
             }
@@ -303,24 +303,27 @@ class Account extends AccountBase {
         $dateLastPeriod = Period::getLastDate();
         foreach ($accounts as $acc) {
             if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
-                    && (($acc->earned - $acc->spended) >= 0)) {
+                    && (($acc->earned - $acc->spended - $acc->balance) >= 0)) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
                 $compensation += $ret['compensation'];
             }
         }
 
         //log penalties & compensations to check everything is shared
-
         //System accounts
         $accounts = self::getSystemAccounts();
         foreach ($accounts as $acc) {
             $ret = $acc->addSalary($date, $rule);
         }
-        
+
         //Reset earned and spended
         $accounts = self::getTaxesAccounts();
         foreach ($accounts as $acc) {
-            $acc->saveAttributes(array('earned' => 0, 'spended' => 0));
+            $amount = $acc->earned - $acc->spended - $acc->balance;
+            $acc->saveAttributes(array(
+                'earned' => 0,
+                'spended' => 0,
+                'balance' => ($amount>0?0:-$amount)));
         }
     }
 

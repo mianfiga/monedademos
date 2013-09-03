@@ -155,5 +155,6 @@ return array(
     '<strong>1st</strong> Write your user password.' => '<strong>1º</strong> Escribe tu contraseña de usuario.',
     '<strong>2nd</strong> Write your new account pin twice (will be asked to confirm your future payments).' => '<strong>2º</strong> Escribe tu nuevo pin dos veces (te lo pedirá para confirmar tus pagos futuros).',
     '<strong>3rd</strong> Saves changes.' => '<strong>3º</strong> Guarda los cambios.',
+    'Earned: (+) %earned%, Paid: (-) %spended%, Previous month balance: (-) %balance% (Previous month balance is set to 0 when you get to sell something or when you finish the month with positive balance)' => 'Ganado: (+) %earned%, Pagado: (-) %spended%, Balance del mes anterior: (-) %balance% (El balance del mes anterior se pone a 0 cuando vendes algo o cuando acabas el mes con balance positivo)',
 );
 ?>
