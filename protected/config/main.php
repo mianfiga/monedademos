@@ -6,7 +6,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'đ DEMOS: Democracia Económica con MOneda Social',
+	'name'=>'Demos, moneda social',
 	'defaultController' => 'site/pre', 
 	'theme' => (isset($_COOKIE['mobile'])&&$_COOKIE['mobile']?'mobile':'basic'),//tremenda chanada... y lo bien que funciona
 	'language' => (isset($_COOKIE['language'])?$_COOKIE['language']:'en_US'),

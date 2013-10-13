@@ -25,7 +25,7 @@
     </div>
 </div>
 <?php
-echo $this->renderPartial('//contribution/_view', array('data' => $model->chargeEntity->getObject()));
+echo $this->renderPartial('//contribution/_view', array('data' => $model->chargeEntity->getObject(), 'entity' => $model->chargeEntity));
 ?>
 
 <div class="row">
@@ -50,5 +50,5 @@ echo $this->renderPartial('//contribution/_view', array('data' => $model->charge
     </div>
 </div>
 <?php
-echo $this->renderPartial('//contribution/_view', array('data' => $model->depositEntity->getObject()));
+echo $this->renderPartial('//contribution/_view', array('data' => $model->depositEntity->getObject(), 'entity' => $model->depositEntity));
 ?>

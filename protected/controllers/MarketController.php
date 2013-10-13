@@ -27,7 +27,7 @@ class MarketController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
+                'actions' => array('index', 'view', 'rss'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -207,7 +207,7 @@ class MarketController extends Controller {
      */
     public function actionExpire($id) {
         $model = $this->loadModel($id);
-        
+
         if (!isset(Yii::app()->user->roles[$model->created_by])) {
             Yii::app()->user->setFlash('error', Yii::t('market', 'You can not update this advertisement'));
             $this->redirect(array('view', 'id' => $id));
@@ -296,34 +296,6 @@ class MarketController extends Controller {
      */
     public function actionList($mode = null) {
         $this->actionIndex($mode);
-        /*        $user_id = Yii::app()->user->getId();
-          //Yii::app()->user->setFlash('notice',Yii::t('dev','Market is under special testing period things may not work properly'));
-          $dataProvider = new CActiveDataProvider('MarketAd', array(
-          'criteria' => array(
-          'condition' => 'visible=1' . ($user == 1 ? ' AND created_by=\'' . $user_id . '\'' : ''),
-          //						'order' => 't.updated DESC, id DESC',
-          'with' => ($user_id == null ? array() : array(
-          'joined' => array(
-          'together' => true,
-          'joinType' => 'LEFT outer JOIN',
-          ($user == 2 ? 'condition' : 'on') => 'joined.user_id=' . $user_id,
-          )
-          )),
-          ),
-          'sort' => array(
-          'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
-          ),
-          ));
-
-          $model = new MarketAd('search');
-          $model->unsetAttributes();  // clear any default values
-          if (isset($_GET['MarketAd']))
-          $model->attributes = $_GET['MarketAd'];
-
-          $this->render('index', array(
-          'dataProvider' => $dataProvider,
-          'model' => $model,
-          )); */
     }
 
     /**
@@ -357,6 +329,19 @@ class MarketController extends Controller {
 
         $this->render('admin', array(
             'model' => $model,
+        ));
+    }
+
+    /**
+     * Manages all models.
+     */
+    public function actionRss() {
+        $entity_id = Yii::app()->user->getId();
+
+        $dataProvider = MarketAd::getAds(null, $entity_id);
+
+        $this->renderPartial('rss', array(
+            'dataProvider' => $dataProvider,
         ));
     }
 

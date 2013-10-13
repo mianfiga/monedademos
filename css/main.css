@@ -21,10 +21,12 @@ body
     padding: 0;
     border-top: 3px solid #C9E0ED;
 }
+
 #contact
 {
     float:right;
 }
+
 #content
 {
 }
@@ -314,13 +316,16 @@ div.search-form
     width: 120px;
     color: #CfCfCf; 
 }
-
+.mk_rss{
+    float:left;
+    margin: 15px 10px 0px 0px;
+}
 .mk_bottom_bar{
     /*	clear:both;*/	
 }
 
 .mk_view_img{
-    float:left;
+    
     margin-right: 10px;
 }
 .mk_posbottom{
@@ -520,4 +525,8 @@ fc-webicon-googleplus-s
 .br_block{
     height: 220px;
     overflow: hidden;
+}
+
+.contribution_button{
+    float: right;
 }

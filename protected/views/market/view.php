@@ -1,5 +1,8 @@
 <?php $this->pageTitle = Site::TITLE . "Market | " . $model->title; ?>
 <?php
+$cs = Yii::app()->getClientScript();
+$cs->registerLinkTag("alternate","application/rss+xml", Yii::app()->createAbsoluteUrl('market/rss'));
+
 $this->breadcrumbs = array(
     'Market' => array('index'),
     $model->title,
@@ -11,6 +14,8 @@ $this->menu = array(
     array('label' => Yii::t('market', 'Manage Advertisement'), 'url' => array('panel', 'id' => $model->id), 'visible' => isset(Yii::app()->user->roles) && isset(Yii::app()->user->roles[$model->created_by])),
     array('label' => Yii::t('market', 'Update Advertisement'), 'url' => array('update', 'id' => $model->id), 'visible' => isset(Yii::app()->user->roles) && isset(Yii::app()->user->roles[$model->created_by])),
 );
+
+
 ?>
 <div class="mk_updated"><?php echo Yii::t('market', 'Updated') . ':&nbsp;' . date('d/m/Y', strtotime($model->updated)); ?></div>
 <?php echo Yii::t('market', ($model->type == 'offer' ? 'Offering' : 'Looking&nbsp;for') . '&nbsp;' . $model->class) ?><br/>
