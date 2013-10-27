@@ -33,13 +33,13 @@ class RbuCommand extends CConsoleCommand {
     //rollbackPeriod()
     public function actionRollbackPeriod($date = null) {
         if ($date == null) {
-            $date = date(Common::DATETIME_FORMAT,strtotime('today'));
+            $date = date(Common::DATETIME_FORMAT, strtotime('today'));
         }
         $prePeriod = Period::getPrevious();
         $period = Period::getLast();
         $lastDate = $period->added;
         $period->saveAttributes(array('added' => $prePeriod->added));
-        echo $date."\n";
+        echo $date . "\n";
         $accounts = Account::getSalaryAccounts();
         foreach ($accounts as $account) {
             if ($account->lastSalary->executed_at < $date) {
@@ -53,8 +53,8 @@ class RbuCommand extends CConsoleCommand {
         Account::paySalaries();
         $period->saveAttributes(array('added' => $lastDate));
     }
-    
-    public function actionPaySalaries($date=null){
+
+    public function actionPaySalaries($date = null) {
         if ($date == null) {
             $date = strtotime('first day of this month');
         }
@@ -72,16 +72,35 @@ class RbuCommand extends CConsoleCommand {
 
     //ChargeTaxes and paySalaries
     public function actionAddPeriod($date = null) {
-        if ($date == null) {
-            $date = strtotime('first day of this month');
+
+        $islands = Island::model()->findAll();
+        foreach ($islans as $island) {
+
+            if ($date == null) {
+                $date = strtotime('first day of this month');
+            }
+
+            $rule = Rule::getCurrentRule($island->group_id);
+            $period = Period::calculate($island->id);
+            Account::chargeTaxes($island, $rule);
+            Account::paySalaries($island, $date, $rule);
+            //Rule::addPeriodRule($period);
+            $period->save();
         }
 
-        $rule = Rule::getCurrentRule();
-        $period = Period::calculate();
-        Account::chargeTaxes($rule);
-        Account::paySalaries($date, $rule);
-        Rule::addPeriodRule($period);
-        $period->save();
+        $groups = IslandGroup::model()->findAll();
+        foreach ($groups as $group) {
+            Rule::addIslandGroupRule($group);
+        }
+
+        /* $accounts = self::getIsolatedAccounts($island->id);
+          foreach ($accounts as $acc) {
+          $acc->pay($date, $rule);
+          $acc->saveAttributes(array(
+          'earned' => 0,
+          'spended' => 0,
+          'balance' => 0));
+          } */
     }
 
     public function actionAddSalary($account, $date = null) {
@@ -92,17 +111,18 @@ class RbuCommand extends CConsoleCommand {
         $acc->addSalary($date);
     }
 
-    public function actionNewRule($date = null, $salary = null, $min_salary = null, $multiplier = null) {
+    public function actionNewRule($island_id, $date = null, $salary = null, $min_salary = null, $multiplier = null) {
         if ($date == null) {
             $date = time();
         }
 
-        $rule = Rule::getCurrentRule();
+        $rule = Rule::getCurrentRule($island_id);
 
         $newRule = new Rule;
         $newRule->salary = $salary;
         $newRule->min_salary = $min_salary;
         $newRule->multiplier = $multiplier;
+        $newRule->island_id = $island_id;
         $newRule->added = date('YmdHis');
         $newRule->save();
 
@@ -152,11 +172,14 @@ class RbuCommand extends CConsoleCommand {
             Notification::addNotification(Notification::MARKET_AD_EXPIRED, $ad->created_by, Sid::getSID($ad), $notif_data);
         }
 
-        $newRule = Rule::getTomorrowRule();
-        $rule = Rule::getAdaptedRule();
-        if ($newRule->id != $rule->id) {
-            //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
-            Account::adaptFunds($newRule);
+        $groups = IslandGroup::model()->findAll();
+        foreach ($groups as $group) {
+            $newRule = Rule::getTomorrowRule($group->id);
+            $rule = Rule::getAdaptedRule($group->id);
+            if ($newRule->id != $rule->id) {
+                //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
+                Account::adaptFunds($newRule);
+            }
         }
     }
 

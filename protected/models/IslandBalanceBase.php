@@ -1,24 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "{{period}}".
+ * This is the model class for table "{{island_balance}}".
  *
- * The followings are the available columns in table '{{period}}':
- * @property string $id
- * @property string $island_id
- * @property string $added
- * @property string $movements
- * @property string $active_users
+ * The followings are the available columns in table '{{island_balance}}':
+ * @property string $from_id
+ * @property string $to_id
+ * @property string $period_amount
+ * @property string $total_amount
  *
  * The followings are the available model relations:
- * @property Island $island
+ * @property Island $from
+ * @property Island $to
  */
-class PeriodBase extends CActiveRecord
+class IslandBalanceBase extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return PeriodBase the static model class
+	 * @return IslandBalanceBase the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -30,7 +30,7 @@ class PeriodBase extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '{{period}}';
+		return '{{island_balance}}';
 	}
 
 	/**
@@ -41,12 +41,12 @@ class PeriodBase extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('added', 'required'),
-			array('island_id', 'length', 'max'=>11),
-			array('movements, active_users', 'length', 'max'=>10),
+			array('from_id, to_id, period_amount, total_amount', 'required'),
+			array('from_id, to_id', 'length', 'max'=>11),
+			array('period_amount, total_amount', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, island_id, added, movements, active_users', 'safe', 'on'=>'search'),
+			array('from_id, to_id, period_amount, total_amount', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +58,8 @@ class PeriodBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'island' => array(self::BELONGS_TO, 'Island', 'island_id'),
+			'from' => array(self::BELONGS_TO, 'Island', 'from_id'),
+			'to' => array(self::BELONGS_TO, 'Island', 'to_id'),
 		);
 	}
 
@@ -68,11 +69,10 @@ class PeriodBase extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'island_id' => 'Island',
-			'added' => 'Added',
-			'movements' => 'Movements',
-			'active_users' => 'Active Users',
+			'from_id' => 'From',
+			'to_id' => 'To',
+			'period_amount' => 'Period Amount',
+			'total_amount' => 'Total Amount',
 		);
 	}
 
@@ -87,11 +87,10 @@ class PeriodBase extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('island_id',$this->island_id,true);
-		$criteria->compare('added',$this->added,true);
-		$criteria->compare('movements',$this->movements,true);
-		$criteria->compare('active_users',$this->active_users,true);
+		$criteria->compare('from_id',$this->from_id,true);
+		$criteria->compare('to_id',$this->to_id,true);
+		$criteria->compare('period_amount',$this->period_amount,true);
+		$criteria->compare('total_amount',$this->total_amount,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -15,7 +15,7 @@
   ?></p>
   <?php echo CHtml::link($data->getUrl(),$data->getUrl());?><br/><br/><br/>
   
-  Estas notificaciones están bajo pruebas, si no desea recibir notificaciones al correo electrónico, o para cualquier otra consulta puede ponerse en contacto con nosotros en contacto@instauremoslademocracia.net.
+  Estas notificaciones están bajo pruebas, si no desea recibir notificaciones al correo electrónico, o para cualquier otra consulta puede ponerse en contacto con nosotros en contacto@monedademos.es.
   
 <?php /*	<b><?php echo CHtml::encode($data->getAttributeLabel('subject')); ?>:</b>
 	<?php echo CHtml::encode($data->subject); ?>

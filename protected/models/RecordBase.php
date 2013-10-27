@@ -5,10 +5,14 @@
  *
  * The followings are the available columns in table '{{record}}':
  * @property string $id
+ * @property string $island_id
  * @property string $added
  * @property string $total_amount
  * @property string $user_count
  * @property string $account_count
+ *
+ * The followings are the available model relations:
+ * @property Island $island
  */
 class RecordBase extends CActiveRecord
 {
@@ -39,11 +43,12 @@ class RecordBase extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('added, total_amount, user_count, account_count', 'required'),
+			array('island_id', 'length', 'max'=>11),
 			array('total_amount, user_count', 'length', 'max'=>20),
 			array('account_count', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, added, total_amount, user_count, account_count', 'safe', 'on'=>'search'),
+			array('id, island_id, added, total_amount, user_count, account_count', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,6 +60,7 @@ class RecordBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'island' => array(self::BELONGS_TO, 'Island', 'island_id'),
 		);
 	}
 
@@ -65,6 +71,7 @@ class RecordBase extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'island_id' => 'Island',
 			'added' => 'Added',
 			'total_amount' => 'Total Amount',
 			'user_count' => 'User Count',
@@ -84,6 +91,7 @@ class RecordBase extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('island_id',$this->island_id,true);
 		$criteria->compare('added',$this->added,true);
 		$criteria->compare('total_amount',$this->total_amount,true);
 		$criteria->compare('user_count',$this->user_count,true);

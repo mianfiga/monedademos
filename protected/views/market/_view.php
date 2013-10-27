@@ -12,7 +12,7 @@
     <?php } ?>
     <?php echo CHtml::link('<img class="mk_button_join" src="' . Yii::app()->request->baseUrl . '/images/join.png" alt="Join" title="Join"/>', array('market/join', 'id' => $data->id)); ?>
     <h4 class="no-space"><?php echo CHtml::link(CHtml::encode($data->title), array('market/view', 'id' => $data->id)); ?></h4>
-    <?php echo CHtml::encode($data->summary); ?>
+    <?php echo $data->summary; ?>
     <?php echo CHtml::link(Yii::t('market', 'view more'), array('market/view', 'id' => $data->id)); ?>
 
     <div class="mk_bottom_bar">
