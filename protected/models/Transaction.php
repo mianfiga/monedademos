@@ -297,7 +297,9 @@ class Transaction extends TransactionBase {
             }
         }
 
-        if ($this->class == Transaction::CLASS_SALARY) {
+        if ($this->class == Transaction::CLASS_SALARY && $this->amount == 0) {
+            Notification::addNotification(Notification::RECIPROCITY_LACK, $this->deposit_entity, Sid::getSID($this), $notif_data);
+        }else if ($this->class == Transaction::CLASS_SALARY) {
             Notification::addNotification(Notification::SALARY, $this->deposit_entity, Sid::getSID($this), $notif_data);
         }
         if ($this->class == Transaction::CLASS_TAX) {

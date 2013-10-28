@@ -199,8 +199,21 @@ class Account extends AccountBase {
         $salary = $rule->salary * $percent;
 
         $amount = $this->earned - $this->spended - $this->balance + 0.0;
-        //If have wasted more than have earned: penalty
-        if ($amount < 0) {
+        
+        //If keeps wasting with no earning: no salary
+        if ($this->earned == 0 && $this->spended > 0 && $this->balance > 0) {
+            $salary = 0;
+            $penalty = $rule->salary;
+            $ret = array(
+                "salary" => $salary,
+                "penalty" => $penalty,
+            );
+            
+            $transaction = new Transaction;
+
+            $transaction->subject = "Sueldo " . Transaction::amountSystemToUser(0) . ' por falta de reciprocidad.';
+            
+        } else if ($amount < 0) {//If have wasted more than have earned: penalty
             $max_penalty = $rule->salary - $rule->min_salary;
             $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
             $salary -= $penalty;

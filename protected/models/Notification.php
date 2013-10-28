@@ -32,6 +32,7 @@ class Notification extends NotificationBase {
     const SYSTEM = 14;
     const SELF_PAYMENT = 15;
     const SELF_CHARGE = 16;
+    const RECIPROCITY_LACK = 17;
 
     /**
      * Returns the static model of the specified AR class.
