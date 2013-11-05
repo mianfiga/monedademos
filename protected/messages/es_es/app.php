@@ -20,6 +20,7 @@ return array(
     'New to Demos?' => '¿Eres nuevo en Demos?',
     'Fields with <span class="required">*</span> are required' => 'Los campos con <span class="required">*</span> son obligatorios',
     'Username' => 'Usuario',
+    'Username or e-mail' => "Usuario o e-mail",
     'Password' => 'Contraseña',
     'Confirm password' => 'Confirme la contraseña',
     'Remember me next time' => 'Recuérdame la próxima vez',
