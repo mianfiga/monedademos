@@ -14,6 +14,11 @@ class UserIdentity extends CUserIdentity {
     public function authenticate() {
         $username = strtolower($this->username);
         $user = User::model()->find('LOWER(username)=?', array($username));
+        
+        if ($user === null) {
+            $user = User::model()->find('LOWER(email)=?', array($username));
+        }
+
         if ($user === null)
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         else if (!$user->validatePassword($this->password))
@@ -41,11 +46,11 @@ class UserIdentity extends CUserIdentity {
     public function getId() {
         return $this->_id;
     }
-    
+
     public function setId($id) {
-        if (isset($this->_logged[$id])){
-          $this->_id= $id;  
-          $this->username = $this->_logged[$id];
+        if (isset($this->_logged[$id])) {
+            $this->_id = $id;
+            $this->username = $this->_logged[$id];
         }
     }
 
@@ -53,11 +58,10 @@ class UserIdentity extends CUserIdentity {
         return $this->_logged;
     }
 
-    /*public function getRoles() {
-        return $this->_roles;
-    }
-    public function setRoles() {
-        return $this->_roles;
-    }*/
-
+    /* public function getRoles() {
+      return $this->_roles;
+      }
+      public function setRoles() {
+      return $this->_roles;
+      } */
 }

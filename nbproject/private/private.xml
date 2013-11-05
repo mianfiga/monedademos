@@ -4,6 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/var/www/rbu/protected/models/Account.php</file>
+            <file>file:/var/www/rbu/protected/views/transaction/view.php</file>
+            <file>file:/var/www/rbu/protected/views/rate/_embedded.php</file>
             <file>file:/var/www/rbu/protected/models/Transaction.php</file>
             <file>file:/var/www/rbu/protected/commands/RbuCommand.php</file>
             <file>file:/var/www/rbu/protected/models/Notification.php</file>
