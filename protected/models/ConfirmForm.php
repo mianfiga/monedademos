@@ -32,7 +32,7 @@ class ConfirmForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'password'=>Yii::t('app','Pin/Password'),
+			'password'=>Yii::t('app','Client\'s Pin/Password'),
 		);
 	}
 

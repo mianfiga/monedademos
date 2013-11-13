@@ -25,6 +25,7 @@ return array(
     'Confirm password' => 'Confirme la contraseña',
     'Remember me next time' => 'Recuérdame la próxima vez',
     'Pin/Password' => 'Pin/Contraseña',
+    'Client\'s Pin/Password' => 'Pin/Contraseña del Cliente',
     '{account_number} pin/password' => '{account_number} pin/contraseña',
     'User Password ({username})' => 'Contraseña de usuario ({username})',
     'Account Pin/Password' => 'Pin/Contraseña de la cuenta',
