@@ -16,7 +16,7 @@
         </div>
         <div class="row collapse">
             <div class="small-10 large-4 columns">
-                <?php echo $form->textField($model, 'form_amount', array('size' => 10, 'maxlength' => 10)); ?>
+                <?php echo $form->textField($model, 'form_amount', array('size' => 10, 'maxlength' => 10, 'autofocus' => 'autofocus')); ?>
             </div>
             <div class="small-2 large-8 columns form_currency_symbol">
                 &nbsp;đ

@@ -32,7 +32,8 @@ $opmodel = Yii::app()->session['operations'][$model->sid]['model'];
                         <?php echo $form->labelEx($model, 'password'); ?>
                         <?php echo $form->passwordField($model, 'password', array('size' => 10, 'maxlength' => 128,
                                     'placeholder' => Yii::t('app','{account_number} pin/password',
-                                            array('{account_number}' =>$opmodel->getChargeAccountNumber())))); ?>
+                                            array('{account_number}' =>$opmodel->getChargeAccountNumber())),
+                                    'autofocus' => 'autofocus')); ?>
                         <?php echo $form->error($model, 'password'); ?>
                     </div>
 
