@@ -15,6 +15,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update User <?php echo $model->username; ?></h1>
+<h1><?php Yii::t('app','Update user info'); ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
