@@ -61,10 +61,10 @@ class User extends UserBase {
             array('username', 'unique', 'on' => 'register'),
             array('username', 'match', 'pattern' => '/^.\w+$/', 'message' => '{attribute} can contain alphanumeric characters only', 'on' => 'register'),
             array('email', 'required', 'on' => 'register, update'),
-            array('plain_password, password2', 'required', 'on' => 'register'),
-            array('plain_password, password2', 'safe', 'on' => 'update'),
-            array('plain_password', 'length', 'max' => 128, 'on' => 'register, update'),
-            array('password2', 'compare', 'compareAttribute' => 'plain_password', 'on' => 'register, update'),
+            array('plain_password, password2', 'required', 'on' => 'register, recovery'),
+            array('plain_password, password2', 'safe', 'on' => 'update, recovery'),
+            array('plain_password', 'length', 'max' => 128, 'on' => 'register, update, recovery'),
+            array('password2', 'compare', 'compareAttribute' => 'plain_password', 'on' => 'register, update, recovery'),
             array('name', 'length', 'max' => 127, 'on' => 'register, update'),
             array('email', 'email', 'on' => 'register, update'),
             array('email', 'unique', 'on' => 'register, update'),
@@ -74,7 +74,7 @@ class User extends UserBase {
             array('birthday', 'safe', 'on' => 'register,update'),
             array('identification_method, identification_number', 'safe', 'on' => 'update'),
             array('contact, contribution_text', 'safe', 'on' => 'register,edit'),
-            array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements(), 'on' => 'register,update'),
+            array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements(), 'on' => 'register,update, recovery'),
             array('conditions', 'match', 'pattern' => '/^1$/', 'on' => 'register'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
@@ -85,7 +85,7 @@ class User extends UserBase {
     /**
      * @return array relational rules.
      */
-    public function relations() {
+    public function relations () {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
 
@@ -145,11 +145,11 @@ class User extends UserBase {
         $criteria->order = 'updated DESC, id DESC'; // last_login DESC, 
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                    'pagination' => array(
-                        'pageSize' => 30,
-                    ),
-                ));
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => 30,
+            ),
+        ));
     }
 
     public function validatePassword($password) {
@@ -198,7 +198,7 @@ class User extends UserBase {
         $this->identification_method = $ids[0];
         unset($ids[0]);
         $this->identification_number = implode(': ', $ids);
-        if (strlen($this->contribution_text) < strlen($this->contribution_title)){
+        if (strlen($this->contribution_text) < strlen($this->contribution_title)) {
             $aux = $this->contribution_text;
             $this->contribution_text = $this->contribution_title;
             $this->contribution_title = $aux;
@@ -228,8 +228,7 @@ class User extends UserBase {
 
             $this->identification = $this->identification_method . ': ' . $this->identification_number;
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -239,7 +238,7 @@ class User extends UserBase {
             $entity->class = get_class($this);
             $entity->object_id = $this->id;
             $entity->save();
-            
+
             $date = Common::datetime();
             $this->_isNew = false;
             $acc = new Account;
@@ -291,6 +290,12 @@ class User extends UserBase {
 
     public function getCulture() {
         return $this->culture;
+    }
+
+    static public function recoveryCheck($id, $magic) {
+        if ($model = self::model()->findByPk($id) ) {
+            return $model->magic == $magic;//falta añadir limite de fecha
+        }
     }
 
 }

@@ -122,7 +122,7 @@ return array(
     'Examples: "12", "12.03" or "12.30" mind the dot and two digits when using cents.' => 'Ejemplo: "12", "12.03" o "12.30" atención al uso del punto y de los dos dígitos cuando uses céntimos.',
     'You should copy your Account Number and save it to your mobile or wallet, you will need it in th future to pay and charge to other users' => 'You should copy your accountNumber and save it to your mobile or wallet, you will need it in th future to pay and charge to other users',
     'Contact user' => 'Contactar usuario',
-    'Welcome to DEMOS, Sign in to start click Login in the top menu' => 'Bienvenido a DEMOS, Inicia sesión para empezar haz clic en Acceder en el menú superior',
+    'Welcome to DEMOS' => 'Bienvenidx a DEMOS',
     'You are already signed in, to sign in with another user first Logout (in the top menu)' => 'Ya has iniciado sesión para iniciar con otro usuario debes primero salir (en el menú superior)',
     'More info' => 'Más info',
     'It\'s important that you copy this number and take it with you, you\'ll need it to pay' => 'Es importante que copies este número y lo lleves contigo, lo necesitarás para pagar',
@@ -158,5 +158,9 @@ return array(
     '<strong>2nd</strong> Write your new account pin twice (will be asked to confirm your future payments).' => '<strong>2º</strong> Escribe tu nuevo pin dos veces (te lo pedirá para confirmar tus pagos futuros).',
     '<strong>3rd</strong> Saves changes.' => '<strong>3º</strong> Guarda los cambios.',
     'Earned: (+) %earned%, Paid: (-) %spended%, Previous month balance: (-) %balance% (Previous month balance is set to 0 when you get to sell something or when you finish the month with positive balance)' => 'Ganado: (+) %earned%, Pagado: (-) %spended%, Balance del mes anterior: (-) %balance% (El balance del mes anterior se pone a 0 cuando vendes algo o cuando acabas el mes con balance positivo)',
+    'Password recovery' => 'Recuperación de contraseña',
+    'Request a new password' => 'Solicita una nueva contraseña',
+    'Incorrect username or password.' => 'Usuario o contraseña incorrectos.',
+    'Username or e-mail not found.'=> 'Usuario o e-mail no encontrado',
 );
 ?>

@@ -64,7 +64,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
 
     <br/>
     <div class="row">
-        <?php if ($scenario == 'register' || $scenario == 'update') { ?>
+        <?php if ($scenario == 'register' || $scenario == 'update' || $scenario == 'recovery') { ?>
             <div class="small-10 large-6 columns form_row">
                 <?php echo $form->labelEx($model, 'plain_password'); ?>
                 <?php echo $form->passwordField($model, 'plain_password', array('size' => 60, 'maxlength' => 128)); ?>
@@ -72,7 +72,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
             </div>
         <?php } ?>
 
-        <?php if ($scenario == 'register' || $scenario == 'update') { ?>
+        <?php if ($scenario == 'register' || $scenario == 'update' || $scenario == 'recovery') { ?>
             <div class="small-10 large-6 columns form_row">
                 <?php echo $form->labelEx($model, 'password2'); ?>
                 <?php echo $form->passwordField($model, 'password2', array('size' => 60, 'maxlength' => 128)); ?>
@@ -176,7 +176,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
         </div>
     <?php } ?>
 
-    <?php if ($scenario == 'register' || $scenario == 'update') { ?>
+    <?php if ($scenario == 'register' || $scenario == 'update' || $scenario == 'recovery') { ?>
         <?php if (CCaptcha::checkRequirements()): ?>
             <br/><br/>
             <div class="row">

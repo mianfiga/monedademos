@@ -51,13 +51,13 @@ class SiteController extends Controller {
         Site::languageCheck();
 
         $dataProviderMarketAd = new CActiveDataProvider('MarketAd', array(
-                    'criteria' => array(
-                        'condition' => 'visible=1 AND expiration >= curdate()',
-                        'order' => ' t.updated DESC',
-                        'limit' => 10,
-                    ),
-                    'pagination' => false,
-                ));
+            'criteria' => array(
+                'condition' => 'visible=1 AND expiration >= curdate()',
+                'order' => ' t.updated DESC',
+                'limit' => 10,
+            ),
+            'pagination' => false,
+        ));
 
         if (Yii::app()->session['mobile'])
             Yii::app()->setTheme('mobile');
@@ -66,7 +66,7 @@ class SiteController extends Controller {
         $this->render('index', array(
             'record' => Record::getLastRecord(),
             'rule' => Rule::getCurrentRule(),
-            'next_rule' => Rule::getDateRule(date('Y-m-d H:i:s', mktime (0, 0, 0, date("n")+1))),
+            'next_rule' => Rule::getDateRule(date('Y-m-d H:i:s', mktime(0, 0, 0, date("n") + 1))),
             'dataProviderMarketAd' => $dataProviderMarketAd,
         ));
     }
@@ -121,8 +121,12 @@ class SiteController extends Controller {
 
         if (isset($_POST['User'])) {
             $modelRegister->attributes = $_POST['User'];
+
             if ($modelRegister->save()) {
-                Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS, Sign in to start click Login in the top menu'));
+                $model->username = $modelRegister->username;
+                $model->password = $modelRegister->plain_password;
+                $model->validate() && $model->login();
+                Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(Yii::app()->user->returnUrl);
             }
         }
@@ -143,7 +147,7 @@ class SiteController extends Controller {
      * Logs out the current user and redirect to homepage.
      */
     public function actionLogout() {
-        ActivityLog::add(Yii::app()->user->id,  ActivityLog::LOGOUT);
+        ActivityLog::add(Yii::app()->user->id, ActivityLog::LOGOUT);
         Yii::app()->user->logout();
         $this->redirect(Yii::app()->homeUrl);
     }
@@ -182,7 +186,7 @@ class SiteController extends Controller {
                 $cookie->expire = time() + 60 * 60 * 24 * 180;
                 Yii::app()->request->cookies['language'] = $cookie;
                 if (Yii::app()->user->getId() != null) {
-                    $entity = Entity::model()->findByPk(Yii::app()->user->getId());  
+                    $entity = Entity::model()->findByPk(Yii::app()->user->getId());
                     $entity->getObject()->saveAttributes(array('culture' => $model->language));
                 }
                 $this->redirect($model->url);
@@ -208,6 +212,4 @@ class SiteController extends Controller {
         }
     }
 
-    
-    
 }
