@@ -1,4 +1,4 @@
-<?php 
+<?php
 //Top Bar javascript
 $baseUrl = Yii::app()->baseUrl;
 $cs = Yii::app()->getClientScript();
@@ -35,122 +35,134 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
                     </div>
                 </div>
             </div>
-            <div id="mainmenu" class="row">
-                <nav class="top-bar contain-to-grid ">
-                    <ul class="title-area">
-                        <!-- Title Area -->
-                        <li class="name">
-                            <h1><a href="http://monedademos.es">Demos</a></h1>
-                        </li>
-                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-                        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-                    </ul>
-                    <section class="top-bar-section">
+
+
+            <?php if (preg_match('/(?i)msie [1-8]/', $_SERVER['HTTP_USER_AGENT'])) { ?>
+
+                <div class="row">
+                    <div id="mainmenuie" class="top-bar">
                         <?php echo $this->renderPartial('/site/_menu'); ?>
-                    </section>
-                </nav>
-
-            </div><!-- mainmenu -->
-
-            <?php if (isset($this->breadcrumbs)): ?>
-                <div class="row">
-                    <div class="small-12 columns">
-                        <?php
-                        $this->widget('zii.widgets.CBreadcrumbs', array(
-                            'links' => $this->breadcrumbs,
-                            'separator' => ' ',
-                        ));
-                        ?><!-- breadcrumbs -->
                     </div>
-                </div>
-            <?php endif ?>
-            <?php if (Yii::app()->user->hasFlash('error')) { ?>
-                <div class="row">
-                    <div class="small-12 columns">
-                        <div class="alert-box alert">
-                            <?php echo Yii::app()->user->getFlash('error'); ?>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <?php if (Yii::app()->user->hasFlash('notice')) { ?>
-                <div class="row">
-                    <div class="small-12 columns">
-                        <div class="alert-box">
-                            <?php echo Yii::app()->user->getFlash('notice'); ?>
-                        </div>
-                    </div>
-                </div>
+                </div><!-- mainmenu -->
+            <?php } else {
+                ?>
+                <div id="mainmenu" class="row">
+                    <nav class="top-bar contain-to-grid ">
+                        <ul class="title-area">
+                            <!-- Title Area -->
+                            <li class="name">
+                                <h1><a href="http://monedademos.es">Demos</a></h1>
+                            </li>
+                            <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                            <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                        </ul>
+                        <section class="top-bar-section">
+                            <?php echo $this->renderPartial('/site/_menu'); ?>
+                        </section>
+                    </nav>
+                </div><!-- mainmenu -->
             <?php } ?>
 
-            <?php if (Yii::app()->user->hasFlash('success')) { ?>
-                <div class="row">
-                    <div class="small-12 columns">
-                        <div class="alert-box success">
-                            <?php echo Yii::app()->user->getFlash('success'); ?>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <?php echo $content; ?>
 
-            <div class="clear"></div>
+        <?php if (isset($this->breadcrumbs)): ?>
             <div class="row">
-                <div id="footer" class="small-12 columns">
-                    <div class="row">
+                <div class="small-12 columns">
+                    <?php
+                    $this->widget('zii.widgets.CBreadcrumbs', array(
+                        'links' => $this->breadcrumbs,
+                        'separator' => ' ',
+                    ));
+                    ?><!-- breadcrumbs -->
+                </div>
+            </div>
+        <?php endif ?>
+        <?php if (Yii::app()->user->hasFlash('error')) { ?>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="alert-box alert">
+                        <?php echo Yii::app()->user->getFlash('error'); ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if (Yii::app()->user->hasFlash('notice')) { ?>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="alert-box">
+                        <?php echo Yii::app()->user->getFlash('notice'); ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
+        <?php if (Yii::app()->user->hasFlash('success')) { ?>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="alert-box success">
+                        <?php echo Yii::app()->user->getFlash('success'); ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <?php echo $content; ?>
+
+        <div class="clear"></div>
+        <div class="row">
+            <div id="footer" class="small-12 columns">
+                <div class="row">
+                    <div class="small-12 large-3 columns">
+                        <ul class="inline-list">
+                            <li>
+                                <?php
+                                $language = new LanguageForm;
+                                $language->language = (isset(Yii::app()->request->cookies['language']) ? Yii::app()->request->cookies['language']->value : null);
+                                $language->url = Yii::app()->request->url;
+                                echo $this->renderPartial('//site/_languageForm', array('model' => $language));
+                                ?>
+                            </li>
+                        </ul> 
+                    </div>
+
+                    <?php if (isset(Yii::app()->user->roles) && Yii::app()->user->getId() && count(Yii::app()->user->roles) > 1) { ?>
                         <div class="small-12 large-3 columns">
                             <ul class="inline-list">
                                 <li>
                                     <?php
-                                    $language = new LanguageForm;
-                                    $language->language = (isset(Yii::app()->request->cookies['language']) ? Yii::app()->request->cookies['language']->value : null);
-                                    $language->url = Yii::app()->request->url;
-                                    echo $this->renderPartial('//site/_languageForm', array('model' => $language));
+                                    $roles = new RolesForm;
+                                    $roles->role = Yii::app()->user->getId();
+                                    $roles->url = Yii::app()->request->url;
+                                    echo $this->renderPartial('//site/_rolesForm', array('model' => $roles));
                                     ?>
                                 </li>
                             </ul> 
                         </div>
+                    <?php } ?>
 
-                        <?php if (isset(Yii::app()->user->roles) && Yii::app()->user->getId() && count(Yii::app()->user->roles) > 1) { ?>
-                            <div class="small-12 large-3 columns">
-                                <ul class="inline-list">
-                                    <li>
-                                        <?php
-                                        $roles = new RolesForm;
-                                        $roles->role = Yii::app()->user->getId();
-                                        $roles->url = Yii::app()->request->url;
-                                        echo $this->renderPartial('//site/_rolesForm', array('model' => $roles));
-                                        ?>
-                                    </li>
-                                </ul> 
-                            </div>
-                        <?php } ?>
-
-                        <div class="small-12 large-4 columns links">
+                    <div class="small-12 large-4 columns links">
+                        <ul class="inline-list">
+                            <li>
+                                <?php echo CHtml::link(Yii::t('app', 'Conditions'), array('/site/page', 'view' => 'conditions')); ?>
+                            </li>
+                            <li>
+                                <?php echo CHtml::link(Yii::t('app', 'About'), array('/site/page', 'view' => 'about')); ?>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="small-12 large-2 columns links">
+                        <div class="social_box">
                             <ul class="inline-list">
-                                <li>
-                                    <?php echo CHtml::link(Yii::t('app', 'Conditions'), array('/site/page', 'view' => 'conditions')); ?>
-                                </li>
-                                <li>
-                                    <?php echo CHtml::link(Yii::t('app', 'About'), array('/site/page', 'view' => 'about')); ?>
-                                </li>
+                                <li class="social twitter"><a href="http://twitter.com/monedademos">@monedademos</a></li>
+                                <li class="social facebook"><a href="http://facebook.com/monedaDemos">Moneda Demos</a></li>
+                                <li class="social googleplus"><a href="https://plus.google.com/113493943316049288613" rel="publisher">Moneda Demos</a></li>
+                                <li class="social blog"><a href="http://blog.monedademos.es">Blog de DEMOS</a></li>
                             </ul>
                         </div>
-                        <div class="small-12 large-2 columns links">
-                            <div class="social_box">
-                                <ul class="inline-list">
-                                    <li class="social twitter"><a href="http://twitter.com/monedademos">@monedademos</a></li>
-                                    <li class="social facebook"><a href="http://facebook.com/monedaDemos">Moneda Demos</a></li>
-                                    <li class="social googleplus"><a href="https://plus.google.com/113493943316049288613" rel="publisher">Moneda Demos</a></li>
-                                    <li class="social blog"><a href="http://blog.monedademos.es">Blog de DEMOS</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>        
-                    Copyleft <?php echo date('Y'); ?> by monedademos.es<br/>
-                    <?php echo Yii::powered(); ?>
-                </div><!-- footer -->
-            </div>
+                    </div>
+                </div>        
+                Copyleft <?php echo date('Y'); ?> by monedademos.es<br/>
+                <?php echo Yii::powered(); ?>
+            </div><!-- footer -->
+        </div>
         </div><!-- page -->
 
     </body>

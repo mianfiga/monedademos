@@ -30,7 +30,8 @@ return array(
     'User Password ({username})' => 'Contraseña de usuario ({username})',
     'Account Pin/Password' => 'Pin/Contraseña de la cuenta',
     'Confirm account Pin/Password' => 'Confirma el Pin/Contraseña de la cuenta',
-    'Have you forgotten your username/password? contact us to resolve it at contacto@monedademos.es' => '¿Has olvidado tu usuario/contraseña? Contacta con nosotros para solvertarlo en contacto@monedademos.es',
+    //'Have you forgotten your username/password? contact us to resolve it at contacto@monedademos.es' => '¿Has olvidado tu usuario/contraseña? Contacta con nosotros para solvertarlo en contacto@monedademos.es',
+    'Have you forgotten your username/password? <a href="{url}">click here</a>' => '¿Has olvidado tu usuario/contraseña? <a href="{url}">clic aquí</a>',
     'Moving <strong>{total_amount}</strong> within <strong>{user_count}</strong> users' => 'Moviendo <strong>{total_amount}</strong> entre <strong>{user_count}</strong> Usuarios',
     'Average salary: <strong>{salary}</strong>, Minimum salary: <strong>{min_salary}</strong>' => 'Sueldo medio: <strong>{salary}</strong>, Sueldo mínimo: <strong>{min_salary}</strong>',
     '<strong>Next month:</strong> Average salary: <strong>{salary}</strong>, Minimum salary: <strong>{min_salary}</strong>' => '<strong>Próximo mes:</strong> Sueldo medio: <strong>{salary}</strong>, Sueldo mínimo: <strong>{min_salary}</strong>',
@@ -162,5 +163,7 @@ return array(
     'Request a new password' => 'Solicita una nueva contraseña',
     'Incorrect username or password.' => 'Usuario o contraseña incorrectos.',
     'Username or e-mail not found.'=> 'Usuario o e-mail no encontrado',
+    'Pasword updated successfully'=> 'Contraseña actualizada con éxito',
+    'Check your E-mail for further instructions' => 'Comprueba tu e-mail para continuar',
 );
 ?>

@@ -47,7 +47,7 @@ $this->breadcrumbs = array(
                                 <?php echo CHtml::submitButton(Yii::t('app', 'Sign in'), array('class' => 'large button expand secondary')); ?>
                             </div>
 
-                            <?php echo Yii::t('app', 'Have you forgotten your username/password? contact us to resolve it at contacto@monedademos.es'); ?>
+                            <?php echo Yii::t('app', 'Have you forgotten your username/password? <a href="{url}">click here</a>',array('{url}'=> Yii::app()->createUrl('user/recoveryRequest'))); ?>
                             <?php $this->endWidget(); ?>
                         </div><!-- form -->
                     </div>

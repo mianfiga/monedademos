@@ -294,14 +294,18 @@ class UserController extends Controller {
      */
     public function actionRecovery($id, $magic) {
         $this->layout = '//layouts/column1';
-        if (User::checkRecovery($id, $magic)) {
+        if (User::recoveryCheck($id, $magic)) {
 
             $model = $this->loadModel($id);
             if (isset($_POST['User'])) {
                 $model->attributes = $_POST['User'];
                 $model->updated = date('YmdHis');
-                if ($model->save())
+                if ($model->save()){
+                    Yii::app()->user->setFlash('success', Yii::t('app', 'Pasword updated successfully'));
                     $this->redirect(array('view', 'id' => $model->id));
+                }
+                    
+
             }
 
             $model->setScenario('recovery');
