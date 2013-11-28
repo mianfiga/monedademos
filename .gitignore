@@ -2,6 +2,7 @@
 assets/*
 images/brands/*
 images/market/*
+nbproject/
 protected/config/console.php
 protected/config/main.php
 protected/config/test.php
