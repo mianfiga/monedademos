@@ -49,7 +49,7 @@ class BrandController extends Controller {
      */
     public function actionView($id) {
         $model = $this->loadModel($id);
-        $entity = Entity::get($model);
+        $entity = Entity::get($model,'links');
         $ratesDataProvider = Rate::getTo($entity->id);
         $adsDataProvider = MarketAd::getAds(1, $entity->id);
 
