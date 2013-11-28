@@ -1,5 +1,7 @@
 *~
-protected/config/*
+protected/config/console.php
+protected/config/main.php
+protected/config/test.php
 protected/runtime/*
 images/brands/*
 images/market/*
