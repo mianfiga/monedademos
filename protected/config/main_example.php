@@ -8,7 +8,7 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Demos, moneda social',
 	'defaultController' => 'site/pre', 
-	'theme' => (isset($_COOKIE['mobile'])&&$_COOKIE['mobile']?'mobile':'basic'),//tremenda chanada... y lo bien que funciona
+	'theme' => 'basic',
 	'language' => (isset($_COOKIE['language'])?$_COOKIE['language']:'en_US'),
 
 	// preloading 'log' component
@@ -25,7 +25,7 @@ return array(
 		
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'baifito',
+			'password'=>'password',
 		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
@@ -54,7 +54,7 @@ return array(
             'connectionString' => 'mysql:host=localhost;dbname=rbu',
             'emulatePrepare' => true,
             'username' => 'root',
-            'password' => 'baifito',
+            'password' => 'root',
             'charset' => 'utf8',
             'tablePrefix' => 'rbu_',
         ),

@@ -16,13 +16,13 @@ return array(
 	            'connectionString' => 'mysql:host=localhost;dbname=rbu',
 	            'emulatePrepare' => true,
 	            'username' => 'root',
-	            'password' => 'baifito',
+	            'password' => 'root',
 	            'charset' => 'utf8',
 	            'tablePrefix' => 'rbu_',
 	        ),
-		'request' => array(
+		'request' => array( //CHANGE THIS TO MAKE NOTIFICATIONS WORK
 	            'hostInfo' => 'http://monedademos.es',
-	            'baseUrl' => '/kunden/homepages/5/d336675058/htdocs/rbu',
+	            'baseUrl' => 'PATH_TO_HOME_DIRECTORY',
 	            'scriptUrl' => '',
 	        ),
 	),
