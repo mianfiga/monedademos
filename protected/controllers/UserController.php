@@ -135,11 +135,12 @@ class UserController extends Controller {
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
-            if ($model->save())
+            if ($model->save()) {
                 $modelLogIn = new LoginForm;
-            $modelLogIn->username = $model->username;
-            $modelLogIn->password = $model->plain_password;
-            $modelLogIn->validate() && $modelLogIn->login();
+                $modelLogIn->username = $model->username;
+                $modelLogIn->password = $model->plain_password;
+                $modelLogIn->validate() && $modelLogIn->login();
+            }
 
             Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
             $this->redirect(array(Yii::app()->defaultController));
@@ -276,7 +277,7 @@ class UserController extends Controller {
         $model = new RecoveryForm;
         if (isset($_POST['RecoveryForm'])) {
             $model->attributes = $_POST['RecoveryForm'];
-            
+
             if ($model->validate() && $model->recover()) {
                 $this->redirect(array('site/index'));
             }
@@ -300,12 +301,10 @@ class UserController extends Controller {
             if (isset($_POST['User'])) {
                 $model->attributes = $_POST['User'];
                 $model->updated = date('YmdHis');
-                if ($model->save()){
+                if ($model->save()) {
                     Yii::app()->user->setFlash('success', Yii::t('app', 'Pasword updated successfully'));
                     $this->redirect(array('view', 'id' => $model->id));
                 }
-                    
-
             }
 
             $model->setScenario('recovery');
