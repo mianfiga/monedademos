@@ -140,10 +140,9 @@ class UserController extends Controller {
                 $modelLogIn->username = $model->username;
                 $modelLogIn->password = $model->plain_password;
                 $modelLogIn->validate() && $modelLogIn->login();
+                Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
+                $this->redirect(array(Yii::app()->defaultController));
             }
-
-            Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
-            $this->redirect(array(Yii::app()->defaultController));
         }
 
         $this->render('create', array(

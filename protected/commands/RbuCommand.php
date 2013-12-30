@@ -12,6 +12,74 @@ class RbuCommand extends CConsoleCommand {
         }
     }
 
+    public function actionSetTotalAmounts() {
+        $accounts = Account::model()->findAll();
+        foreach ($accounts as $account) {
+            $received = Transaction::model()->findBySql('select sum(`amount`) as `amount`, count(*) as subject from `' . Transaction::model()->tableSchema->name . '` where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $account->id);
+            $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount`, count(*) as subject from `' . Transaction::model()->tableSchema->name . '` where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $account->id);
+            $account->total_earned = $received->amount;
+            $account->total_spended = $spended->amount;
+            $account->deposit_transfer_count = $received->subject;
+            $account->charge_transfer_count = $spended->subject;
+            $account->save();
+        }
+    }
+
+    public function actionSetRiskEstimation() {
+        $activities = ActivityLog::model()->findAll('1 order by id ASC');
+        foreach ($activities as $act) {
+
+            $act->riskEstimation();
+            echo $act->id . ': ' . $act->risk_estimation ."\n";
+            $act->save();
+        }
+    }
+
+    public function actionSetEntropy() {
+        $margin = 0.9;
+        $accounts = Account::model()->findAll();
+        $global_clients = array();
+        $global_sellers = array();
+
+        foreach ($accounts as $account) {
+
+            $clients_transactions = Transaction::model()->findAllBySql('select deposit_account, charge_account, sum(amount) as `amount` FROM `rbu_transaction` WHERE (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $account->id . ' group by charge_account order by amount desc');
+            $sellers_transactions = Transaction::model()->findAllBySql('select charge_account, deposit_account, sum(amount) as `amount` FROM `rbu_transaction` WHERE (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $account->id . ' group by deposit_account order by amount desc');
+            $account->total_clients = count($clients_transactions);
+            $account->total_sellers = count($sellers_transactions);
+
+            $i = 0;
+            $acc = 0.0;
+            foreach ($clients_transactions as $client) {
+                $acc += $client->amount;
+                $global_clients[$i] = (isset($global_clients[$i]) ? $global_clients[$i] : 0) + $client->amount;
+                $i++;
+                if ($acc / $account->total_earned > $margin) {
+                    $account->best_clients = $i;
+                    break;
+                }
+            }
+
+            $i = 0;
+            $acc = 0.0;
+            foreach ($sellers_transactions as $seller) {
+                $acc += $seller->amount;
+                $global_sellers[$i] = (isset($global_sellers[$i]) ? $global_sellers[$i] : 0) + $seller->amount;
+                $i++;
+                if ($acc / $account->total_spended > $margin) {
+                    $account->best_sellers = $i;
+                    break;
+                }
+            }
+            $account->save();
+        }
+        echo 'Total_sum = ' . count($accounts) . "\n";
+        echo "N;Global_clients;Global_sellers\n";
+        for ($i = 0; isset($global_sellers[$i]); $i++) {
+            echo $i . ';' . $global_clients[$i] . ';' . $global_sellers[$i] . "\n";
+        }
+    }
+
     public function actionCorrectRecords() {
         $users = User::model()->findAll();
         $records = Record::model()->findAll();
@@ -33,13 +101,13 @@ class RbuCommand extends CConsoleCommand {
     //rollbackPeriod()
     public function actionRollbackPeriod($date = null) {
         if ($date == null) {
-            $date = date(Common::DATETIME_FORMAT,strtotime('today'));
+            $date = date(Common::DATETIME_FORMAT, strtotime('today'));
         }
         $prePeriod = Period::getPrevious();
         $period = Period::getLast();
         $lastDate = $period->added;
         $period->saveAttributes(array('added' => $prePeriod->added));
-        echo $date."\n";
+        echo $date . "\n";
         $accounts = Account::getSalaryAccounts();
         foreach ($accounts as $account) {
             if ($account->lastSalary->executed_at < $date) {
@@ -53,8 +121,8 @@ class RbuCommand extends CConsoleCommand {
         Account::paySalaries();
         $period->saveAttributes(array('added' => $lastDate));
     }
-    
-    public function actionPaySalaries($date=null){
+
+    public function actionPaySalaries($date = null) {
         if ($date == null) {
             $date = strtotime('first day of this month');
         }

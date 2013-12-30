@@ -217,26 +217,34 @@ class Transaction extends TransactionBase {
                 $deposit = Account::model()->findByPk($this->deposit_account);
 
                 $this->charge_errors = 0;
-                if ($charge === null)
+                if ($charge === null) {
                     $this->charge_errors += Account::ERROR_WRONG;
-                if ($charge->blocked !== null)
+                }
+                if ($charge->blocked !== null) {
                     $this->charge_errors += Account::ERROR_BLOCKED;
-                if ($charge->deleted !== null)
+                }
+                if ($charge->deleted !== null) {
                     $this->charge_errors += Account::ERROR_DELETED;
-                if ($charge->id != Account::FUND_ACCOUNT && $charge->credit < $this->amount)
+                }
+                if ($charge->id != Account::FUND_ACCOUNT && $charge->credit < $this->amount) {
                     $this->charge_errors += Account::ERROR_NOFUNDS;
+                }
 
                 $this->deposit_errors = 0;
-                if ($deposit === null)
+                if ($deposit === null) {
                     $this->deposit_errors += Account::ERROR_WRONG;
-                if ($deposit->blocked !== null)
+                }
+                if ($deposit->blocked !== null) {
                     $this->deposit_errors += Account::ERROR_BLOCKED;
-                if ($deposit->deleted !== null)
+                }
+                if ($deposit->deleted !== null) {
                     $this->deposit_errors += Account::ERROR_DELETED;
+                }
 
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
                     if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
                         $charge->spended += $this->amount;
+                        $deposit->total_spended += $this->amount;
                     }
 
                     $charge->credit -= $this->amount;
@@ -245,6 +253,7 @@ class Transaction extends TransactionBase {
                     $deposit = Account::model()->findByPk($this->deposit_account);
                     if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
                         $deposit->earned += $this->amount;
+                        $deposit->total_earned += $this->amount;
                         $rule = Rule::getCurrentRule();
                         if ($deposit->earned >= $rule->min_salary) {
                             $deposit->balance = 0;
@@ -395,8 +404,9 @@ class Transaction extends TransactionBase {
     }
 
     public function getDepositAccountNumber() {
-        if ($this->deposit_account_number != null)
+        if ($this->deposit_account_number != null) {
             return $this->deposit_account_number;
+        }
         return Authorization::formAccountNumber($this->deposit_entity, $this->deposit_account);
     }
 
