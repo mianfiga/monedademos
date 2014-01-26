@@ -199,7 +199,7 @@ class Account extends AccountBase {
         $salary = $rule->salary * $percent;
 
         $amount = $this->earned - $this->spended - $this->balance + 0.0;
-        
+
         //If keeps wasting with no earning: no salary
         if ($this->earned == 0 && $this->spended > 0 && $this->balance > 0) {
             $salary = 0;
@@ -208,11 +208,10 @@ class Account extends AccountBase {
                 "salary" => $salary,
                 "penalty" => $penalty,
             );
-            
+
             $transaction = new Transaction;
 
             $transaction->subject = "Sueldo " . Transaction::amountSystemToUser(0) . ' por falta de reciprocidad.';
-            
         } else if ($amount < 0) {//If have wasted more than have earned: penalty
             $max_penalty = $rule->salary - $rule->min_salary;
             $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
@@ -228,7 +227,7 @@ class Account extends AccountBase {
             $transaction->subject = "Salary (" . Transaction::amountSystemToUser($rule->salary) . ')' . ($penalty > 0 ? ' - Penalty (' .
                             Transaction::amountSystemToUser($penalty) . ')' : '');
         } else { //Don't have wasted more than have earned: compensation
-            $compensation = ($related_value == 0 ? 0 : min(abs($amount / $related_value * $global_amount), $amount/2));
+            $compensation = ($related_value == 0 ? 0 : min(abs($amount / $related_value * $global_amount), $amount / 2));
             $salary += $compensation;
 
             //returning el array
@@ -289,6 +288,9 @@ class Account extends AccountBase {
             //$acc->last_action = date('Y-m-d');
             $amount = $acc->earned - $acc->spended - $acc->balance;
 
+            if ($acc->earned == 0 && $acc->spended == 0) {
+                continue;
+            }
             if ($amount < 0) {
                 $negative -= $amount;
                 $negative_count++;
@@ -306,6 +308,9 @@ class Account extends AccountBase {
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
+            if ($acc->earned == 0 && $acc->spended == 0) {
+                continue;
+            }
             if (($acc->earned - $acc->spended - $acc->balance) < 0) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
@@ -315,6 +320,9 @@ class Account extends AccountBase {
         //Assign compensed salaries
         $dateLastPeriod = Period::getLastDate();
         foreach ($accounts as $acc) {
+            if ($acc->earned == 0 && $acc->spended == 0) {
+                continue;
+            }
             if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
                     && (($acc->earned - $acc->spended - $acc->balance) >= 0)) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
@@ -336,7 +344,7 @@ class Account extends AccountBase {
             $acc->saveAttributes(array(
                 'earned' => 0,
                 'spended' => 0,
-                'balance' => ($amount>0?0:-$amount)));
+                'balance' => ($amount > 0 ? 0 : -$amount)));
         }
     }
 
@@ -435,8 +443,7 @@ class Account extends AccountBase {
                 $this->_isNew = false;
             }
             return true;
-        }
-        else
+        } else
             return false;
     }
 

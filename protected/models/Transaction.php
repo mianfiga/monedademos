@@ -242,7 +242,7 @@ class Transaction extends TransactionBase {
                 }
 
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
-                    if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
+                    if($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE){
                         $charge->spended += $this->amount;
                         $deposit->total_spended += $this->amount;
                     }
@@ -251,7 +251,7 @@ class Transaction extends TransactionBase {
                     $charge->save();
 
                     $deposit = Account::model()->findByPk($this->deposit_account);
-                    if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
+                    if($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE){
                         $deposit->earned += $this->amount;
                         $deposit->total_earned += $this->amount;
                         $rule = Rule::getCurrentRule();
