@@ -43,7 +43,11 @@ $cs->registerScript('foundation_tooltip', '$(document).foundation(\'tooltips\');
 </div>
 <div class="row">
     <div class="small-12 large-5 columns">
-        <h3><?php echo Yii::t('app', 'Credit') ?>: <?php echo Transaction::amountSystemToUser($account->credit) ?></h3>
+        <h3><?php echo Yii::t('app', 'Credit') ?>: <span class="has-tip" data-tooltip title="<?php
+        echo Yii::t('app', 'Total Earned (exc. salaries): (+) %earned%, Total Paid (exc. taxes): (-) %spended%', array(
+            '%earned%' => Transaction::amountSystemToUser($account->total_earned),
+            '%spended%' => Transaction::amountSystemToUser($account->total_spended)));
+        ?>"><?php echo Transaction::amountSystemToUser($account->credit) ?></span></h3>
     </div>
     <div class="small-12 large-7 columns">
         <h3><?php echo Yii::t('app', 'Balance') ?>:

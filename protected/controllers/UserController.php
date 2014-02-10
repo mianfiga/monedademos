@@ -140,6 +140,9 @@ class UserController extends Controller {
                 $modelLogIn->username = $model->username;
                 $modelLogIn->password = $model->plain_password;
                 $modelLogIn->validate() && $modelLogIn->login();
+                
+                ActivityLog::add(Entity::get($model)->id, ActivityLog::SIGNUP);
+                
                 Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(array(Yii::app()->defaultController));
             }
