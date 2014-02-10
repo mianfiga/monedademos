@@ -288,9 +288,6 @@ class Account extends AccountBase {
             //$acc->last_action = date('Y-m-d');
             $amount = $acc->earned - $acc->spended - $acc->balance;
 
-            if ($acc->earned == 0 && $acc->spended == 0) {
-                continue;
-            }
             if ($amount < 0) {
                 $negative -= $amount;
                 $negative_count++;
@@ -305,20 +302,20 @@ class Account extends AccountBase {
         } else {
             $negative_average = $negative / $negative_count;
         }
+        
+        $dateLastPeriod = Period::getLastDate();
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
-            if ($acc->earned == 0 && $acc->spended == 0) {
-                continue;
-            }
-            if (($acc->earned - $acc->spended - $acc->balance) < 0) {
+            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
+                    && (($acc->earned - $acc->spended - $acc->balance) < 0)) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
             }
         }
 
         //Assign compensed salaries
-        $dateLastPeriod = Period::getLastDate();
+
         foreach ($accounts as $acc) {
             if ($acc->earned == 0 && $acc->spended == 0) {
                 continue;
