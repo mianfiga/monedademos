@@ -317,11 +317,9 @@ class Account extends AccountBase {
         //Assign compensed salaries
 
         foreach ($accounts as $acc) {
-            if ($acc->earned == 0 && $acc->spended == 0) {
+            if ($dateLastPeriod > $acc->last_action) {
                 continue;
-            }
-            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
-                    && (($acc->earned - $acc->spended - $acc->balance) >= 0)) {
+            }else if (($acc->earned - $acc->spended - $acc->balance) >= 0) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
                 $compensation += $ret['compensation'];
             }
