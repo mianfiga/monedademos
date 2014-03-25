@@ -121,7 +121,20 @@ class RbuCommand extends CConsoleCommand {
         Account::paySalaries();
         $period->saveAttributes(array('added' => $lastDate));
     }
+    
+    public function actionSystemTransaction($amount, $subject, $charge_account=1, $deposit_account=1, $charge_entity=1, $deposit_entity=1) {    
+        $rb = new Transaction;
+        $rb->charge_account = $charge_account;
+        $rb->deposit_account = $deposit_account;
 
+        $rb->charge_entity = $charge_entity;
+        $rb->deposit_entity = $deposit_entity;
+        $rb->class = Transaction::CLASS_SYSTEM;
+        $rb->amount = $amount;
+        $rb->subject = $subject;
+        $rb->save();    
+    }
+    
     public function actionPaySalaries($date = null) {
         if ($date == null) {
             $date = strtotime('first day of this month');
@@ -154,7 +167,7 @@ class RbuCommand extends CConsoleCommand {
 
     public function actionAddSalary($account, $date = null) {
         if ($date == null) {
-            $date = strtotime('first day of this month');
+            $date = mktime (0,0,0, date("n"),1);
         }
         $acc = Account::model()->findByPk($account);
         $acc->addSalary($date);

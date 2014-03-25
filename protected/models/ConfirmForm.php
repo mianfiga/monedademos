@@ -7,7 +7,7 @@
  */
 class ConfirmForm extends CFormModel
 {
-	const ATTEMPTS = 3;
+	const ATTEMPTS = 10;
 	public $sid;
 	public $password;
 

@@ -244,7 +244,7 @@ class Transaction extends TransactionBase {
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
                     if($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE){
                         $charge->spended += $this->amount;
-                        $deposit->total_spended += $this->amount;
+                        $charge->total_spended += $this->amount;
                     }
 
                     $charge->credit -= $this->amount;
