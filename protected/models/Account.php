@@ -281,6 +281,7 @@ class Account extends AccountBase {
         $penalties = 0;
         $compensation = 0;
 
+        $dateLastPeriod = Period::getLastDate();
 
         //Count how many account in positive and in negative balance
         foreach ($accounts as $acc) {
@@ -288,10 +289,10 @@ class Account extends AccountBase {
             //$acc->last_action = date('Y-m-d');
             $amount = $acc->earned - $acc->spended - $acc->balance;
 
-            if ($amount < 0) {
+            if ($amount < 0 && $dateLastPeriod <= $acc->last_action) { //count only active accounts
                 $negative -= $amount;
                 $negative_count++;
-            } elseif ($amount > 0) {
+            } else if ($amount > 0) { //if positive, is active account
                 $positive += $amount;
                 $positive_count++;
             }
@@ -303,7 +304,6 @@ class Account extends AccountBase {
             $negative_average = $negative / $negative_count;
         }
         
-        $dateLastPeriod = Period::getLastDate();
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
