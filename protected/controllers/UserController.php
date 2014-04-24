@@ -14,7 +14,7 @@ class UserController extends Controller {
             'captcha' => array(
                 'class' => 'CCaptchaAction',
                 'backColor' => 0xFFFFFF,
-                ));
+        ));
     }
 
     /**
@@ -34,7 +34,7 @@ class UserController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('captcha', 'invited', 'create'),
+                'actions' => array('captcha', 'invited', 'create', 'recovery', 'recoveryRequest'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -135,8 +135,17 @@ class UserController extends Controller {
 
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
-            if ($model->save())
+            if ($model->save()) {
+                $modelLogIn = new LoginForm;
+                $modelLogIn->username = $model->username;
+                $modelLogIn->password = $model->plain_password;
+                $modelLogIn->validate() && $modelLogIn->login();
+                
+                ActivityLog::add(Entity::get($model)->id, ActivityLog::SIGNUP);
+                
+                Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(array(Yii::app()->defaultController));
+            }
         }
 
         $this->render('create', array(
@@ -232,8 +241,7 @@ class UserController extends Controller {
             // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if (!isset($_GET['ajax']))
                 $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-        }
-        else
+        } else
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
     }
 
@@ -260,6 +268,52 @@ class UserController extends Controller {
         $this->render('admin', array(
             'model' => $model,
         ));
+    }
+
+    /**
+     * Request a password recovery
+     * If successful, an e-mail will be sent to recover password.
+     */
+    public function actionRecoveryRequest() {
+        $this->layout = '//layouts/column1';
+        $model = new RecoveryForm;
+        if (isset($_POST['RecoveryForm'])) {
+            $model->attributes = $_POST['RecoveryForm'];
+
+            if ($model->validate() && $model->recover()) {
+                $this->redirect(array('site/index'));
+            }
+        }
+        $this->render('//recovery/request', array(
+            'model' => $model,
+        ));
+    }
+
+    /**
+     * Recovers pasword
+     * If successful, a new user password will be sent.
+     * @param integer $id the ID of the model to be updated
+     * @param string $magic the unique string of the model to allow it to be updated
+     */
+    public function actionRecovery($id, $magic) {
+        $this->layout = '//layouts/column1';
+        if (User::recoveryCheck($id, $magic)) {
+
+            $model = $this->loadModel($id);
+            if (isset($_POST['User'])) {
+                $model->attributes = $_POST['User'];
+                $model->updated = date('YmdHis');
+                if ($model->save()) {
+                    Yii::app()->user->setFlash('success', Yii::t('app', 'Pasword updated successfully'));
+                    $this->redirect(array('view', 'id' => $model->id));
+                }
+            }
+
+            $model->setScenario('recovery');
+            $this->render('update', array(
+                'model' => $model,
+            ));
+        }
     }
 
     /**

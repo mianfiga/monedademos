@@ -55,7 +55,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 						'buttons'=>array(
 								'view' => array(
 //							'label'=>'...',     //Text label of the button.
-										'url'=>'Yii::app()->createUrl("contribution/view", array("id"=>$data->id))',
+										'url'=>'Yii::app()->createUrl("contribution/view", array("id"=>$data->object_id))',
 									),
 								'update' => array(
 										'label'=>'view & update',     //Text label of the button.

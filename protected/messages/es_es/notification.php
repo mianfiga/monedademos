@@ -39,6 +39,10 @@ return array(
     'New comment in advertisement' => 'Nuevo comentario en anuncio',
     '[DEMOS Market] New comment in {ad_title}' => '[DEMOS Market] Nuevo comentario en {ad_title}',
     'New communication in advert {ad_title}|New communications in advert {ad_title}' => 'Nueva comunicación en el anuncio {ad_title}|Nuevas comunicaciones en el anuncio {ad_title}',
+    
+    '[DEMOS] Password recovery' => '[DEMOS] Recuperación de contraseña',
+    'Password recovery' =>'Recuperación de contraseña',
+    'Click in the following link to set a new password'=>'Haga clic en el siguiente link para establecer una nueva contraseña',
 
 );
 ?>

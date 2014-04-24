@@ -7,7 +7,7 @@
  */
 class ConfirmForm extends CFormModel
 {
-	const ATTEMPTS = 3;
+	const ATTEMPTS = 10;
 	public $sid;
 	public $password;
 
@@ -32,7 +32,7 @@ class ConfirmForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'password'=>Yii::t('app','Pin/Password'),
+			'password'=>Yii::t('app','Client\'s Pin/Password'),
 		);
 	}
 

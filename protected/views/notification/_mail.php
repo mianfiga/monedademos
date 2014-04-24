@@ -1,6 +1,6 @@
 <?php
 /* @var $this NotificationController */
-/* @var $data NotificationUser */
+/* @var $data NotificationMessage */
 ?>
 <?php $cls= '';
       if($data->updated < $data->shown)

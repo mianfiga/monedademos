@@ -58,26 +58,26 @@ body
 }
 
 
-/*
-#mainmenu .top-bar
+
+#mainmenuie .top-bar
 {
     clear: both;
-    background:white url(bg.gif) repeat-x left top;
+    background:white url(bg.gif) repeat-x left top !important;
 }
 
-#mainmenu ul
+#mainmenuie ul
 {
     padding:6px 20px 5px 20px;
     margin:0px;
     line-height: 1.2;
 }
 
-#mainmenu ul li
+#mainmenuie ul li
 {
     display: inline;
 }
 
-#mainmenu ul li a
+#mainmenuie ul li a
 {
     color:#ffffff;
     background-color:transparent;
@@ -87,13 +87,12 @@ body
     padding:5px 8px;
 }
 
-#mainmenu ul li a:hover, #mainmenu ul li.active a
+#mainmenuie ul li a:hover, #mainmenuie ul li.active a
 {
     color: #6399cd;
     background-color:#EFF4FA;
     text-decoration:none;
 }
-*/
 
 #mainmenu ul li a:hover, #mainmenu ul li.active a
 {

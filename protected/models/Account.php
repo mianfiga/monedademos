@@ -199,8 +199,20 @@ class Account extends AccountBase {
         $salary = $rule->salary * $percent;
 
         $amount = $this->earned - $this->spended - $this->balance + 0.0;
-        //If have wasted more than have earned: penalty
-        if ($amount < 0) {
+
+        //If keeps wasting with no earning: no salary
+        if ($this->earned == 0 && $this->spended > 0 && $this->balance > 0) {
+            $salary = 0;
+            $penalty = $rule->salary;
+            $ret = array(
+                "salary" => $salary,
+                "penalty" => $penalty,
+            );
+
+            $transaction = new Transaction;
+
+            $transaction->subject = "Sueldo " . Transaction::amountSystemToUser(0) . ' por falta de reciprocidad.';
+        } else if ($amount < 0) {//If have wasted more than have earned: penalty
             $max_penalty = $rule->salary - $rule->min_salary;
             $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
             $salary -= $penalty;
@@ -269,6 +281,7 @@ class Account extends AccountBase {
         $penalties = 0;
         $compensation = 0;
 
+        $dateLastPeriod = Period::getLastDate();
 
         //Count how many account in positive and in negative balance
         foreach ($accounts as $acc) {
@@ -276,10 +289,10 @@ class Account extends AccountBase {
             //$acc->last_action = date('Y-m-d');
             $amount = $acc->earned - $acc->spended - $acc->balance;
 
-            if ($amount < 0) {
+            if ($amount < 0 && $dateLastPeriod <= $acc->last_action) { //count only active accounts
                 $negative -= $amount;
                 $negative_count++;
-            } elseif ($amount > 0) {
+            } else if ($amount > 0) { //if positive, is active account
                 $positive += $amount;
                 $positive_count++;
             }
@@ -290,20 +303,23 @@ class Account extends AccountBase {
         } else {
             $negative_average = $negative / $negative_count;
         }
+        
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
-            if (($acc->earned - $acc->spended - $acc->balance) < 0) {
+            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
+                    && (($acc->earned - $acc->spended - $acc->balance) < 0)) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
             }
         }
 
         //Assign compensed salaries
-        $dateLastPeriod = Period::getLastDate($island->id);
+
         foreach ($accounts as $acc) {
-            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
-                    && (($acc->earned - $acc->spended - $acc->balance) >= 0)) {
+            if ($dateLastPeriod > $acc->last_action) {
+                continue;
+            }else if (($acc->earned - $acc->spended - $acc->balance) >= 0) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
                 $compensation += $ret['compensation'];
             }
@@ -433,8 +449,7 @@ class Account extends AccountBase {
                 $this->_isNew = false;
             }
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -502,8 +517,8 @@ class Account extends AccountBase {
         $to_zero->save();
 
 
-        $received = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id);
-        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id);
+        $received = Transaction::model()->findBySql('select sum(`amount`) as `amount` from `' . Transaction::model()->tableSchema->name . '` where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id);
+        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from `' . Transaction::model()->tableSchema->name . '` where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id);
 
         //Adds the possitivediference to the account
         $amount = $received->amount - $spended->amount;
@@ -537,8 +552,8 @@ class Account extends AccountBase {
         $rb->subject = Yii::t('app,', 'Rollback salary and try again.');
         $rb->save();
 
-        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \'' . Period::getPrevious()->added . '\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
-        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from rbu_transaction where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \'' . Period::getPrevious()->added . '\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $earned = Transaction::model()->findBySql('select sum(`amount`) as `amount` from `' . Transaction::model()->tableSchema->name . '` where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND deposit_account = ' . $this->id . ' AND executed_at > \'' . Period::getPrevious()->added . '\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
+        $spended = Transaction::model()->findBySql('select sum(`amount`) as `amount` from `' . Transaction::model()->tableSchema->name . '` where (`class` =\'' . Transaction::CLASS_CHARGE . '\' OR `class` = \'' . Transaction::CLASS_TRANSFER . '\') AND charge_account = ' . $this->id . ' AND executed_at > \'' . Period::getPrevious()->added . '\' and executed_at < \'' . $this->lastSalary->executed_at . '\'');
 
         $this->saveAttributes(array('earned' => $earned->amount, 'spended' => $spended->amount));
     }

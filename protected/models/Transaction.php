@@ -134,17 +134,17 @@ class Transaction extends TransactionBase {
                 " OR (deposit_account='" . $acc['account_id'] . "')"; /* AND deposit_entity='".$acc['entity_id']."')", */
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                    'pagination' => array(
-                        'pageSize' => 30,
-                    ),
-                ));
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => 30,
+            ),
+        ));
     }
 
     public function getUrl() {
         return Yii::app()->createUrl('transaction/view', array(
                     'id' => $this->id,
-                ));
+        ));
     }
 
     protected function afterFind() {
@@ -217,37 +217,47 @@ class Transaction extends TransactionBase {
                 $deposit = Account::model()->findByPk($this->deposit_account);
 
                 $this->charge_errors = 0;
-                if ($charge === null)
+                if ($charge === null) {
                     $this->charge_errors += Account::ERROR_WRONG;
-                if ($charge->blocked !== null)
+                }
+                if ($charge->blocked !== null) {
                     $this->charge_errors += Account::ERROR_BLOCKED;
-                if ($charge->deleted !== null)
+                }
+                if ($charge->deleted !== null) {
                     $this->charge_errors += Account::ERROR_DELETED;
-                if ($charge->id != Account::FUND_ACCOUNT && $charge->credit < $this->amount)
+                }
+                if ($charge->id != Account::FUND_ACCOUNT && $charge->credit < $this->amount) {
                     $this->charge_errors += Account::ERROR_NOFUNDS;
+                }
 
                 $this->deposit_errors = 0;
-                if ($deposit === null)
+                if ($deposit === null) {
                     $this->deposit_errors += Account::ERROR_WRONG;
-                if ($deposit->blocked !== null)
+                }
+                if ($deposit->blocked !== null) {
                     $this->deposit_errors += Account::ERROR_BLOCKED;
-                if ($deposit->deleted !== null)
+                }
+                if ($deposit->deleted !== null) {
                     $this->deposit_errors += Account::ERROR_DELETED;
+                }
 
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
-                    if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX
-                            && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
+                    if($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE){
                         $charge->spended += $this->amount;
+                        $charge->total_spended += $this->amount;
                     }
 
                     $charge->credit -= $this->amount;
                     $charge->save();
 
                     $deposit = Account::model()->findByPk($this->deposit_account);
-                    if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX
-                            && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
+                    if($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE){
                         $deposit->earned += $this->amount;
-                        $deposit->balance = 0;
+                        $deposit->total_earned += $this->amount;
+                        $rule = Rule::getCurrentRule();
+                        if ($deposit->earned >= $rule->min_salary) {
+                            $deposit->balance = 0;
+                        }
                     }
                     $deposit->credit += $this->amount;
                     $deposit->save();
@@ -262,8 +272,7 @@ class Transaction extends TransactionBase {
 ////////////////////////////////////////////////////
             }
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -297,7 +306,9 @@ class Transaction extends TransactionBase {
             }
         }
 
-        if ($this->class == Transaction::CLASS_SALARY) {
+        if ($this->class == Transaction::CLASS_SALARY && $this->amount == 0) {
+            Notification::addNotification(Notification::RECIPROCITY_LACK, $this->deposit_entity, Sid::getSID($this), $notif_data);
+        } else if ($this->class == Transaction::CLASS_SALARY) {
             Notification::addNotification(Notification::SALARY, $this->deposit_entity, Sid::getSID($this), $notif_data);
         }
         if ($this->class == Transaction::CLASS_TAX) {
@@ -308,7 +319,7 @@ class Transaction extends TransactionBase {
             Notification::addNotification(Notification::SYSTEM, $this->deposit_entity, Sid::getSID($this), $notif_data);
             Notification::addNotification(Notification::SYSTEM, $this->charge_entity, Sid::getSID($this), $notif_data);
         }
-        
+
         if (isset($entity_id)) {
             ActivityLog::add($entity_id, ActivityLog::TRANSACTION, Sid::getSID($this));
         }
@@ -393,8 +404,9 @@ class Transaction extends TransactionBase {
     }
 
     public function getDepositAccountNumber() {
-        if ($this->deposit_account_number != null)
+        if ($this->deposit_account_number != null) {
             return $this->deposit_account_number;
+        }
         return Authorization::formAccountNumber($this->deposit_entity, $this->deposit_account);
     }
 
