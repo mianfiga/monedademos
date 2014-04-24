@@ -55,7 +55,7 @@ class User extends UserBase {
         // will receive user inputs.
         return array(
             array('name, surname', 'required', 'on' => 'register, update'),
-            array('zip', 'required', 'on' => 'register, edit'),
+            array('zip, country', 'required', 'on' => 'register, edit'),
             array('username', 'required', 'on' => 'register'),
             array('username', 'length', 'max' => 16, 'on' => 'register'),
             array('username', 'unique', 'on' => 'register'),
@@ -118,6 +118,7 @@ class User extends UserBase {
             'contact' => Yii::t('app', 'Contact'),
             'birthday' => Yii::t('app', 'Birthday'),
             'zip' => Yii::t('app', 'Zip code'),
+            'country' => Yii::t('app', 'Country'),
             'verifyCode' => Yii::t('app', 'Verification Code'),
             'created' => Yii::t('app', 'Created'),
             'blocked' => Yii::t('app', 'Blocked'),

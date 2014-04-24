@@ -64,7 +64,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
 //		'email',
 //		'contact',
-        'zip',
+        array(
+            'name' => 'zip',
+            'type' => 'html',
+            'value' => '$data->zip . \'&nbsp;\'. $data->country',
+        ),
 //		'created',
 //		'blocked',
 //		'deleted',
