@@ -22,6 +22,12 @@ class Sid {
                 return 'ad-' . $object->id;
             case 'MarketJoined':
                 return 'jo-' . $object->ad_id . '-' . $object->entity_id;
+            case 'User':
+                return 'us-' . $object->id;
+            case 'Entity':
+                return 'en-' . $object->id;
+            default:
+                return null;
         }
     }
 
@@ -39,31 +45,32 @@ class Sid {
                 return MarketAd::model()->findByPk($data[1]);
             case 'jo':
                 return MarketJoined::model()->findByPk(array('ad_id' => $data[1], 'entity_id' => $data[2]));
+            case 'us':
+                return User::model()->findByPk($data[1]);
+            case 'en':
+                return Entity::model()->findByPk($data[1]);
         }
     }
-    
+
     public static function getUrl($sid, $absolute = false) {
-        
+
         if ($sid == null)
             return null;
 
         $data = explode('-', $sid);
         switch ($data[0]) {
             case 'tr':
-                return Yii::app()->createAbsoluteUrl('transaction/view',
-                        array('id' => $data[1]));
+                return Yii::app()->createAbsoluteUrl('transaction/view', array('id' => $data[1]));
             case 'pe':
-                return Yii::app()->createAbsoluteUrl('pending/view',
-                        array('id' => $data[1]));
+                return Yii::app()->createAbsoluteUrl('pending/view', array('id' => $data[1]));
             case 'ad':
-                return Yii::app()->createAbsoluteUrl('market/view',
-                        array('id' => $data[1]));
+                return Yii::app()->createAbsoluteUrl('market/view', array('id' => $data[1]));
             case 'jo':
-                //Falta, depende del usuario logeado se visita una cosa u otra
+            //Falta, depende del usuario logeado se visita una cosa u otra
         }
     }
-    
-    public static function getName($sid){
+
+    public static function getName($sid) {
         if ($sid == null)
             return null;
 
@@ -76,9 +83,8 @@ class Sid {
             case 'ad':
                 return Yii::t('app', 'advertisement');
             case 'jo':
-                //Falta, depende del usuario logeado se visita una cosa u otra
+            //Falta, depende del usuario logeado se visita una cosa u otra
         }
-        
     }
 
 }

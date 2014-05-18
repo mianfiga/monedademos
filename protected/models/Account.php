@@ -187,7 +187,7 @@ class Account extends AccountBase {
             $date = strtotime('today');
         }
         if ($rule === null) {
-            $rule = Rule::getCurrentRule($this->getHolder()->island_id());
+            $rule = Rule::getCurrentRule($this->holder->island->group_id);
         }
 
         // We only pay proportionaly to the current day of month
@@ -303,11 +303,11 @@ class Account extends AccountBase {
         } else {
             $negative_average = $negative / $negative_count;
         }
-        
+
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
-            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
+            if ($dateLastPeriod <= $acc->last_action
                     && (($acc->earned - $acc->spended - $acc->balance) < 0)) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
@@ -319,7 +319,7 @@ class Account extends AccountBase {
         foreach ($accounts as $acc) {
             if ($dateLastPeriod > $acc->last_action) {
                 continue;
-            }else if (($acc->earned - $acc->spended - $acc->balance) >= 0) {
+            } else if (($acc->earned - $acc->spended - $acc->balance) >= 0) {
                 $ret = $acc->addSalary($date, $rule, $positive, $penalties);
                 $compensation += $ret['compensation'];
             }
@@ -336,6 +336,26 @@ class Account extends AccountBase {
                 'balance' => 0));
         }
 
+        //System accounts
+        $accounts = self::getSystemAccounts($island->id);
+        foreach ($accounts as $acc) {
+            /* $ret = */ $acc->addSalary($date, $rule);
+            $acc->saveAttributes(array(
+                'earned' => 0,
+                'spended' => 0,
+                'balance' => 0));
+        }
+        
+        //Group accounts
+        $accounts = self::getGroupAccounts($island->id);
+        foreach ($accounts as $acc) {
+            $acc->saveAttributes(array(
+                'earned' => 0,
+                'spended' => 0,
+                'balance' => 0));
+        }
+
+        
         //Reset user earned and spended
         $accounts = self::getUserAccounts($island->id);
         foreach ($accounts as $acc) {
@@ -345,6 +365,10 @@ class Account extends AccountBase {
                 'spended' => 0,
                 'balance' => ($amount > 0 ? 0 : -$amount)));
         }
+        
+        
+        return Array('negative_accounts' => $negative_count, 'negative_amount' => $negative,
+                     'positive_accounts' => $positive_count, 'positive_amount' => $positive);
     }
 
     /**
@@ -378,20 +402,24 @@ class Account extends AccountBase {
         //log the amount added to fund
     }
 
-    public static function getUserAccounts($island_id) {
-        return Account::model()->with('holders')->findAll('`class`=\'' . Account::CLASS_USER . '\' AND holders.island_id=\'' . $island_id . '\' AND deleted is null');
+    public static function getUserAccounts($island_id = Island::DEFAULT_ISLAND) {
+        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_USER . '\' AND t.island_id=\'' . $island_id . '\' AND t.deleted is null');
     }
 
-    public static function getTaxesAccounts($island_id) {
-        return Account::model()->with('holders')->findAll('`class`!=\'' . Account::CLASS_FUND . '\' AND holders.island_id=\'' . $island_id . '\' AND deleted is null');
+    public static function getTaxesAccounts($island_id = Island::DEFAULT_ISLAND) {
+        return Account::model()->findAll('`t`.`class`!=\'' . Account::CLASS_FUND . '\' AND t.island_id=\'' . $island_id . '\' AND t.deleted is null');
     }
 
-    public static function getSalaryAccounts($island_id) {
-        return Account::model()->with('holders')->findAll('( class=\'' . Account::CLASS_USER . '\' OR class=\'' . Account::CLASS_SYSTEM . '\' ) AND holders.island_id=\'' . $island_id . '\' AND deleted is null');
+    public static function getSalaryAccounts($island_id = Island::DEFAULT_ISLAND) {
+        return Account::model()->findAll('( `t`.`class`=\'' . Account::CLASS_USER . '\' OR `t`.`class`=\'' . Account::CLASS_SYSTEM . '\' ) AND t.island_id=\'' . $island_id . '\' AND t.deleted is null');
+    }
+    
+    public static function getGroupAccounts($island_id = Island::DEFAULT_ISLAND) {
+        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_GROUP . ' AND t.island_id=\'' . $island_id . '\' AND t.deleted is null');
     }
 
     public static function getIsolatedAccounts() {
-        return Account::model()->with('holders')->findAll('( class=\'' . Account::CLASS_GROUP . '\' AND holders.island_id is null AND deleted is null');
+        return Account::model()->findAll('( `t`.`class`=\'' . Account::CLASS_GROUP . '\' AND t.island_id is null AND t.deleted is null');
     }
 
     /**
@@ -485,12 +513,12 @@ class Account extends AccountBase {
         parent::afterSave();
     }
 
-    public static function getFundAccount($island_id) {
-        return self::model()->with('holders')->find('class=\'' . self::CLASS_FUND . '\' AND holders.island_id = \'' . $island_id . '\' AND deleted is NULL');
+    public static function getFundAccount($island_id = Island::DEFAULT_ISLAND) {
+        return self::model()->find('t.class=\'' . self::CLASS_FUND . '\' AND t.island_id = \'' . $island_id . '\' AND t.deleted is NULL');
     }
 
-    public static function getSystemAccounts($island_id) {
-        return self::model()->with('holders')->findAll('class=\'' . self::CLASS_SYSTEM . '\' AND holders.island_id = \'' . $island_id . '\' AND deleted is NULL');
+    public static function getSystemAccounts($island_id = Island::DEFAULT_ISLAND) {
+        return self::model()->findAll('t.class=\'' . self::CLASS_SYSTEM . '\' AND t.island_id = \'' . $island_id . '\' AND t.deleted is NULL');
     }
 
     /**

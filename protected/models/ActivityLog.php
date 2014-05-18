@@ -20,6 +20,7 @@ class ActivityLog extends ActivityLogBase {
     const LOGOUT = 'logout';
     const TRANSACTION = 'transaction';
     const SIGNUP = 'signup';
+    const CONTACT = 'contact';
 
     /**
      * Returns the static model of the specified AR class.

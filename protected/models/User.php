@@ -85,7 +85,7 @@ class User extends UserBase {
     /**
      * @return array relational rules.
      */
-    public function relations () {
+    public function relations() {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
 
@@ -238,6 +238,7 @@ class User extends UserBase {
             $entity = new Entity;
             $entity->class = get_class($this);
             $entity->object_id = $this->id;
+            $entity->island_id = Island::DEFAULT_ISLAND;
             $entity->save();
 
             $date = Common::datetime();
@@ -270,6 +271,8 @@ class User extends UserBase {
             }
 
             Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)));
+
+            ActivityLog::add($entity->id, ActivityLog::SIGNUP);
         }
         parent::afterSave();
     }
@@ -294,8 +297,8 @@ class User extends UserBase {
     }
 
     static public function recoveryCheck($id, $magic) {
-        if ($model = self::model()->findByPk($id) ) {
-            return $model->magic == $magic;//falta añadir limite de fecha
+        if ($model = self::model()->findByPk($id)) {
+            return $model->magic == $magic; //falta añadir limite de fecha
         }
     }
 
