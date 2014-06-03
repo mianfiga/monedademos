@@ -90,24 +90,24 @@ class Rule extends RuleBase {
         return 1.0 / $this->multiplier;
     }
 
-    public static function getTomorrowRule($island_group_id = 1) {
+    public static function getTomorrowRule($island_group_id = Island::DEFAULT_ISLAND) {
         return self::model()->find('island_group_id = \'' . $island_group_id . '\' AND added <= \'' . date(Common::DATETIME_FORMAT, strtotime('tomorrow')) . '\' ORDER BY id DESC');
     }
 
-    public static function getCurrentRule($island_group_id = 1) {
+    public static function getCurrentRule($island_group_id = Island::DEFAULT_ISLAND) {
         return self::model()->find('island_group_id = \'' . $island_group_id . '\' AND added <= \'' . date(Common::DATETIME_FORMAT) . '\' ORDER BY id DESC');
     }
 
-    public static function getAdaptedRule($island_group_id = 1) {
+    public static function getAdaptedRule($island_group_id = Island::DEFAULT_ISLAND) {
         return self::model()->find('island_group_id = \'' . $island_group_id . '\' AND system_adapted=1 ORDER BY id DESC');
     }
 
-    public static function getPreviousRule($island_group_id = 1) {
+    public static function getPreviousRule($island_group_id = Island::DEFAULT_ISLAND) {
         $rules = self::model()->findAll('island_group_id = \'' . $island_group_id . '\' AND added <= \'' . date(Common::DATETIME_FORMAT) . '\' ORDER BY id DESC');
         return $rules->next();
     }
 
-    public static function getDateRule($date, $island_group_id = 1) {
+    public static function getDateRule($date, $island_group_id = Island::DEFAULT_ISLAND) {
         return self::model()->find('island_group_id = \'' . $island_group_id . '\' AND added <= \'' . $date . '\' ORDER BY id DESC');
     }
 
@@ -160,7 +160,7 @@ class Rule extends RuleBase {
         } else {
             $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_HIGH;
         }
-        $newRule->added = date('Y-m-d H:i:s', mktime(0, 0, 0, date("n") + 1));
+        $newRule->added = date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1));
         $newRule->system_adapted = 0;
 
         $newRule->save();

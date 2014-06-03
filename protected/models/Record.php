@@ -32,14 +32,14 @@ class Record extends RecordBase {
      * @return array validation rules for model attributes.
      */
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
+// NOTE: you should only define rules for those attributes that
+// will receive user inputs.
         return array(
             array('added, total_amount, user_count, account_count', 'required'),
             array('total_amount, user_count', 'length', 'max' => 20),
             array('account_count', 'length', 'max' => 10),
             // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
+// Please remove those attributes that should not be searched.
             array('id, added, total_amount, user_count, account_count', 'safe', 'on' => 'search'),
         );
     }
@@ -48,10 +48,9 @@ class Record extends RecordBase {
      * @return array relational rules.
      */
     public function relations() {
-        // NOTE: you may need to adjust the relation name and the related
-        // class name for the relations automatically generated below.
-        return array(
-        );
+// NOTE: you may need to adjust the relation name and the related
+// class name for the relations automatically generated below.
+        return array();
     }
 
     /**
@@ -72,8 +71,8 @@ class Record extends RecordBase {
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
     public function search() {
-        // Warning: Please modify the following code to remove attributes that
-        // should not be searched.
+// Warning: Please modify the following code to remove attributes that
+// should not be searched.
 
         $criteria = new CDbCriteria;
 
@@ -84,17 +83,17 @@ class Record extends RecordBase {
         $criteria->compare('account_count', $this->account_count, true);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
-    public static function getLastRecord() {
-        return self::model()->find('1 ORDER BY id DESC');
+    public static function getLastRecord($island_id=1) {
+        return self::model()->find("island_id='" . $island_id . "' ORDER BY id DESC");
     }
 
     public static function updateRecord($array) {
         $record = self::getLastRecord();
-        $date = date('Y-m-d');
+        $date = common::date();
         if (isset($array['total_amount']))
             $record->total_amount = $array['total_amount'];
         if (isset($array['user_count']))

@@ -30,7 +30,7 @@ class RbuCommand extends CConsoleCommand {
         foreach ($activities as $act) {
 
             $act->riskEstimation();
-            echo $act->id . ': ' . $act->risk_estimation ."\n";
+            echo $act->id . ': ' . $act->risk_estimation . "\n";
             $act->save();
         }
     }
@@ -121,8 +121,8 @@ class RbuCommand extends CConsoleCommand {
         Account::paySalaries();
         $period->saveAttributes(array('added' => $lastDate));
     }
- 
-    public function actionSystemTransaction($amount, $subject, $charge_account=1, $deposit_account=1, $charge_entity=1, $deposit_entity=1) {    
+
+    public function actionSystemTransaction($amount, $subject, $charge_account = 1, $deposit_account = 1, $charge_entity = 1, $deposit_entity = 1) {
         $rb = new Transaction;
         $rb->charge_account = $charge_account;
         $rb->deposit_account = $deposit_account;
@@ -132,7 +132,7 @@ class RbuCommand extends CConsoleCommand {
         $rb->class = Transaction::CLASS_SYSTEM;
         $rb->amount = $amount;
         $rb->subject = $subject;
-        $rb->save();    
+        $rb->save();
     }
 
     public function actionPaySalaries($date = null) {
@@ -153,19 +153,23 @@ class RbuCommand extends CConsoleCommand {
 
     //ChargeTaxes and paySalaries
     public function actionAddPeriod($date = null) {
+        if ($date == null) {
+            $date = strtotime('first day of this month');
+        }
 
         $islands = Island::model()->findAll();
-        foreach ($islans as $island) {
 
-            if ($date == null) {
-                $date = strtotime('first day of this month');
-            }
-
+        foreach ($islands as $island) {
             $rule = Rule::getCurrentRule($island->group_id);
             $period = Period::calculate($island->id);
             Account::chargeTaxes($island, $rule);
-            Account::paySalaries($island, $date, $rule);
-            //Rule::addPeriodRule($period);
+            $ret = Account::paySalaries($island, $date, $rule);
+            
+            $period->negative_accounts = $ret->negative_accounts;
+            $period->negative_amount   = $ret->negative_amount;
+            $period->positive_accounts = $ret->positive_accounts;
+            $period->positive_amount   = $ret->positive_amount;
+
             $period->save();
         }
 
@@ -186,7 +190,7 @@ class RbuCommand extends CConsoleCommand {
 
     public function actionAddSalary($account, $date = null) {
         if ($date == null) {
-            $date = mktime (0,0,0, date("n"),1);
+            $date = mktime(0, 0, 0, date("n"), 1);
         }
         $acc = Account::model()->findByPk($account);
         $acc->addSalary($date);

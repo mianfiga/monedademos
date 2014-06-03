@@ -31,6 +31,7 @@
  */
 class Island extends IslandBase {
 
+    const DEFAULT_ISLAND = 1;
     const THUMB_PREFIX = 'thumb_';
 
     public $form_image;

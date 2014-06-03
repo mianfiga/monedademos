@@ -93,10 +93,45 @@ class ContributionController extends Controller {
             if ($model->validate()) {
                 $recipent = $this->loadModel($id);
                 $headers = "From: contacto@monedademos.es\r\nReply-To: {$logged->email}";
-                if (mail($recipent->email, '[Contact from DEMOS] ' . $model->subject, $model->body, $headers))
+                if (mail($recipent->email, '[Contact from DEMOS] ' . $model->subject, $model->body, $headers)) {
                     Yii::app()->user->setFlash('contact', Yii::t('app', 'Thank you for contacting'));
-                else
+                    ActivityLog::add($entity->id, ActivityLog::CONTACT, Sid::getSID($recipent). '-Y');
+                }
+                else {
                     Yii::app()->user->setFlash('error', Yii::t('app', 'E-mail not sent'));
+                    ActivityLog::add($entity->id, ActivityLog::CONTACT, Sid::getSID($recipent). '-N');
+                }
+                $this->refresh();
+            }
+        }
+
+        $this->render('contact', array(
+            'model' => $model,
+            'logged' => $logged,
+        ));
+    }
+    
+    public function actionContactEnt($id) {
+        $model = new ContributionContactForm;
+        $entity = Entity::model()->findByPk(Yii::app()->user->getId());
+        $logged = $entity->getObject();
+
+        // Uncomment the following line if AJAX validation is needed
+        // $this->performAjaxValidation($model);
+
+        if (isset($_POST['ContributionContactForm'])) {
+            $model->attributes = $_POST['ContributionContactForm'];
+            if ($model->validate()) {
+                $recipent = Entity::model()->findByPk($id); //$this->loadModel($id);
+                $headers = "From: contacto@monedademos.es\r\nReply-To: {$logged->email}";
+                if (mail($recipent->email, '[Contact from DEMOS] ' . $model->subject, $model->body, $headers)) {
+                    Yii::app()->user->setFlash('contact', Yii::t('app', 'Thank you for contacting'));
+                    ActivityLog::add($entity->id, ActivityLog::CONTACT, Sid::getSID($recipent). '-Y');
+                }
+                else {
+                    Yii::app()->user->setFlash('error', Yii::t('app', 'E-mail not sent'));
+                    ActivityLog::add($entity->id, ActivityLog::CONTACT, Sid::getSID($recipent). '-N');
+                }
                 $this->refresh();
             }
         }

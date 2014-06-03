@@ -118,13 +118,10 @@ class Period extends PeriodBase {
                     OR (depositTransactions.executed_at > \'' . $oldPeriodDate . '\' AND
                         depositTransactions.class in (\'' . Transaction::CLASS_TRANSFER . '\', \'' . Transaction::CLASS_CHARGE . '\')))');
 
-<<<<<<< HEAD
+        
         $sum = Account::model()->findBySql('select sum(`earned`) as `earned` ' .
-                'from `' . Account::model()->tableSchema->name . '` as account, `' . Authorization::model()->tableSchema->name . '` as auth, `' . Entity::model()->tableSchema->name . '` as entity' .
-                ' where entity.island_id=\'' . $island_id . '\'' .
-                '   AND entity.id = auth.entity_id ' .
-                '   AND auth.account_id = account.id' .
-                '   AND auth.class =\'' . Authorization::CLASS_HOLDER . '\'', array());
+                'from `' . Account::model()->tableSchema->name . '` as account' .
+                ' where island_id=\'' . $island_id . '\'', array());
 
         $period->movements = $sum->earned;
         $period->added = date('Y-m-d');

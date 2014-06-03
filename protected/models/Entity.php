@@ -59,6 +59,7 @@ class Entity extends EntityBase {
             'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(user_id, account_id)'),
             'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
             'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
+            'island' => array(self::BELONGS_TO, 'Island', 'island_id'),
         );
     }
 
