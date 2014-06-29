@@ -733,7 +733,10 @@ INSERT INTO `rbu_notification` (`id`, `title`, `message`, `subject`, `view`) VAL
 (14, 'System Transaction', 'Moved {amount} from {charge_account_number} to {deposit_account_number}, subject: "{subject}".', '[DEMOS] System Transaction', NULL),
 (15, 'New Payment', 'Received {amount} from {charge_account_number} ({charge_user_name}) to your account {deposit_account_number}, subject: "{subject}".', '[DEMOS] New Payment', NULL),
 (16, 'New charge', 'Paid {amount} from your account {charge_account_number} to {deposit_account_number} ({deposit_user_name}), subject: "{subject}".', '[DEMOS] New charge', NULL),
-(17, 'New salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Demos es un sistema que busca la reciprocidad entre las personas participantes.\r\n\r\n Llevas un tiempo sin aportar, por eso te animamos a que busques dónde puedes ayudar. Tu sueldo se restablecerá tan pronto como lo consigas.\r\n\r\n ¡Ánimo!', '[DEMOS] Salary assigned', NULL);
+(17, 'New salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Demos es un sistema que busca la reciprocidad entre las personas participantes.\r\n\r\n Llevas un tiempo sin aportar, por eso te animamos a que busques dónde puedes ayudar. Tu sueldo se restablecerá tan pronto como lo consigas.\r\n\r\n ¡Ánimo!', '[DEMOS] Salary assigned', NULL),
+(18,'Welcome to Demos, this is your first salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Bienvenid@ a Demos. Demos es un sistema que busca la reciprocidad entre las personas participantes, al principio puede parecer complicado pero verás que pronto te familiarizas con la herramienta.\r\n\r\n Este es tu primer sueldo en Demos y ya puedes hacer uso de estos demos. Pero ten en cuenta que en Demos se prioriza que \'demos\' así que una vez consigas aportar a otros usuarios a través de Demos tu siguiente sueldo podrá ser mayor al sueldo mínimo (y será aún mayor si consigues aportar más de lo que consumas).\r\n\r\n ¡Bienvenid@!', '[DEMOS] Salary assigned', NULL),
+(19,'New salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Demos es un sistema que busca la reciprocidad entre las personas participantes.\r\n\r\n Vemos que no has conseguido aportar a otros usuarios a través de Demos todavía por eso tu sueldo se mantiene en el mínimo. Tu sueldo se restablecerá a los valores habituales tan pronto como lo consigas.\r\n\r\n ¡Ánimo!', '[DEMOS] Salary assigned', NULL);
+
 
 --
 -- Volcado de datos para la tabla `rbu_notification_configuration`
@@ -755,7 +758,9 @@ INSERT INTO `rbu_notification_configuration` (`entity_id`, `notification_id`, `m
 (1, 13, 'instantly', 'active', 'active'),
 (1, 15, 'none', 'active', 'active'),
 (1, 16, 'none', 'active', 'active'),
-(1, 17, 'instantly', 'active', 'active');
+(1, 17, 'instantly', 'active', 'active'),
+(1, 18, 'instantly', 'active', 'active'),
+(1, 19, 'instantly', 'active', 'active');
 
 
 
