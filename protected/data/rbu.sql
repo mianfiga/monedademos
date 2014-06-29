@@ -1,5 +1,7 @@
 SET FOREIGN_KEY_CHECKS=0;
 
+-- --------------------------------------------------------
+
 -- 
 -- Estructura de tabla para la tabla `rbu_account`
 -- 
@@ -26,7 +28,7 @@ CREATE TABLE `rbu_account` (
   `deposit_transfer_count` int(10) unsigned NOT NULL DEFAULT '0',
   `charge_transfer_count` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=790 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=790 ;
+) ENGINE=InnoDB AUTO_INCREMENT=876 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -44,7 +46,7 @@ CREATE TABLE `rbu_activity_log` (
   `risk_estimation` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_activity_log` (`entity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15943 DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=15943 ;
+) ENGINE=InnoDB AUTO_INCREMENT=18484 DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
 
 -- --------------------------------------------------------
 
@@ -89,7 +91,7 @@ CREATE TABLE `rbu_brand` (
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=32 ;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -104,7 +106,7 @@ CREATE TABLE `rbu_entity` (
   `points` int(11) NOT NULL DEFAULT '0',
   `rates` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=789 DEFAULT CHARSET=latin1 AUTO_INCREMENT=789 ;
+) ENGINE=InnoDB AUTO_INCREMENT=875 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -116,7 +118,7 @@ CREATE TABLE `rbu_exemption` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -134,7 +136,7 @@ CREATE TABLE `rbu_invitation` (
   `used` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_invitation_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=40 ;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -160,7 +162,7 @@ CREATE TABLE `rbu_market_ad` (
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=1007 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1007 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1107 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -193,7 +195,7 @@ CREATE TABLE `rbu_notification` (
   `subject` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `view` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -252,7 +254,7 @@ CREATE TABLE `rbu_pending` (
   KEY `FK_pending_deposit_account` (`deposit_account`),
   KEY `FK_pending_charge_user` (`charge_entity`),
   KEY `FK_ppending_deposit_user` (`deposit_entity`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=112 ;
+) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -266,7 +268,7 @@ CREATE TABLE `rbu_period` (
   `movements` int(10) unsigned NOT NULL DEFAULT '0',
   `active_users` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -300,7 +302,7 @@ CREATE TABLE `rbu_record` (
   `user_count` bigint(20) unsigned NOT NULL,
   `account_count` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=387 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=387 ;
+) ENGINE=InnoDB AUTO_INCREMENT=412 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -332,7 +334,7 @@ CREATE TABLE `rbu_rule` (
   `multiplier` smallint(5) unsigned NOT NULL,
   `system_adapted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -355,7 +357,7 @@ CREATE TABLE `rbu_transaction` (
   KEY `FK_transaction_deposit_account` (`deposit_account`),
   KEY `FK_transaction_charge_user` (`charge_entity`),
   KEY `FK_transaction_deposit_user` (`deposit_entity`)
-) ENGINE=InnoDB AUTO_INCREMENT=13842 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=13842 ;
+) ENGINE=InnoDB AUTO_INCREMENT=14673 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -393,7 +395,7 @@ CREATE TABLE `rbu_user` (
   UNIQUE KEY `email` (`email`),
   KEY `FK_user_created_by` (`created_by`),
   KEY `FK_exemption_exemption_id` (`exemption_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=758 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=758 ;
+) ENGINE=InnoDB AUTO_INCREMENT=842 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- 
 -- Filtros para las tablas descargadas (dump)
@@ -478,7 +480,7 @@ ALTER TABLE `rbu_user`
   ADD CONSTRAINT `FK_exemption_exemption_id` FOREIGN KEY (`exemption_id`) REFERENCES `rbu_exemption` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_user_created_by` FOREIGN KEY (`created_by`) REFERENCES `rbu_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
-SET FOREIGN_KEY_CHECKS=1;
+
 
 --
 -- Volcado de datos para la tabla `rbu_account`
@@ -533,7 +535,9 @@ INSERT INTO `rbu_notification` (`id`, `title`, `message`, `subject`, `view`) VAL
 (14, 'System Transaction', 'Moved {amount} from {charge_account_number} to {deposit_account_number}, subject: "{subject}".', '[DEMOS] System Transaction', NULL),
 (15, 'New Payment', 'Received {amount} from {charge_account_number} ({charge_user_name}) to your account {deposit_account_number}, subject: "{subject}".', '[DEMOS] New Payment', NULL),
 (16, 'New charge', 'Paid {amount} from your account {charge_account_number} to {deposit_account_number} ({deposit_user_name}), subject: "{subject}".', '[DEMOS] New charge', NULL),
-(17, 'New salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Demos es un sistema que busca la reciprocidad entre las personas participantes.\r\n\r\n Llevas un tiempo sin aportar, por eso te animamos a que busques dónde puedes ayudar. Tu sueldo se restablecerá tan pronto como lo consigas.\r\n\r\n ¡Ánimo!', '[DEMOS] Salary assigned', NULL);
+(17, 'New salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Demos es un sistema que busca la reciprocidad entre las personas participantes.\r\n\r\n Llevas un tiempo sin aportar, por eso te animamos a que busques dónde puedes ayudar. Tu sueldo se restablecerá tan pronto como lo consigas.\r\n\r\n ¡Ánimo!', '[DEMOS] Salary assigned', NULL),
+(18,'Welcome to Demos, this is your first salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Bienvenid@ a Demos. Demos es un sistema que busca la reciprocidad entre las personas participantes, al principio puede parecer complicado pero verás que pronto te familiarizas con la herramienta.\r\n\r\n Este es tu primer sueldo en Demos y ya puedes hacer uso de estos demos. Pero ten en cuenta que en Demos se prioriza que \'demos\' así que una vez consigas aportar a otros usuarios a través de Demos tu siguiente sueldo podrá ser mayor al sueldo mínimo (y será aún mayor si consigues aportar más de lo que consumas).\r\n\r\n ¡Bienvenid@!', '[DEMOS] Salary assigned', NULL),
+(19,'New salary', 'Salary assigned: {amount} "{subject}".\r\n\r\n Demos es un sistema que busca la reciprocidad entre las personas participantes.\r\n\r\n Vemos que no has conseguido aportar a otros usuarios a través de Demos todavía por eso tu sueldo se mantiene en el mínimo. Tu sueldo se restablecerá a los valores habituales tan pronto como lo consigas.\r\n\r\n ¡Ánimo!', '[DEMOS] Salary assigned', NULL);
 
 --
 -- Volcado de datos para la tabla `rbu_notification_configuration`
@@ -555,12 +559,15 @@ INSERT INTO `rbu_notification_configuration` (`entity_id`, `notification_id`, `m
 (1, 13, 'instantly', 'active', 'active'),
 (1, 15, 'none', 'active', 'active'),
 (1, 16, 'none', 'active', 'active');
+(1, 18, 'instantly', 'active', 'active'),
+(1, 19, 'instantly', 'active', 'active');
 
 --
 -- Volcado de datos para la tabla `rbu_entity`
 --
 INSERT INTO `rbu_entity` VALUES (1, 'User', 1, 0, 0);
 
+SET FOREIGN_KEY_CHECKS=1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
