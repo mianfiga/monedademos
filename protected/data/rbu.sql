@@ -507,7 +507,7 @@ INSERT INTO `rbu_user` (`id`, `username`, `salt`, `password`, `name`, `surname`,
 -- Volcado de datos para la tabla `rbu_authorization`
 --
 
-INSERT INTO `rbu_authorization` (`user_id`, `account_id`, `code`, `class`, `title`, `salt`, `password`, `wrong_pass_count`, `added`, `blocked`, `deleted`) VALUES
+INSERT INTO `rbu_authorization` (`entity_id`, `account_id`, `code`, `class`, `title`, `salt`, `password`, `wrong_pass_count`, `added`, `blocked`, `deleted`) VALUES
 (1, 1, 'G', 'holder', 'Personal account', '!', '!', 0, '2012-06-12 19:49:07', NULL, NULL),
 (1, 2, 'A', 'holder', 'System Account to pay system needs', '!', '!', 0, '2012-06-12 19:24:42', NULL, NULL);
 
