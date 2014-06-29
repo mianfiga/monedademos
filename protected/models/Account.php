@@ -241,7 +241,7 @@ class Account extends AccountBase {
 
             $transaction->subject = "Minimum salary (" . Transaction::amountSystemToUser($rule->min_salary) . ')';
 
-        } if ($amount < 0) {//If have wasted more than have earned: penalty
+        } else if ($amount < 0) {//If have wasted more than have earned: penalty
             $max_penalty = $rule->salary - $rule->min_salary;
             $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
             $salary -= $penalty;
