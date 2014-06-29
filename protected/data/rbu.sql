@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.0.6deb1
--- http://www.phpmyadmin.net
---
--- Servidor: localhost
--- Tiempo de generación: 28-11-2013 a las 18:11:25
--- Versión del servidor: 5.5.34-0ubuntu0.13.10.1
--- Versión de PHP: 5.5.3-1ubuntu2
-
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -29,6 +20,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `rbu_account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `island_id` int(11) unsigned DEFAULT '1',
   `class` enum('fund','system','user','group') COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'user',
   `credit` bigint(20) NOT NULL DEFAULT '0',
   `earned` bigint(20) NOT NULL DEFAULT '0',
@@ -40,8 +32,17 @@ CREATE TABLE IF NOT EXISTS `rbu_account` (
   `last_action` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `blocked` timestamp NULL DEFAULT NULL,
   `deleted` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+  `total_earned` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `total_spended` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `total_clients` int(10) unsigned NOT NULL DEFAULT '0',
+  `total_sellers` int(10) unsigned NOT NULL DEFAULT '0',
+  `best_clients` int(10) unsigned NOT NULL DEFAULT '0',
+  `best_sellers` int(10) unsigned NOT NULL DEFAULT '0',
+  `deposit_transfer_count` int(10) unsigned NOT NULL DEFAULT '0',
+  `charge_transfer_count` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `island_id` (`island_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=310 ;
 
 -- --------------------------------------------------------
 
@@ -56,9 +57,10 @@ CREATE TABLE IF NOT EXISTS `rbu_activity_log` (
   `related_sid` varchar(127) COLLATE latin1_german2_ci DEFAULT NULL,
   `ip` varchar(41) COLLATE latin1_german2_ci NOT NULL,
   `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `risk_estimation` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_activity_log` (`entity_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=2640 ;
 
 -- --------------------------------------------------------
 
@@ -103,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `rbu_brand` (
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -117,8 +119,10 @@ CREATE TABLE IF NOT EXISTS `rbu_entity` (
   `object_id` int(11) unsigned NOT NULL,
   `points` int(11) NOT NULL DEFAULT '0',
   `rates` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+  `island_id` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `island_id` (`island_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=309 ;
 
 -- --------------------------------------------------------
 
@@ -130,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `rbu_exemption` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -148,7 +152,76 @@ CREATE TABLE IF NOT EXISTS `rbu_invitation` (
   `used` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_invitation_user` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=40 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rbu_island`
+--
+
+CREATE TABLE IF NOT EXISTS `rbu_island` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(127) COLLATE utf8_spanish2_ci NOT NULL,
+  `name` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8_spanish2_ci NOT NULL,
+  `summary` text COLLATE utf8_spanish2_ci,
+  `description` text COLLATE utf8_spanish2_ci,
+  `image` varchar(254) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `last_action` timestamp NULL DEFAULT NULL,
+  `group_id` int(10) unsigned DEFAULT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nickname` (`nickname`),
+  KEY `FK_island_created_by` (`created_by`),
+  KEY `FK_island_group` (`group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rbu_island_balance`
+--
+
+CREATE TABLE IF NOT EXISTS `rbu_island_balance` (
+  `from_id` int(11) unsigned NOT NULL,
+  `to_id` int(11) unsigned NOT NULL,
+  `period_amount` bigint(20) unsigned NOT NULL,
+  `total_amount` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`from_id`,`to_id`),
+  KEY `FK_island_balance_to` (`to_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rbu_island_group`
+--
+
+CREATE TABLE IF NOT EXISTS `rbu_island_group` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rbu_island_migration`
+--
+
+CREATE TABLE IF NOT EXISTS `rbu_island_migration` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `entity_id` int(11) unsigned NOT NULL,
+  `to_id` int(11) unsigned NOT NULL,
+  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `executed_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `FK_island_migration_entity` (`entity_id`),
+  KEY `FK_island_migration_to` (`to_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -166,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `rbu_link` (
   `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `entity_id` (`entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -192,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `rbu_market_ad` (
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=275 ;
 
 -- --------------------------------------------------------
 
@@ -225,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `rbu_notification` (
   `subject` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `view` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=18 ;
 
 -- --------------------------------------------------------
 
@@ -284,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `rbu_pending` (
   KEY `FK_pending_deposit_account` (`deposit_account`),
   KEY `FK_pending_charge_user` (`charge_entity`),
   KEY `FK_ppending_deposit_user` (`deposit_entity`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=20 ;
 
 -- --------------------------------------------------------
 
@@ -294,11 +367,17 @@ CREATE TABLE IF NOT EXISTS `rbu_pending` (
 
 CREATE TABLE IF NOT EXISTS `rbu_period` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `island_id` int(11) unsigned DEFAULT '1',
   `added` date NOT NULL,
   `movements` int(10) unsigned NOT NULL DEFAULT '0',
   `active_users` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+  `negative_accounts` int(11) NOT NULL DEFAULT '0',
+  `negative_amount` bigint(20) NOT NULL DEFAULT '0',
+  `positive_accounts` int(11) NOT NULL DEFAULT '0',
+  `positive_amount` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `island_id` (`island_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -327,12 +406,14 @@ CREATE TABLE IF NOT EXISTS `rbu_rate` (
 
 CREATE TABLE IF NOT EXISTS `rbu_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `island_id` int(11) unsigned DEFAULT '1',
   `added` date NOT NULL,
   `total_amount` bigint(20) unsigned NOT NULL,
   `user_count` bigint(20) unsigned NOT NULL,
   `account_count` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+  PRIMARY KEY (`id`),
+  KEY `island_id` (`island_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=221 ;
 
 -- --------------------------------------------------------
 
@@ -358,13 +439,15 @@ CREATE TABLE IF NOT EXISTS `rbu_role` (
 
 CREATE TABLE IF NOT EXISTS `rbu_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `island_group_id` int(11) unsigned DEFAULT '1',
   `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `salary` bigint(20) unsigned NOT NULL,
   `min_salary` bigint(20) unsigned NOT NULL,
   `multiplier` smallint(5) unsigned NOT NULL,
   `system_adapted` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+  PRIMARY KEY (`id`),
+  KEY `island_group_id` (`island_group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
@@ -387,7 +470,7 @@ CREATE TABLE IF NOT EXISTS `rbu_transaction` (
   KEY `FK_transaction_deposit_account` (`deposit_account`),
   KEY `FK_transaction_charge_user` (`charge_entity`),
   KEY `FK_transaction_deposit_user` (`deposit_entity`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=4908 ;
 
 -- --------------------------------------------------------
 
@@ -409,6 +492,7 @@ CREATE TABLE IF NOT EXISTS `rbu_user` (
   `email` varchar(255) COLLATE utf8_spanish2_ci NOT NULL,
   `contact` text COLLATE utf8_spanish2_ci NOT NULL,
   `zip` varchar(16) COLLATE utf8_spanish2_ci NOT NULL,
+  `country` varchar(4) COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'ES',
   `culture` varchar(7) COLLATE utf8_spanish2_ci NOT NULL DEFAULT 'es_es',
   `exemption_id` int(10) unsigned DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -424,11 +508,17 @@ CREATE TABLE IF NOT EXISTS `rbu_user` (
   UNIQUE KEY `email` (`email`),
   KEY `FK_user_created_by` (`created_by`),
   KEY `FK_exemption_exemption_id` (`exemption_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=301 ;
 
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `rbu_account`
+--
+ALTER TABLE `rbu_account`
+  ADD CONSTRAINT `rbu_account_ibfk_1` FOREIGN KEY (`island_id`) REFERENCES `rbu_island` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `rbu_authorization`
@@ -438,10 +528,37 @@ ALTER TABLE `rbu_authorization`
   ADD CONSTRAINT `rbu_authorization_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE;
 
 --
+-- Filtros para la tabla `rbu_entity`
+--
+ALTER TABLE `rbu_entity`
+  ADD CONSTRAINT `rbu_entity_ibfk_1` FOREIGN KEY (`island_id`) REFERENCES `rbu_island` (`id`);
+
+--
 -- Filtros para la tabla `rbu_invitation`
 --
 ALTER TABLE `rbu_invitation`
   ADD CONSTRAINT `FK_invitation_user` FOREIGN KEY (`user_id`) REFERENCES `rbu_account` (`id`) ON DELETE NO ACTION;
+
+--
+-- Filtros para la tabla `rbu_island`
+--
+ALTER TABLE `rbu_island`
+  ADD CONSTRAINT `FK_island_created_by` FOREIGN KEY (`created_by`) REFERENCES `rbu_entity` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_island_group` FOREIGN KEY (`group_id`) REFERENCES `rbu_island_group` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `rbu_island_balance`
+--
+ALTER TABLE `rbu_island_balance`
+  ADD CONSTRAINT `FK_island_balance_from` FOREIGN KEY (`from_id`) REFERENCES `rbu_island` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_island_balance_to` FOREIGN KEY (`to_id`) REFERENCES `rbu_island` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `rbu_island_migration`
+--
+ALTER TABLE `rbu_island_migration`
+  ADD CONSTRAINT `FK_island_migration_entity` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_island_migration_to` FOREIGN KEY (`to_id`) REFERENCES `rbu_island` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `rbu_link`
@@ -486,6 +603,12 @@ ALTER TABLE `rbu_pending`
   ADD CONSTRAINT `rbu_pending_ibfk_2` FOREIGN KEY (`deposit_entity`) REFERENCES `rbu_entity` (`id`) ON DELETE NO ACTION;
 
 --
+-- Filtros para la tabla `rbu_period`
+--
+ALTER TABLE `rbu_period`
+  ADD CONSTRAINT `rbu_period_ibfk_1` FOREIGN KEY (`island_id`) REFERENCES `rbu_island` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `rbu_rate`
 --
 ALTER TABLE `rbu_rate`
@@ -493,11 +616,23 @@ ALTER TABLE `rbu_rate`
   ADD CONSTRAINT `FK_rate_entity_to` FOREIGN KEY (`to_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `rbu_record`
+--
+ALTER TABLE `rbu_record`
+  ADD CONSTRAINT `rbu_record_ibfk_1` FOREIGN KEY (`island_id`) REFERENCES `rbu_island` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `rbu_role`
 --
 ALTER TABLE `rbu_role`
   ADD CONSTRAINT `FK_role_actor` FOREIGN KEY (`actor_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_role_part` FOREIGN KEY (`part_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `rbu_rule`
+--
+ALTER TABLE `rbu_rule`
+  ADD CONSTRAINT `rbu_rule_ibfk_1` FOREIGN KEY (`island_group_id`) REFERENCES `rbu_island_group` (`id`) ON DELETE NO ACTION;
 
 --
 -- Filtros para la tabla `rbu_transaction`
@@ -514,44 +649,68 @@ ALTER TABLE `rbu_transaction`
 ALTER TABLE `rbu_user`
   ADD CONSTRAINT `FK_exemption_exemption_id` FOREIGN KEY (`exemption_id`) REFERENCES `rbu_exemption` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_user_created_by` FOREIGN KEY (`created_by`) REFERENCES `rbu_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 SET FOREIGN_KEY_CHECKS=1;
 
 
 
+--
+-- Volcado de datos para la tabla `rbu_island_group`
+--
 
+INSERT INTO `rbu_island_group` (`id`) VALUES
+(1);
+
+
+--
+-- Volcado de datos para la tabla `rbu_island`
+--
+
+INSERT INTO `rbu_island` (`id`, `nickname`, `name`, `email`, `summary`, `description`, `image`, `last_action`, `group_id`, `created_by`, `added`, `updated`, `deleted`) VALUES
+(1, 'default', 'La Isla por defecto de Demos', 'contacto@monedademos.es', 'Al llegar a demos entrarás a esta Isla hasta que encuentres o crees un grupo con el que empezar a participar. Esta isla no es una isla de pruebas, lo que hagas aquí formará parte de tu actividad en Demos', NULL, NULL, '0000-00-00 00:00:00', 1, NULL, '2014-04-24 16:00:56', '2014-04-24 16:00:56', NULL);
+
+
+--
+-- Volcado de datos para la tabla `rbu_entity`
+--
+INSERT INTO `rbu_entity` (`id`, `class`, `object_id`, `points`, `rates`, `island_id`) VALUES
+(1, 'Island', 1, 0, 0, 1);
 
 
 --
 -- Volcado de datos para la tabla `rbu_account`
 --
 
-INSERT INTO `rbu_account` (`id`, `class`, `credit`, `earned`, `spended`, `title`, `access`, `added`, `blocked`, `deleted`) VALUES
-(1, 'fund', 5000000, 0, 0, 'System Fund, where the non asigned money stay', 'public', '2012-06-12 19:49:07', NULL, NULL),
-(2, 'system', 0, 0, 0, 'System Account to pay system needs', 'public', '2012-06-12 18:58:51', NULL, NULL);
+INSERT INTO `rbu_account` (`id`, `island_id`, `class`, `credit`, `earned`, `spended`, `balance`, `title`, `access`, `added`, `last_action`, `blocked`, `deleted`, `total_earned`, `total_spended`, `total_clients`, `total_sellers`, `best_clients`, `best_sellers`, `deposit_transfer_count`, `charge_transfer_count`) VALUES
+(1, 1, 'fund', 5000000, 0, 0, 0, 'System Fund, where the non asigned money stays', 'public', now(), '0000-00-00 00:00:00', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 1, 'system', 0, 0, 0, 0, 'System Account to pay system needs', 'public', now(), '0000-00-00 00:00:00', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
 --
 -- Volcado de datos para la tabla `rbu_rule`
 --
 
-INSERT INTO `rbu_rule` (`id`, `added`, `salary`, `min_salary`, `multiplier`) VALUES
-(1, '2012-06-12 18:47:13', 500000, 200000, 10);
+INSERT INTO `rbu_rule` (`id`, `island_group_id`, `added`, `salary`, `min_salary`, `multiplier`, `system_adapted`) VALUES
+(1, 1, now(), 500000, 200000, 10, 1);
 
 --
 -- Volcado de datos para la tabla `rbu_user`
 --
 
-INSERT INTO `rbu_user` (`id`, `username`, `salt`, `password`, `name`, `surname`, `birthday`, `identification`, `contribution_title`, `contribution_text`, `email`, `contact`, `zip`, `exemption_id`, `created`, `created_by`, `blocked`, `deleted`) VALUES
-(1, 'Fund', '', '', 'System Fund', 'System Fund', '2012-05-20', 'DNI: ', '', '', 'contacto@monedademos.es', '', '35009', NULL, '2012-06-12 19:49:07', NULL, NULL, NULL);
+INSERT INTO `rbu_user` (`id`, `username`, `salt`, `password`, `name`, `surname`, `birthday`, `identification`, `contribution_title`, `contribution_text`, `email`, `contact`, `zip`, `country`, `culture`, `exemption_id`, `created`, `created_by`, `last_login`, `last_action`, `updated`, `magic`, `blocked`, `deleted`) VALUES
+(1, 'Fund', '', '', 'System Fund', 'System Fund', '2012-05-20', 'DNI: ', '', '', 'contacto@monedademos.es', '', '35009', 'ES', 'es_es', NULL, now(), NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, NULL, NULL);
+
 
 --
 -- Volcado de datos para la tabla `rbu_authorization`
 --
 
-INSERT INTO `rbu_authorization` (`user_id`, `account_id`, `code`, `class`, `title`, `salt`, `password`, `wrong_pass_count`, `added`, `blocked`, `deleted`) VALUES
-(1, 1, 'G', 'holder', 'Personal account', '!', '!', 0, '2012-06-12 19:49:07', NULL, NULL),
-(1, 2, 'A', 'holder', 'System Account to pay system needs', '!', '!', 0, '2012-06-12 19:24:42', NULL, NULL);
-
+INSERT INTO `rbu_authorization` (`entity_id`, `account_id`, `code`, `class`, `title`, `salt`, `password`, `wrong_pass_count`, `added`, `blocked`, `deleted`) VALUES
+(1, 1, 'G', 'holder', 'Personal account', '!', '!', 0, now(), NULL, NULL),
+(1, 2, 'A', 'holder', 'System Account to pay system needs', '!', '!', 0, now(), NULL, NULL);
 
 --
 -- Volcado de datos para la tabla `rbu_notification`
@@ -595,7 +754,10 @@ INSERT INTO `rbu_notification_configuration` (`entity_id`, `notification_id`, `m
 (1, 12, 'instantly', 'active', 'active'),
 (1, 13, 'instantly', 'active', 'active'),
 (1, 15, 'none', 'active', 'active'),
-(1, 16, 'none', 'active', 'active');
+(1, 16, 'none', 'active', 'active'),
+(1, 17, 'instantly', 'active', 'active');
+
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
