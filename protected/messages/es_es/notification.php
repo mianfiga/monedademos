@@ -43,6 +43,8 @@ return array(
     '[DEMOS] Password recovery' => '[DEMOS] Recuperación de contraseña',
     'Password recovery' =>'Recuperación de contraseña',
     'Click in the following link to set a new password'=>'Haga clic en el siguiente link para establecer una nueva contraseña',
+    
+    'Welcome to Demos, this is your first salary' => 'Bienvenid@ a Demos, este es tu primer sueldo',
 
 );
 ?>

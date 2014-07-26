@@ -126,6 +126,9 @@ class SiteController extends Controller {
                 $model->username = $modelRegister->username;
                 $model->password = $modelRegister->plain_password;
                 $model->validate() && $model->login();
+                
+                ActivityLog::add(Entity::get($modelRegister)->id, ActivityLog::SIGNUP);
+                
                 Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(Yii::app()->user->returnUrl);
             }

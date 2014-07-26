@@ -173,6 +173,14 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                 <?php echo $form->textField($model, 'zip', array('size' => 16, 'maxlength' => 16)); ?>
                 <?php echo $form->error($model, 'zip'); ?>
             </div>
+            <div class="small-3 large-3 columns form_row">
+                <?php echo $form->labelEx($model, 'country'); ?>
+                <?php echo $form->dropDownList($model, 'country', Site::countryList()); ?>
+                <?php echo $form->error($model, 'country'); ?>
+            </div>
+            <div class="hide-for-small large-5 columns form_row">
+                
+            </div>
         </div>
     <?php } ?>
 

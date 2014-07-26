@@ -217,34 +217,43 @@ class Transaction extends TransactionBase {
                 $deposit = Account::model()->findByPk($this->deposit_account);
 
                 $this->charge_errors = 0;
-                if ($charge === null)
+                if ($charge === null) {
                     $this->charge_errors += Account::ERROR_WRONG;
-                if ($charge->blocked !== null)
+                }
+                if ($charge->blocked !== null) {
                     $this->charge_errors += Account::ERROR_BLOCKED;
-                if ($charge->deleted !== null)
+                }
+                if ($charge->deleted !== null) {
                     $this->charge_errors += Account::ERROR_DELETED;
-                if ($charge->id != Account::FUND_ACCOUNT && $charge->credit < $this->amount)
+                }
+                if ($charge->id != Account::FUND_ACCOUNT && $charge->credit < $this->amount) {
                     $this->charge_errors += Account::ERROR_NOFUNDS;
+                }
 
                 $this->deposit_errors = 0;
-                if ($deposit === null)
+                if ($deposit === null) {
                     $this->deposit_errors += Account::ERROR_WRONG;
-                if ($deposit->blocked !== null)
+                }
+                if ($deposit->blocked !== null) {
                     $this->deposit_errors += Account::ERROR_BLOCKED;
-                if ($deposit->deleted !== null)
+                }
+                if ($deposit->deleted !== null) {
                     $this->deposit_errors += Account::ERROR_DELETED;
+                }
 
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
-                    if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
+                    if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
                         $charge->spended += $this->amount;
+                        $charge->total_spended += $this->amount;
                     }
 
                     $charge->credit -= $this->amount;
                     $charge->save();
 
                     $deposit = Account::model()->findByPk($this->deposit_account);
-                    if ($this->class != self::CLASS_SALARY && $this->class != self::CLASS_TAX && $this->class != self::CLASS_MOVEMENT && $this->class != self::CLASS_SYSTEM) {
+                    if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
                         $deposit->earned += $this->amount;
+                        $deposit->total_earned += $this->amount;
                         $rule = Rule::getCurrentRule();
                         if ($deposit->earned >= $rule->min_salary) {
                             $deposit->balance = 0;
@@ -281,34 +290,42 @@ class Transaction extends TransactionBase {
             '{deposit_user_name}' => $this->depositEntity->name,
             '{subject}' => $this->subject);
 
-        if ($this->class == Transaction::CLASS_TRANSFER || $this->class == Transaction::CLASS_CHARGE) {
-            $entity_id = Yii::app()->user->getId();
-            $this->chargeEntity->getObject()->saveAttributes(array('last_action' => date('YmdHis')));
-            $this->depositEntity->getObject()->saveAttributes(array('last_action' => date('YmdHis')));
-            $this->chargeAccount->saveAttributes(array('last_action' => date('YmdHis')));
-            $this->depositAccount->saveAttributes(array('last_action' => date('YmdHis')));
+        switch ($this->class) {
+            case Transaction::CLASS_TRANSFER:
+            case Transaction::CLASS_CHARGE:
+                $entity_id = Yii::app()->user->getId();
+                $this->chargeEntity->getObject()->saveAttributes(array('last_action' => date('YmdHis')));
+                $this->depositEntity->getObject()->saveAttributes(array('last_action' => date('YmdHis')));
+                $this->chargeAccount->saveAttributes(array('last_action' => date('YmdHis')));
+                $this->depositAccount->saveAttributes(array('last_action' => date('YmdHis')));
 
-            if ($entity_id == $this->charge_entity) {
-                Notification::addNotification(Notification::PAYMENT, $this->deposit_entity, Sid::getSID($this), $notif_data);
-                Notification::addNotification(Notification::SELF_CHARGE, $this->charge_entity, Sid::getSID($this), $notif_data);
-            } else {
-                Notification::addNotification(Notification::SELF_PAYMENT, $this->deposit_entity, Sid::getSID($this), $notif_data);
-                Notification::addNotification(Notification::CHARGE, $this->charge_entity, Sid::getSID($this), $notif_data);
-            }
-        }
+                if ($entity_id == $this->charge_entity) {
+                    Notification::addNotification(Notification::PAYMENT, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                    Notification::addNotification(Notification::SELF_CHARGE, $this->charge_entity, Sid::getSID($this), $notif_data);
+                } else {
+                    Notification::addNotification(Notification::SELF_PAYMENT, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                    Notification::addNotification(Notification::CHARGE, $this->charge_entity, Sid::getSID($this), $notif_data);
+                }
 
-        if ($this->class == Transaction::CLASS_SALARY && $this->amount == 0) {
-            Notification::addNotification(Notification::RECIPROCITY_LACK, $this->deposit_entity, Sid::getSID($this), $notif_data);
-        } else if ($this->class == Transaction::CLASS_SALARY) {
-            Notification::addNotification(Notification::SALARY, $this->deposit_entity, Sid::getSID($this), $notif_data);
-        }
-        if ($this->class == Transaction::CLASS_TAX) {
-            Notification::addNotification(Notification::TAX, $this->charge_entity, Sid::getSID($this), $notif_data);
-        }
+                break;
+            case Transaction::CLASS_SALARY:
 
-        if ($this->class == Transaction::CLASS_SYSTEM) {
-            Notification::addNotification(Notification::SYSTEM, $this->deposit_entity, Sid::getSID($this), $notif_data);
-            Notification::addNotification(Notification::SYSTEM, $this->charge_entity, Sid::getSID($this), $notif_data);
+                if ($this->amount == 0) {
+                    Notification::addNotification(Notification::RECIPROCITY_LACK, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                } else if ($this->depositAccount->firstSalary->id == $this->id) {
+                    Notification::addNotification(Notification::FIRST_SALARY, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                } else if ($this->depositAccount->total_earned == 0) {
+                    Notification::addNotification(Notification::NEVER_SELL, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                } else {
+                    Notification::addNotification(Notification::SALARY, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                }
+
+                break;
+
+            case Transaction::CLASS_SYSTEM:
+                Notification::addNotification(Notification::SYSTEM, $this->deposit_entity, Sid::getSID($this), $notif_data);
+                Notification::addNotification(Notification::SYSTEM, $this->charge_entity, Sid::getSID($this), $notif_data);
+                break;
         }
 
         if (isset($entity_id)) {
@@ -395,8 +412,9 @@ class Transaction extends TransactionBase {
     }
 
     public function getDepositAccountNumber() {
-        if ($this->deposit_account_number != null)
+        if ($this->deposit_account_number != null) {
             return $this->deposit_account_number;
+        }
         return Authorization::formAccountNumber($this->deposit_entity, $this->deposit_account);
     }
 

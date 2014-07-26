@@ -2,7 +2,7 @@
 <div class="row">
     <div class="small-12 columns" >
         <div id="summary">
-            Demos is a social currency made as an alternative to official currencies that runs at <?php echo CHtml::link('monedademos.es', array('/site/index')); ?>.
+            Demos es una moneda social alternativa al euro que funciona a través de <?php echo CHtml::link('monedademos.es', array('/site/index')); ?>.
         </div>
     </div>
 </div>
@@ -14,12 +14,12 @@
     <div class="small-12 large-6 columns">
         <div class="row">
             <div class="small-12 columns">
-                <h2>Demos in 3 steps:</h2>
+                <h2>Demos 3 pasos:</h2>
             </div>
             <div class="small-12 columns">
-                <div class="site_number_txt"><span class="site_number">1</span> <strong>Get the salary</strong>. Automatically you receive a monthly salary in Demos with a compensation or penalty depending on your contribution to other users.</div>
-                <div class="site_number_txt"><span class="site_number">2</span> <strong>Trade</strong>. Buy and sell with other people throught transfers made on the web.</div>
-                <div class="site_number_txt"><span class="site_number">3</span> <strong>Collaborate</strong>. Before you receive a new salary, a percentage of taxes is charge to the amount available in your account.</div>
+                <div class="site_number_txt"><span class="site_number">1</span> <strong>Cobras</strong>. Recibes automáticamente un sueldo mensual en Demos con una compensación o penalización según tus aportaciones a otros usuarios.</div>
+                <div class="site_number_txt"><span class="site_number">2</span> <strong>Comercias</strong>. Compras y vendes con otras personas a través de transferencias realizadas en la web.</div>
+                <div class="site_number_txt"><span class="site_number">3</span> <strong>Cooperas</strong>. Antes de recibir tu nuevo sueldo, se cobra automáticamente un porcentaje de impuesto sobre tu saldo.</div>
             </div>
         </div>
         <div class="row">
