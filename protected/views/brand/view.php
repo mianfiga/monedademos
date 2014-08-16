@@ -15,6 +15,8 @@ $this->breadcrumbs = array(
   array('label' => 'Delete Brand', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
   array('label' => 'Manage Brand', 'url' => array('admin')),
   ); */
+
+$is_admin = isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged;
 ?>
 <div class="row">
     <div class="small-12 large-7 columns">
@@ -39,7 +41,7 @@ $this->breadcrumbs = array(
             </div>
             <div class="small-12 large-3 columns">
                 <?php
-                if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) {
+                if ($is_admin) {
                     echo '&nbsp;' . CHtml::link(Yii::t('market', 'Create Advertisement'), array(
                         'market/create', 'id' => Entity::get($model)->id), array('class' => "button small secondary")
                     );
@@ -47,29 +49,36 @@ $this->breadcrumbs = array(
                 ?>
             </div>
         </div>
-<?php
-echo $this->renderPartial('/market/_list', array(
-    'dataProvider' => $adsDataProvider,
-));
-?>
+        <?php
+        echo $this->renderPartial('/market/_list', array(
+            'dataProvider' => $adsDataProvider,
+        ));
+        ?>
     </div>
     <div class="small-12 large-5 columns">
-<?php if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) { ?>
+        <?php if ($is_admin) { ?>
             <br/>
             <div class="row">
                 <div class="small-12 columns">
-    <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $model->id), array('class' => "button")); ?>
+                    <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $model->id), array('class' => "button")); ?>
                 </div>
             </div>
-<?php } ?>
+        <?php } ?>
 
 
-<?php if ($model->image != '') { ?>
+        <?php if ($model->image != '') { ?>
             <img src="<?php echo Yii::app()->request->baseUrl . '/images/brands/' . $model->image ?>" alt="<?php echo CHtml::encode($model->name) ?>"/>
         <?php } ?>
+        <?php
+            echo $this->renderPartial('/link/_list', array(
+                'links' => $entity->links,
+                'edit' => $is_admin));
+        ?>
         <?php
         echo $this->renderPartial('/rate/_list', array(
             'dataProvider' => $ratesDataProvider));
         ?>
+
+
     </div>
 </div>

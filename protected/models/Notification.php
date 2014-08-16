@@ -33,6 +33,8 @@ class Notification extends NotificationBase {
     const SELF_PAYMENT = 15;
     const SELF_CHARGE = 16;
     const RECIPROCITY_LACK = 17;
+    const FIRST_SALARY = 18;
+    const NEVER_SELL = 19;
 
     /**
      * Returns the static model of the specified AR class.
@@ -157,11 +159,12 @@ class Notification extends NotificationBase {
                     ),
                 ));
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-        $headers .= "From: noreply@monedademos.es\r\n";
+        $headers_common = 'MIME-Version: 1.0' . "\r\n";
+        $headers_common .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        $headers_common .= "From: noreply@monedademos.es\r\n";
 
         foreach ($notifs as $notif) {
+            $headers = $headers_common . "List-Unsubscribe: <".Yii::app()->createAbsoluteUrl('notification/unsubscribe', array('e_id' => $notif->entity_id, 'n_id' => $notif->notification_id,'m' =>$notif->entity->getMagic())) .">";
             $configuration = NotificationConfiguration::model()->find("notification_id=$notif->notification_id AND (entity_id=$notif->entity_id OR entity_id=1) ORDER BY entity_id DESC");
 
             $udate = strtotime($notif->sent); //date_timestamp_get(DateTime::createFromFormat('Y-m-d H:i:s',$notif->sent));
@@ -170,7 +173,7 @@ class Notification extends NotificationBase {
                     || ($configuration->mailmode == NotificationConfiguration::MAILMODE_DAILY &&
                     ($udate + 86400) < time() )) {
                 Yii::app()->setLanguage($notif->entity->getCulture());
-                if (mail($notif->entity->getEmail(), $notif->subject(), CController::renderInternal(Yii::getPathOfAlias('application.views') . ($notif->notification->view != '' ? $notif->notification->view : '/notification/_mail') . '.php', array('data' => $notif), true), $headers)) {
+                if (mail($notif->entity->getEmail(), '=?UTF-8?B?'.base64_encode($notif->subject()).'?=', CController::renderInternal(Yii::getPathOfAlias('application.views') . ($notif->notification->view != '' ? $notif->notification->view : '/notification/_mail') . '.php', array('data' => $notif), true), $headers)) {
                     $notif->sent = date('YmdHis');
                 }
             }

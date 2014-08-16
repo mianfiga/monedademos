@@ -7,6 +7,7 @@
  * @property string $id
  * @property string $class
  * @property integer $object_id
+ * @property string $magic
  */
 class Entity extends EntityBase {
 
@@ -56,6 +57,7 @@ class Entity extends EntityBase {
             'marketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_joined}}(entity_id, ad_id)'),
             'marketJoined' => array(self::HAS_MANY, 'MarketJoined', 'entity_id'),
             'brands' => array(self::HAS_MANY, 'Brand', 'created_by'),
+            'links' => array(self::HAS_MANY, 'Link', 'entity_id'),
             'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(user_id, account_id)'),
             'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
             'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
@@ -89,11 +91,17 @@ class Entity extends EntityBase {
         $criteria->compare('object_id', $this->object_id);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
-    public static function get($object) {
+    public static function get($object, $with = '') {
+        if ($with != '') {
+            return self::model()->with($with)->findByAttributes(array(
+                        'class' => get_class($object),
+                        'object_id' => $object->id));
+        }
+
         return self::model()->findByAttributes(array(
                     'class' => get_class($object),
                     'object_id' => $object->id));
@@ -124,15 +132,35 @@ class Entity extends EntityBase {
         return $this->getObject()->culture;
     }
 
+    public function getMagic() {
+        if ($this->magic != null ) {
+            return $this->magic;
+        }
+        
+        $this->magic = Entity::randString(64);
+        $this->saveAttributes(array('magic' => $this->magic));
+        return $this->magic;
+    }
+
     protected function afterFind() {
         parent::afterFind();
-        if($this->rates == 0){
+        if ($this->rates == 0) {
             $this->rate = Rate::DEFAULT_VALUE;
-        }else{
+        } else {
             $this->rate = round($this->points / $this->rates);
         }
-            
-        
+    }
+
+    public static function randString($length) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        $size = strlen($chars);
+        $str = '';
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $chars[rand(0, $size - 1)];
+        }
+
+        return $str;
     }
 
 }

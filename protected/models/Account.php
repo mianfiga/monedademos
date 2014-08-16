@@ -100,6 +100,13 @@ class Account extends AccountBase {
                 'condition' => '`class` = \'' . Transaction::CLASS_SALARY . '\'',
                 'order' => 'executed_at DESC',
             ),
+            'firstSalary' => array(
+                self::HAS_ONE,
+                'Transaction',
+                'deposit_account',
+                'condition' => '`class` = \'' . Transaction::CLASS_SALARY . '\'',
+                'order' => 'executed_at ASC',
+            ),
         );
     }
 
@@ -191,9 +198,11 @@ class Account extends AccountBase {
         }
 
         // We only pay proportionaly to the current day of month
-        $nummonthdays = date('t', $date) + 0.0;
-        $monthday = date('j', $date);
-        $percent = ($nummonthdays - $monthday + 1) / $nummonthdays;
+        //$nummonthdays = date('t', $date) + 0.0;
+        //$monthday = date('j', $date);
+        //$percent = ($nummonthdays - $monthday + 1) / $nummonthdays;
+        //new desition makes this differently
+        $percent = 1.0;
 
         //Adding the salary
         $salary = $rule->salary * $percent;
@@ -212,6 +221,26 @@ class Account extends AccountBase {
             $transaction = new Transaction;
 
             $transaction->subject = "Sueldo " . Transaction::amountSystemToUser(0) . ' por falta de reciprocidad.';
+        } else if ($this->total_earned == 0) { //If have not sell anything yet, just get min salary
+            $salary = $rule->min_salary;
+
+            //we still calculate penalties in order to compensate
+            if ($amount < 0) {
+                $max_penalty = $rule->salary - $rule->min_salary;
+                $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
+            }else{
+                $penalty = 0;
+            }
+            
+            //returning array
+            $ret = array(
+                "salary" => $salary,
+                "penalty" => $penalty,
+            );
+            $transaction = new Transaction;
+
+            $transaction->subject = "Minimum salary (" . Transaction::amountSystemToUser($rule->min_salary) . ')';
+
         } else if ($amount < 0) {//If have wasted more than have earned: penalty
             $max_penalty = $rule->salary - $rule->min_salary;
             $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
