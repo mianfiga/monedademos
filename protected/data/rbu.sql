@@ -28,7 +28,7 @@ CREATE TABLE `rbu_account` (
   `deposit_transfer_count` int(10) unsigned NOT NULL DEFAULT '0',
   `charge_transfer_count` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=876 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -46,7 +46,7 @@ CREATE TABLE `rbu_activity_log` (
   `risk_estimation` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_activity_log` (`entity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18484 DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
 
 -- --------------------------------------------------------
 
@@ -91,7 +91,7 @@ CREATE TABLE `rbu_brand` (
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -106,7 +106,7 @@ CREATE TABLE `rbu_entity` (
   `points` int(11) NOT NULL DEFAULT '0',
   `rates` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=875 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -136,7 +136,7 @@ CREATE TABLE `rbu_invitation` (
   `used` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_invitation_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -162,7 +162,7 @@ CREATE TABLE `rbu_market_ad` (
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=1107 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -195,7 +195,7 @@ CREATE TABLE `rbu_notification` (
   `subject` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `view` varchar(127) COLLATE utf8_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -254,7 +254,7 @@ CREATE TABLE `rbu_pending` (
   KEY `FK_pending_deposit_account` (`deposit_account`),
   KEY `FK_pending_charge_user` (`charge_entity`),
   KEY `FK_ppending_deposit_user` (`deposit_entity`)
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -268,7 +268,7 @@ CREATE TABLE `rbu_period` (
   `movements` int(10) unsigned NOT NULL DEFAULT '0',
   `active_users` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -302,7 +302,7 @@ CREATE TABLE `rbu_record` (
   `user_count` bigint(20) unsigned NOT NULL,
   `account_count` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=412 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -334,7 +334,7 @@ CREATE TABLE `rbu_rule` (
   `multiplier` smallint(5) unsigned NOT NULL,
   `system_adapted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -357,7 +357,7 @@ CREATE TABLE `rbu_transaction` (
   KEY `FK_transaction_deposit_account` (`deposit_account`),
   KEY `FK_transaction_charge_user` (`charge_entity`),
   KEY `FK_transaction_deposit_user` (`deposit_entity`)
-) ENGINE=InnoDB AUTO_INCREMENT=14673 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -395,7 +395,7 @@ CREATE TABLE `rbu_user` (
   UNIQUE KEY `email` (`email`),
   KEY `FK_user_created_by` (`created_by`),
   KEY `FK_exemption_exemption_id` (`exemption_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=842 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- 
 -- Filtros para las tablas descargadas (dump)
@@ -558,7 +558,7 @@ INSERT INTO `rbu_notification_configuration` (`entity_id`, `notification_id`, `m
 (1, 12, 'instantly', 'active', 'active'),
 (1, 13, 'instantly', 'active', 'active'),
 (1, 15, 'none', 'active', 'active'),
-(1, 16, 'none', 'active', 'active');
+(1, 16, 'none', 'active', 'active'),
 (1, 18, 'instantly', 'active', 'active'),
 (1, 19, 'instantly', 'active', 'active');
 
