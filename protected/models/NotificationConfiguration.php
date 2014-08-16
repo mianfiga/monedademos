@@ -38,8 +38,8 @@ class NotificationConfiguration extends NotificationConfigurationBase
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('notification_id, user_id', 'required'),
-			array('notification_id, user_id', 'length', 'max'=>10),
+			array('notification_id, entity_id', 'required'),
+			array('notification_id, entity_id', 'length', 'max'=>10),
 			array('mailmode', 'length', 'max'=>9),
 			array('webmode, pushmode', 'length', 'max'=>6),
 			// The following rule is used by search().
@@ -56,7 +56,7 @@ class NotificationConfiguration extends NotificationConfigurationBase
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'notificationUsers' => array(self::HAS_MANY, 'NotificationUser', 'notification_id'),
+			'notification' => array(self::BELONGS_TO, 'Notification', 'notification_id'),
 		);
 	}
 

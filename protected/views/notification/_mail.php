@@ -15,7 +15,7 @@
   ?></p>
   <?php echo CHtml::link($data->getUrl(),$data->getUrl());?><br/><br/><br/>
   
-  Estas notificaciones están bajo pruebas, si no desea recibir notificaciones al correo electrónico, o para cualquier otra consulta puede ponerse en contacto con nosotros en contacto@monedademos.es.
+  Si no desea seguir recibiendo esta notificación al correo electrónico haga <a href="<?php echo utf8_encode (Yii::app()->createAbsoluteUrl('notification/unsubscribe', array('e_id' => $data->entity_id, 'n_id' => $data->notification_id, 'm' => $data->entity->getMagic()))) ?>">click aquí</a>, si en un futuro desea restablecerla o para cualquier otra consulta puede ponerse en contacto con nosotros en contacto@monedademos.es.
   
 <?php /*	<b><?php echo CHtml::encode($data->getAttributeLabel('subject')); ?>:</b>
 	<?php echo CHtml::encode($data->subject); ?>
