@@ -48,7 +48,7 @@ CREATE TABLE `rbu_activity_log` (
   `risk_estimation` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_activity_log` (`entity_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -110,7 +110,7 @@ CREATE TABLE `rbu_entity` (
   `island_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `island_id` (`island_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `rbu_link` (
   `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `entity_id` (`entity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
