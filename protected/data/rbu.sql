@@ -267,6 +267,10 @@ CREATE TABLE `rbu_period` (
   `added` date NOT NULL,
   `movements` int(10) unsigned NOT NULL DEFAULT '0',
   `active_users` int(10) unsigned NOT NULL DEFAULT '0',
+  `negative_accounts` int(11) NOT NULL DEFAULT '0',
+  `negative_amount` bigint(20) NOT NULL DEFAULT '0',
+  `positive_accounts` int(11) NOT NULL DEFAULT '0',
+  `positive_amount` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
@@ -301,6 +305,7 @@ CREATE TABLE `rbu_record` (
   `total_amount` bigint(20) unsigned NOT NULL,
   `user_count` bigint(20) unsigned NOT NULL,
   `account_count` int(10) unsigned NOT NULL,
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
@@ -559,6 +564,7 @@ INSERT INTO `rbu_notification_configuration` (`entity_id`, `notification_id`, `m
 (1, 13, 'instantly', 'active', 'active'),
 (1, 15, 'none', 'active', 'active'),
 (1, 16, 'none', 'active', 'active'),
+(1, 17, 'instantly', 'active', 'active'),
 (1, 18, 'instantly', 'active', 'active'),
 (1, 19, 'instantly', 'active', 'active');
 
