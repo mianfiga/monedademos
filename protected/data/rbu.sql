@@ -496,7 +496,7 @@ CREATE TABLE `rbu_user` (
   UNIQUE KEY `email` (`email`),
   KEY `FK_user_created_by` (`created_by`),
   KEY `FK_exemption_exemption_id` (`exemption_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci AUTO_INCREMENT=301 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- 
 -- Filtros para las tablas descargadas (dump)
