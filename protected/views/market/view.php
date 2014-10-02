@@ -26,10 +26,10 @@ $this->menu = array(
     <img class="mk_view_img" src="<?php echo Yii::app()->request->baseUrl . '/images/market/' . $model->image ?>" alt="<?php echo CHtml::encode($model->title) ?>"/>
 <?php } ?>
 <h4 class="subheader"><?php echo Yii::t('market', 'Summary') ?></h4>
-<p><?php echo $model->summary; ?></p>
+<p><?php echo strip_tags($model->summary,'<a>'); ?></p>
 <?php if ($model->description != '') { ?>
     <h4 class="subheader"><?php echo Yii::t('market', 'Description') ?></h4>
-    <div><?php echo nl2br($model->description); ?></div>
+    <div><?php echo nl2br(strip_tags($model->description,'<a><img><table>')); ?></div>
 <?php } ?>
 <br/>
 <div class="mk_bottom_bar">
@@ -53,4 +53,3 @@ $this->menu = array(
         </div>
 <?php } ?>
 </div>
-
