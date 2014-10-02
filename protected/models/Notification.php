@@ -101,8 +101,8 @@ class Notification extends NotificationBase {
         $criteria->compare('view', $this->view, true);
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
     public static function addNotification($notification_id, $entity_id, $SID, $data) {
@@ -157,23 +157,22 @@ class Notification extends NotificationBase {
                         'entity' => array('together' => true),
 //                                  'configuration' => array('together' => true),
                     ),
-                ));
+        ));
 
         $headers_common = 'MIME-Version: 1.0' . "\r\n";
         $headers_common .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-        $headers_common .= "From: noreply@monedademos.es\r\n";
+        //$headers_common .= "From: noreply@monedademos.es\r\n";
 
         foreach ($notifs as $notif) {
-            $headers = $headers_common . "List-Unsubscribe: <".Yii::app()->createAbsoluteUrl('notification/unsubscribe', array('e_id' => $notif->entity_id, 'n_id' => $notif->notification_id,'m' =>$notif->entity->getMagic())) .">";
+            $headers = $headers_common . "From: noreply+" . $notif->notification_id . "@monedademos.es\r\nList-Unsubscribe: <" . Yii::app()->createAbsoluteUrl('notification/unsubscribe', array('e_id' => $notif->entity_id, 'n_id' => $notif->notification_id, 'm' => $notif->entity->getMagic())) . ">";
             $configuration = NotificationConfiguration::model()->find("notification_id=$notif->notification_id AND (entity_id=$notif->entity_id OR entity_id=1) ORDER BY entity_id DESC");
 
             $udate = strtotime($notif->sent); //date_timestamp_get(DateTime::createFromFormat('Y-m-d H:i:s',$notif->sent));
 
-            if ($configuration->mailmode == NotificationConfiguration::MAILMODE_INSTANTLY
-                    || ($configuration->mailmode == NotificationConfiguration::MAILMODE_DAILY &&
+            if ($configuration->mailmode == NotificationConfiguration::MAILMODE_INSTANTLY || ($configuration->mailmode == NotificationConfiguration::MAILMODE_DAILY &&
                     ($udate + 86400) < time() )) {
                 Yii::app()->setLanguage($notif->entity->getCulture());
-                if (mail($notif->entity->getEmail(), '=?UTF-8?B?'.base64_encode($notif->subject()).'?=', CController::renderInternal(Yii::getPathOfAlias('application.views') . ($notif->notification->view != '' ? $notif->notification->view : '/notification/_mail') . '.php', array('data' => $notif), true), $headers)) {
+                if (mail($notif->entity->getEmail(), '=?UTF-8?B?' . base64_encode($notif->subject()) . '?=', CController::renderInternal(Yii::getPathOfAlias('application.views') . ($notif->notification->view != '' ? $notif->notification->view : '/notification/_mail') . '.php', array('data' => $notif), true), $headers)) {
                     $notif->sent = date('YmdHis');
                 }
             }

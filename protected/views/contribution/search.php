@@ -55,12 +55,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
 //		'identification',
         array(
             'name' => 'contribution_title',
-            'value' => 'substr($data->contribution_title,0,150) . (strlen($data->contribution_title)>150?\'...\':\'\')',
+            'value' => 'substr(strip_tags($data->contribution_title,\'<a><img><br>\'),0,150) . (strlen($data->contribution_title)>150?\'...\':\'\')',
         ),
         array(
             'name' => 'contribution_text',
             'type' => 'html',
-            'value' => 'substr($data->contribution_text,0,300) . (strlen($data->contribution_text)>300?\'... <a href="\'. Yii::app()->createUrl("contribution/view", array("id"=>$data->id)) . \'">'. $viewmore . '</a>\':\'\')',
+            'value' => 'substr(strip_tags($data->contribution_text,\'<a><img><br>\'),0,300) . (strlen($data->contribution_text)>300?\'... <a href="\'. Yii::app()->createUrl("contribution/view", array("id"=>$data->id)) . \'">'. $viewmore . '</a>\':\'\')',
         ),
 //		'email',
 //		'contact',
