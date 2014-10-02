@@ -41,7 +41,7 @@ $is_admin = isset(Yii::app()->user->logged) && $model->created_by == Yii::app()-
             </div>
             <div class="small-12 large-3 columns">
                 <?php
-                if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) {
+                if ($is_admin) {
                     echo '&nbsp;' . CHtml::link(Yii::t('market', 'Create Advertisement'), array(
                         'market/create', 'id' => Entity::get($model)->id), array('class' => "button small secondary")
                     );
