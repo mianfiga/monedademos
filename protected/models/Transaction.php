@@ -265,6 +265,12 @@ class Transaction extends TransactionBase {
                     //registramos la transacción
                     return true;
                 } else {
+                    if ($this->charge_errors != 0){
+                        ActivityLog::add($this->charge_entity, ActivityLog::E_TRANSACTION, 'ER-'. $this->charge_errors. '-'. $this->charge_account);
+                    }
+                    if ($this->deposit_errors != 0){
+                        ActivityLog::add($this->deposit_entity, ActivityLog::E_TRANSACTION, 'ER-'. $this->deposit_errors. '-'.$this->deposit_account);
+                    }
 
                     return false;
                 }
