@@ -71,13 +71,10 @@ class Link extends LinkBase
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'entity_id' => 'Entity',
-			'url' => 'Url',
-			'text' => 'Text',
-			'logo' => 'Logo',
-			'public' => 'Public',
-			'added' => 'Added',
+			'url' => Yii::t('app','Url'),
+			'text' => Yii::t('app','Text'),
+			'logo' => Yii::t('app','Logo'),
+			'public' => Yii::t('app','Public'),
 		);
 	}
 

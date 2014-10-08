@@ -138,8 +138,8 @@ class MarketAd extends MarketAdBase {
 
 
         return new CActiveDataProvider($this, array(
-                    'criteria' => $criteria,
-                ));
+            'criteria' => $criteria,
+        ));
     }
 
     protected function beforeSave() {
@@ -183,8 +183,7 @@ class MarketAd extends MarketAdBase {
                 $this->price = Transaction::amountUserToSystem($this->form_price);
             }
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -211,22 +210,30 @@ class MarketAd extends MarketAdBase {
     }
 
     static public function getAds($mode = null, $entity_id = null) {
+        $with = array();
+        if ($entity_id) {
+            $with['joined'] = array(
+                'together' => true,
+                'joinType' => 'LEFT outer JOIN',
+                ($mode == 2 ? 'condition' : 'on') => 'joined.entity_id=' . $entity_id,
+            );
+        }
+
+        $with['createdBy'] = array(
+            'with' => 'user',
+            'joinType' => 'LEFT outer JOIN',
+            'condition' => 'user.blocked is null ' . ($entity_id ? 'OR createdBy.id =' . $entity_id : ''),
+        );
+
         return new CActiveDataProvider('MarketAd', array(
-                    'criteria' => array(
-                        'condition' => 'visible=1' . ($mode == 1 ? ' AND created_by=\'' . $entity_id . '\'' : ''),
-                        'with' => ($entity_id == null ? array() : array(
-                            'joined' => array(
-                                'together' => true,
-                                'joinType' => 'LEFT outer JOIN',
-                                ($mode == 2 ? 'condition' : 'on') => 'joined.entity_id=' . $entity_id,
-                            )
-                                )),
-                    ),
-                    'sort' => array(
-                        'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
-                    ),
-                ));
+            'criteria' => array(
+                'condition' => 'visible=1' . ($mode == 1 ? ' AND created_by=\'' . $entity_id . '\'' : ''),
+                'with' => $with,
+            ),
+            'sort' => array(
+                'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
+            ),
+        ));
     }
 
 }
-

@@ -82,8 +82,8 @@ class MarketController extends Controller {
             $criteria->compare('marketAds.id', $id);
 
             $dataProvider = new CActiveDataProvider('Entity', array(
-                        'criteria' => $criteria,
-                    ));
+                'criteria' => $criteria,
+            ));
 
             Notification::shown($model->created_by, Sid::getSID($model));
             $this->render('panel', array(
@@ -150,6 +150,8 @@ class MarketController extends Controller {
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
+        $entity = Entity::model()->findByPk(Yii::app()->user->logged);
+        $user = $entity->getObject();
         if ($id != null) {
             if (isset(Yii::app()->user->roles[$id])) {
                 $model->created_by = $id;
@@ -162,6 +164,9 @@ class MarketController extends Controller {
             $model->attributes = $_POST['MarketAd'];
 
             if ($model->save()) {
+                if ($user->blocked) {
+                    ActivityLog::add(Yii::app()->user->logged, ActivityLog::BLOCKED_MARKET_AD, Sid::getSID($model));
+                }
                 $this->redirect(array('view', 'id' => $model->id));
             }
         }

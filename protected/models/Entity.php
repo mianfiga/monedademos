@@ -58,9 +58,10 @@ class Entity extends EntityBase {
             'marketJoined' => array(self::HAS_MANY, 'MarketJoined', 'entity_id'),
             'brands' => array(self::HAS_MANY, 'Brand', 'created_by'),
             'links' => array(self::HAS_MANY, 'Link', 'entity_id'),
-            'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(user_id, account_id)'),
+            'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(entity_id, account_id)'),
             'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
             'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
+            'user' => array(self::BELONGS_TO, 'User', 'object_id')
         );
     }
 
