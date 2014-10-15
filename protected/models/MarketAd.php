@@ -209,8 +209,12 @@ class MarketAd extends MarketAdBase {
         $this->expired = $this->expiration < date('Y-m-d');
     }
 
-    static public function getAds($mode = null, $entity_id = null) {
+    static public function getAds($mode = null, $entity_id = null, $limit=null) {
+
         $with = array();
+		
+
+		
         if ($entity_id) {
             $with['joined'] = array(
                 'together' => true,
@@ -224,12 +228,18 @@ class MarketAd extends MarketAdBase {
             'joinType' => 'LEFT outer JOIN',
             'condition' => 'user.blocked is null ' . ($entity_id ? 'OR createdBy.id =' . $entity_id : ''),
         );
+		
+		$criteria = array(
+            'condition' => 'visible=1' . ($mode == 1 ? ' AND t.created_by=\'' . $entity_id . '\'' : '') . ($mode == 3 ? ' AND expiration >= curdate()':''),
+            'with' => $with,
+        );
+		
+		if($limit){
+			$criteria['limit']=$limit;
+		}
 
         return new CActiveDataProvider('MarketAd', array(
-            'criteria' => array(
-                'condition' => 'visible=1' . ($mode == 1 ? ' AND created_by=\'' . $entity_id . '\'' : ''),
-                'with' => $with,
-            ),
+            'criteria' => $criteria,
             'sort' => array(
                 'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
             ),

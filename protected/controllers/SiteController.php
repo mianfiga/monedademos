@@ -49,15 +49,23 @@ class SiteController extends Controller {
     public function actionIndex() {
         Site::mobileCheck();
         Site::languageCheck();
-
-        $dataProviderMarketAd = new CActiveDataProvider('MarketAd', array(
+		
+		$entity_id = null;
+		if(Yii::app()->user){
+			$entity_id = Yii::app()->user->getId();
+		}
+        $dataProviderMarketAd = MarketAd::getAds(3, $entity_id, 10);
+		
+		/*new CActiveDataProvider('MarketAd', array(
             'criteria' => array(
                 'condition' => 'visible=1 AND expiration >= curdate()',
                 'order' => ' t.updated DESC',
                 'limit' => 10,
             ),
             'pagination' => false,
-        ));
+        ));*/
+		
+		$dataProviderMarketAd->setPagination(false);
 
         if (Yii::app()->session['mobile'])
             Yii::app()->setTheme('mobile');
@@ -126,9 +134,6 @@ class SiteController extends Controller {
                 $model->username = $modelRegister->username;
                 $model->password = $modelRegister->plain_password;
                 $model->validate() && $model->login();
-                
-                ActivityLog::add(Entity::get($modelRegister)->id, ActivityLog::SIGNUP);
-                
                 Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(Yii::app()->user->returnUrl);
             }
