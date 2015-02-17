@@ -34,7 +34,7 @@ class UserController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('captcha', 'invited', 'create', 'recovery', 'recoveryRequest'),
+                'actions' => array('captcha', 'invited'/*,'create'*/, 'recovery', 'recoveryRequest'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -108,7 +108,16 @@ class UserController extends Controller {
             if ($model->save()) {
                 $invitation->used = date('YmdHis');
                 $invitation->save();
-                $this->redirect(array('view', 'id' => $model->id));
+                
+                $modelLogIn = new LoginForm;
+                $modelLogIn->username = $model->username;
+                $modelLogIn->password = $model->plain_password;
+                $modelLogIn->validate() && $modelLogIn->login();
+                
+                ActivityLog::add(Entity::get($model)->id, ActivityLog::SIGNUP);
+                
+                Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
+                $this->redirect(array(Yii::app()->defaultController));
             }
         }
 

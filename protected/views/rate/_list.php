@@ -5,7 +5,7 @@
 ?>
 <br/>
 <div class="row">
-    <div class="small-12 <?php echo (isset($entity) ? 'large-6' : '') ?> columns"><h3><?php echo Yii::t('app', 'Rates & Comments') ?></h3></div>
+    <div class="small-12 <?php echo (isset($entity) ? 'large-6' : '') ?> columns"><h3 class="subheader"><?php echo Yii::t('app', 'Rates & Comments') ?></h3></div>
     <?php if (isset($entity)) { ?>
         <div class="small-12 large-6 columns">
             <?php

@@ -110,13 +110,8 @@ class Period extends PeriodBase {
         $oldPeriodDate = self::getLastDate();
 
 
-        $period->active_users = Entity::model()->with(
-                        'chargeTransactions', 'depositTransactions')->count(
-                't.class=\'User\'AND
-                   (   (chargeTransactions.executed_at > \'' . $oldPeriodDate . '\' AND 
-                        chargeTransactions.class in (\'' . Transaction::CLASS_TRANSFER . '\', \'' . Transaction::CLASS_CHARGE . '\'))
-                    OR (depositTransactions.executed_at > \'' . $oldPeriodDate . '\' AND
-                        depositTransactions.class in (\'' . Transaction::CLASS_TRANSFER . '\', \'' . Transaction::CLASS_CHARGE . '\')))');
+        $period->active_users = Entity::model()->count(
+                't.class=\'User\'AND last_transaction >  \''.$oldPeriodDate .'\'');
 
         $sum = Account::model()->findBySql('select sum(`earned`) as `earned` from ' . Account::model()->tableSchema->name, array());
         $period->movements = $sum->earned;

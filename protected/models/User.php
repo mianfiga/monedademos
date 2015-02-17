@@ -30,6 +30,8 @@
  */
 class User extends UserBase {
 
+    const ABILITY_INVITE = 'invite';
+
     public $plain_password;
     public $password2;
     public $identification_method;
@@ -85,7 +87,7 @@ class User extends UserBase {
     /**
      * @return array relational rules.
      */
-    public function relations () {
+    public function relations() {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
 
@@ -294,8 +296,8 @@ class User extends UserBase {
     }
 
     static public function recoveryCheck($id, $magic) {
-        if ($model = self::model()->findByPk($id) ) {
-            return $model->magic == $magic;//falta añadir limite de fecha
+        if ($model = self::model()->findByPk($id)) {
+            return $model->magic == $magic; //falta añadir limite de fecha
         }
     }
 

@@ -10,6 +10,13 @@ $this->menu = array(
 //	array('label'=>'Delete User', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 //	array('label'=>'Manage User', 'url'=>array('admin')),
 );
+if (strpos($model->abilities, User::ABILITY_INVITE) !== false) {
+    $this->menu[] = array(
+        'label' => Yii::t('app', 'Invite friend'), 'url' => array('invitation/index')
+    );
+}
+
+//print_r($model);
 ?>
 
 <h1>User <?php echo $model->username; ?></h1>

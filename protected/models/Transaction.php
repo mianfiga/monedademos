@@ -28,6 +28,8 @@ class Transaction extends TransactionBase {
     const CLASS_CHARGE = 'charge'; //4;
     const CLASS_MOVEMENT = 'movement'; //5;
     const CLASS_SYSTEM = 'system';
+    const CLASS_REFUND = 'refund';
+    const CLASS_SYSTEM_REFUND = 'system refund';
     const USER_PRECISION = 2;
     const SYSTEM_PRECISION = 5;
 
@@ -245,6 +247,9 @@ class Transaction extends TransactionBase {
                     if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
                         $charge->spended += $this->amount;
                         $charge->total_spended += $this->amount;
+                    } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
+                        $charge->earned -= $this->amount;
+                        $charge->total_earned -= $this->amount;
                     }
 
                     $charge->credit -= $this->amount;
@@ -258,6 +263,9 @@ class Transaction extends TransactionBase {
                         if ($deposit->earned >= $rule->min_salary) {
                             $deposit->balance = 0;
                         }
+                    } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
+                        $deposit->spended -= $this->amount;
+                        $deposit->total_spended -= $this->amount;
                     }
                     $deposit->credit += $this->amount;
                     $deposit->save();
@@ -265,11 +273,11 @@ class Transaction extends TransactionBase {
                     //registramos la transacción
                     return true;
                 } else {
-                    if ($this->charge_errors != 0){
-                        ActivityLog::add($this->charge_entity, ActivityLog::E_TRANSACTION, 'ER-'. $this->charge_errors. '-'. $this->charge_account);
+                    if ($this->charge_errors != 0) {
+                        ActivityLog::add($this->charge_entity, ActivityLog::E_TRANSACTION, 'ER-' . $this->charge_errors . '-' . $this->charge_account);
                     }
-                    if ($this->deposit_errors != 0){
-                        ActivityLog::add($this->deposit_entity, ActivityLog::E_TRANSACTION, 'ER-'. $this->deposit_errors. '-'.$this->deposit_account);
+                    if ($this->deposit_errors != 0) {
+                        ActivityLog::add($this->deposit_entity, ActivityLog::E_TRANSACTION, 'ER-' . $this->deposit_errors . '-' . $this->deposit_account);
                     }
 
                     return false;

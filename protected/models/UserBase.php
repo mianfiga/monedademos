@@ -18,6 +18,7 @@
  * @property string $contact
  * @property string $zip
  * @property string $culture
+ * @property string $abilities
  * @property string $exemption_id
  * @property string $created
  * @property string $created_by
