@@ -50,7 +50,9 @@ class MarketController extends Controller {
      */
     public function actionView($id) {
         $entity_id = Yii::app()->user->getId();
-        $model = MarketAd::model()->with(array('entities' => array('on' => ($entity_id ? 'entities.id=' . $entity_id : null)),
+        $model = MarketAd::model()->with(
+                array(
+                    'entities' => array('on' => ($entity_id ? 'entities.id=' . $entity_id : null)),
                     'joined' => array('on' => ($entity_id ? 'joined.entity_id=' . $entity_id : null))
                 ))->findByPk($id);
 
@@ -299,17 +301,16 @@ class MarketController extends Controller {
     /**
      * Lists all models.
      */
-    public function actionList($mode = null) {
-        $this->actionIndex($mode);
+    public function actionList($mode = null, $tribe_id=null) {
+        $this->actionIndex($mode,$tribe_id);
     }
 
     /**
      * Lists all models.
      */
-    public function actionIndex($mode = null) {
+    public function actionIndex($mode = null, $tribe_id=null) {
         $entity_id = Yii::app()->user->getId();
-
-        $dataProvider = MarketAd::getAds($mode, $entity_id);
+        $dataProvider = MarketAd::getAds($mode, $entity_id,$tribe_id);
 
 
         $model = new MarketAd('search');

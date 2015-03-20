@@ -54,7 +54,7 @@ class SiteController extends Controller {
 		if(Yii::app()->user){
 			$entity_id = Yii::app()->user->getId();
 		}
-        $dataProviderMarketAd = MarketAd::getAds(3, $entity_id, 10);
+        $dataProviderMarketAd = MarketAd::getAds(3, $entity_id, null,10);
 		
 		/*new CActiveDataProvider('MarketAd', array(
             'criteria' => array(

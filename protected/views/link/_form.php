@@ -16,22 +16,24 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'entity_id'); ?>
-		<?php echo $form->textField($model,'entity_id',array('size'=>10,'maxlength'=>10)); ?>
-		<?php echo $form->error($model,'entity_id'); ?>
+        <div class="small-4 columns">
+            <div class="form_row">
+                <?php echo $form->labelEx($model,'url'); ?>
+                <?php echo $form->textField($model,'url',array('size'=>10)); ?>
+                <?php echo $form->error($model,'url'); ?>
+            </div>
+        </div>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'url'); ?>
-		<?php echo $form->textArea($model,'url',array('rows'=>6, 'cols'=>50)); ?>
-		<?php echo $form->error($model,'url'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'text'); ?>
-		<?php echo $form->textField($model,'text',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'text'); ?>
-	</div>
+    <div class="row">
+        <div class="small-12 columns">
+        	<div class="form_row">
+                <?php echo $form->labelEx($model,'text'); ?>
+                <?php echo $form->textField($model,'text',array('size'=>60,'maxlength'=>255)); ?>
+                <?php echo $form->error($model,'text'); ?>
+            </div>
+        </div>
+    </div>
+        
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'logo'); ?>
@@ -43,12 +45,6 @@
 		<?php echo $form->labelEx($model,'public'); ?>
 		<?php echo $form->textField($model,'public'); ?>
 		<?php echo $form->error($model,'public'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'added'); ?>
-		<?php echo $form->textField($model,'added'); ?>
-		<?php echo $form->error($model,'added'); ?>
 	</div>
 
 	<div class="row buttons">

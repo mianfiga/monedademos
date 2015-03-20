@@ -167,10 +167,11 @@ class RbuCommand extends CConsoleCommand {
     //ChargeTaxes and paySalaries
     public function actionAddPeriod($date = null) {
         $this->actionUpdateLastTransaction();
-        
+
         if ($date == null) {
             $date = strtotime('first day of this month');
         }
+        $this->actionUpdateLastTransaction();
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $rule = Rule::getCurrentRule();
@@ -184,12 +185,12 @@ class RbuCommand extends CConsoleCommand {
             $transaction->rollBack();
         }
     }
-    
-    public function actionUpdateLastTransaction(){
+
+    public function actionUpdateLastTransaction() {
         $date = Period::getLastDate();
-        $entities = Entity::model()->findAll();//->with('lastChargeTransaction','lastDepositTransaction')->findAll('lastChargeTransaction.executed_at >= \''.$date.'\' OR lastDepositTransaction.executed_at >= \''.$date.'\'')-;
-        foreach($entities as $entity){
-            $entity->saveAttributes(array('last_transaction' => max($entity->lastChargeTransaction->executed_at,$entity->lastDepositTransaction->executed_at)));
+        $entities = Entity::model()->findAll(); //->with('lastChargeTransaction','lastDepositTransaction')->findAll('lastChargeTransaction.executed_at >= \''.$date.'\' OR lastDepositTransaction.executed_at >= \''.$date.'\'')-;
+        foreach ($entities as $entity) {
+            $entity->saveAttributes(array('last_transaction' => max($entity->lastChargeTransaction->executed_at, $entity->lastDepositTransaction->executed_at)));
         }
     }
 
@@ -273,6 +274,18 @@ class RbuCommand extends CConsoleCommand {
         //check if users have had no interaction, and notify them.
         if ($date == NULL) {
             $date = date('Y-m-d');
+        }
+    }
+
+    public function actionMoveMarketAdsToCreatorsIsland() {
+        $ads = MarketAd::model()->findAll();
+        foreach ($ads as $ad) {
+            if (count($ad->tribes) == 0 && $ad->createdBy->tribe_id != null) {
+                $relation_tribe = new MarketAdTribe;
+                $relation_tribe->ad_id = $ad->id;
+                $relation_tribe->tribe_id = $ad->createdBy->tribe_id;
+                $relation_tribe->save();
+            }
         }
     }
 

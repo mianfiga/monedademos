@@ -93,6 +93,7 @@ class MarketAd extends MarketAdBase {
             'createdBy' => array(self::BELONGS_TO, 'Entity', 'created_by'),
             'joined' => array(self::HAS_MANY, 'MarketJoined', 'ad_id'/* ,'with'=>'users' */),
             'entities' => array(self::MANY_MANY, 'Entity', '{{market_joined}}(ad_id, entity_id)'),
+            'tribes' => array(self::MANY_MANY, 'Tribe', '{{market_ad_tribe}}(ad_id, tribe_id)'),
         );
     }
 
@@ -201,6 +202,12 @@ class MarketAd extends MarketAdBase {
             $this->createdBy->getObject()->saveAttributes(array(
                 'updated' => Common::datetime()));
         }
+        if (count($this->tribes) == 0 && $this->createdBy->tribe_id != null) {
+            $relation_tribe = new MarketAdTribe;
+            $relation_tribe->ad_id = $this->id;
+            $relation_tribe->tribe_id = $this->createdBy->tribe_id;
+            $relation_tribe->save();
+        }
     }
 
     protected function afterFind() {
@@ -209,12 +216,12 @@ class MarketAd extends MarketAdBase {
         $this->expired = $this->expiration < date('Y-m-d');
     }
 
-    static public function getAds($mode = null, $entity_id = null, $limit=null) {
+    static public function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null) {
 
         $with = array();
-		
 
-		
+
+
         if ($entity_id) {
             $with['joined'] = array(
                 'together' => true,
@@ -222,21 +229,29 @@ class MarketAd extends MarketAdBase {
                 ($mode == 2 ? 'condition' : 'on') => 'joined.entity_id=' . $entity_id,
             );
         }
+        if ($tribe_id) {
+            $with['tribes'] = array(
+                'together' => true,
+                'joinType' => 'LEFT JOIN',
+                'condition' => 'tribes.id=' . $tribe_id,
+            );
+        }
+
 
         $with['createdBy'] = array(
             'with' => 'user',
             'joinType' => 'LEFT outer JOIN',
             'condition' => 'user.blocked is null ' . ($entity_id ? 'OR createdBy.id =' . $entity_id : ''),
         );
-		
-		$criteria = array(
-            'condition' => 'visible=1' . ($mode == 1 ? ' AND t.created_by=\'' . $entity_id . '\'' : '') . ($mode == 3 ? ' AND expiration >= curdate()':''),
+
+        $criteria = array(
+            'condition' => 'visible=1' . ($mode == 1 ? ' AND t.created_by=\'' . $entity_id . '\'' : '') . ($mode == 3 ? ' AND expiration >= curdate()' : ''),
             'with' => $with,
         );
-		
-		if($limit){
-			$criteria['limit']=$limit;
-		}
+
+        if ($limit) {
+            $criteria['limit'] = $limit;
+        }
 
         return new CActiveDataProvider('MarketAd', array(
             'criteria' => $criteria,

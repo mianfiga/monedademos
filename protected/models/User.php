@@ -240,6 +240,9 @@ class User extends UserBase {
             $entity = new Entity;
             $entity->class = get_class($this);
             $entity->object_id = $this->id;
+            if ($this->created_by) {
+                $entity->tribe_id = $this->createdBy->tribe_id;
+            }
             $entity->save();
 
             $date = Common::datetime();
