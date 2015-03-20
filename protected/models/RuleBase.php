@@ -5,11 +5,15 @@
  *
  * The followings are the available columns in table '{{rule}}':
  * @property string $id
+ * @property string $tribe_id
  * @property string $added
  * @property string $salary
  * @property string $min_salary
  * @property integer $multiplier
  * @property integer $system_adapted
+ *
+ * The followings are the available model relations:
+ * @property Tribe $tribe
  */
 class RuleBase extends CActiveRecord
 {
@@ -41,11 +45,12 @@ class RuleBase extends CActiveRecord
 		return array(
 			array('salary, min_salary, multiplier', 'required'),
 			array('multiplier, system_adapted', 'numerical', 'integerOnly'=>true),
+			array('tribe_id', 'length', 'max'=>11),
 			array('salary, min_salary', 'length', 'max'=>20),
 			array('added', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, added, salary, min_salary, multiplier, system_adapted', 'safe', 'on'=>'search'),
+			array('id, tribe_id, added, salary, min_salary, multiplier, system_adapted', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,6 +62,7 @@ class RuleBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'tribe' => array(self::BELONGS_TO, 'Tribe', 'tribe_id'),
 		);
 	}
 
@@ -67,6 +73,7 @@ class RuleBase extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'tribe_id' => 'Tribe',
 			'added' => 'Added',
 			'salary' => 'Salary',
 			'min_salary' => 'Min Salary',
@@ -87,6 +94,7 @@ class RuleBase extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('tribe_id',$this->tribe_id,true);
 		$criteria->compare('added',$this->added,true);
 		$criteria->compare('salary',$this->salary,true);
 		$criteria->compare('min_salary',$this->min_salary,true);

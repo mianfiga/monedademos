@@ -9,12 +9,12 @@
  * The followings are the available model relations:
  * @property Tribe[] $tribes
  */
-class TribeGroup extends TribeGroupBase
+class TribeGroupBase extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return TribeGroup the static model class
+	 * @return TribeGroupBase the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

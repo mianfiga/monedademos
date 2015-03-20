@@ -138,7 +138,7 @@ class Account extends AccountBase {
         }
 
         $percent = $rule->getTaxProportion();
-        $dateLastPeriod = Period::getLastDate();
+        $dateLastPeriod = Period::getLastDate($rule->tribe_id);
 
         $transaction = new Transaction;
 
@@ -194,7 +194,7 @@ class Account extends AccountBase {
             $date = strtotime('today');
         }
         if ($rule === null) {
-            $rule = Rule::getCurrentRule();
+            $rule = Rule::getCurrentRule($this->holder->tribe->group_id);
         }
 
         // We only pay proportionaly to the current day of month
@@ -292,15 +292,15 @@ class Account extends AccountBase {
      * @param $date date corresponding to de salary to register.
      * @param Rule $rule rule to follow to add the salary.
      */
-    public static function paySalaries($date = null, $rule = null) {
+    public static function paySalaries(Tribe $tribe, $date = null, $rule = null) {
 
         if ($date === null)
             $date = strtotime('today');
 
         if ($rule === null)
-            $rule = Rule::getCurrentRule();
+            $rule = Rule::getCurrentRule($tribe->group_id);
 
-        $accounts = self::getUserAccounts();
+        $accounts = self::getUserAccounts($tribe->id);
 
         $positive = 0;
         $negative = 0;
@@ -336,7 +336,7 @@ class Account extends AccountBase {
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
-            if ($dateLastPeriod <= $acc->last_action //(isset($acc->lastSalary) && $acc->lastSalary->executed_at <= $acc->last_action)
+            if ($dateLastPeriod <= $acc->last_action
                     && (($acc->earned - $acc->spended - $acc->balance) < 0)) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
@@ -356,20 +356,48 @@ class Account extends AccountBase {
 
         //log penalties & compensations to check everything is shared
         //System accounts
-        $accounts = self::getSystemAccounts();
+        $accounts = self::getSystemAccounts($tribe->id);
         foreach ($accounts as $acc) {
-            $ret = $acc->addSalary($date, $rule);
+            /* $ret = */ $acc->addSalary($date, $rule);
+            $acc->saveAttributes(array(
+                'earned' => 0,
+                'spended' => 0,
+                'balance' => 0));
         }
 
-        //Reset earned and spended
-        $accounts = self::getTaxesAccounts();
+        //System accounts
+        $accounts = self::getSystemAccounts($tribe->id);
         foreach ($accounts as $acc) {
-            $amount = $acc->earned - $acc->spended - $acc->balance;
+            /* $ret = */ $acc->addSalary($date, $rule);
+            $acc->saveAttributes(array(
+                'earned' => 0,
+                'spended' => 0,
+                'balance' => 0));
+        }
+        
+        //Group accounts
+        $accounts = self::getGroupAccounts($tribe->id);
+        foreach ($accounts as $acc) {
+            $acc->saveAttributes(array(
+                'earned' => 0,
+                'spended' => 0,
+                'balance' => 0));
+        }
+
+        
+        //Reset user earned and spended
+        $accounts = self::getUserAccounts($tribe->id);
+        foreach ($accounts as $acc) {
+            $amount = $acc->earned - $acc->spended - $acc->balance * 2;
             $acc->saveAttributes(array(
                 'earned' => 0,
                 'spended' => 0,
                 'balance' => ($amount > 0 ? 0 : -$amount)));
         }
+        
+        
+        return Array('negative_accounts' => $negative_count, 'negative_amount' => $negative,
+                     'positive_accounts' => $positive_count, 'positive_amount' => $positive);
     }
 
     /**
@@ -386,12 +414,12 @@ class Account extends AccountBase {
      * Charge taxes to all accounts
      * @param Rule $rule The rule to charge taxes
      */
-    public static function chargeTaxes(Rule $rule = null) {
+    public static function chargeTaxes(Tribe $tribe, Rule $rule = null) {
         if ($rule == null) {
-            $rule = Rule::getCurrentRule();
+            $rule = Rule::getCurrentRule($tribe->group_id);
         }
 
-        $accounts = self::getTaxesAccounts();
+        $accounts = self::getTaxesAccounts($tribe->id);
 
         $amount = 0;
 
@@ -403,16 +431,24 @@ class Account extends AccountBase {
         //log the amount added to fund
     }
 
-    public static function getUserAccounts() {
-        return Account::model()->findAll('`class`=\'' . Account::CLASS_USER . '\' AND deleted is null');
+    public static function getUserAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
+        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_USER . '\' AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
     }
 
-    public static function getTaxesAccounts() {
-        return Account::model()->findAll('`class`!=\'' . Account::CLASS_FUND . '\' AND deleted is null');
+    public static function getTaxesAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
+        return Account::model()->findAll('`t`.`class`!=\'' . Account::CLASS_FUND . '\' AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
     }
 
-    public static function getSalaryAccounts() {
-        return Account::model()->findAll('( class=\'' . Account::CLASS_USER . '\' OR class=\'' . Account::CLASS_SYSTEM . '\' ) AND deleted is null');
+    public static function getSalaryAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
+        return Account::model()->findAll('( `t`.`class`=\'' . Account::CLASS_USER . '\' OR `t`.`class`=\'' . Account::CLASS_SYSTEM . '\' ) AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
+    }
+    
+    public static function getGroupAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
+        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_GROUP . ' AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
+    }
+
+    public static function getIsolatedAccounts() {
+        return Account::model()->findAll('( `t`.`class`=\'' . Account::CLASS_GROUP . '\' AND t.tribe_id is null AND t.deleted is null');
     }
 
     /**
@@ -423,7 +459,7 @@ class Account extends AccountBase {
     public static function adaptFunds(Rule $newRule, Rule $currRule = null) {
 
         if ($currRule === null) {
-            $currRule = Rule::getCurrentRule();
+            $currRule = Rule::getCurrentRule($newRule->tribe_group_id);
         }
         if ($newRule->salary == null) {
             $newRule->salary = $currRule->salary;
@@ -435,11 +471,14 @@ class Account extends AccountBase {
             $newRule->multiplier = $currRule->multiplier;
         }
 
-        $rule = Rule::getAdaptedRule();
+        $rule = Rule::getAdaptedRule($newRule->tribe_group_id);
 
-        $fund = Account::getFundAccount();
-        $fund->credit += (($newRule->salary * $newRule->multiplier) - ($rule->salary * $rule->multiplier)) * count(Account::getSalaryAccounts());
-        $fund->save();
+        $tribes = Tribe::model()->findByAttributes(array('tribe_group_id' => $newRule->tribe_group_id));
+        foreach ($tribes as $tribe) {
+            $fund = Account::getFundAccount($tribe->id);
+            $fund->credit += (($newRule->salary * $newRule->multiplier) - ($rule->salary * $rule->multiplier)) * count(Account::getSalaryAccounts());
+            $fund->save();
+        }
 
         if ($newRule->isNewRecord) {
             $newRule->system_adapted = 1;
@@ -503,12 +542,12 @@ class Account extends AccountBase {
         parent::afterSave();
     }
 
-    public static function getFundAccount() {
-        return self::model()->find('class=\'' . self::CLASS_FUND . '\' AND deleted is NULL');
+    public static function getFundAccount($tribe_id = Tribe::DEFAULT_TRIBE) {
+        return self::model()->find('t.class=\'' . self::CLASS_FUND . '\' AND t.tribe_id = \'' . $tribe_id . '\' AND t.deleted is NULL');
     }
 
-    public static function getSystemAccounts() {
-        return self::model()->findAll('class=\'' . self::CLASS_SYSTEM . '\' AND deleted is NULL');
+    public static function getSystemAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
+        return self::model()->findAll('t.class=\'' . self::CLASS_SYSTEM . '\' AND t.tribe_id = \'' . $tribe_id . '\' AND t.deleted is NULL');
     }
 
     /**

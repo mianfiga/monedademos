@@ -344,11 +344,12 @@ class MarketController extends Controller {
     public function actionRss() {
         $entity_id = Yii::app()->user->getId();
 
-        $dataProvider = MarketAd::getAds(null, $entity_id);
-
+        $dataProvider = MarketAd::getAds(3, $entity_id);
+    	$dataProvider->setPagination(false);
         $this->renderPartial('rss', array(
             'dataProvider' => $dataProvider,
         ));
+
     }
 
     /**

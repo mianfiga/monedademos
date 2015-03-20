@@ -8,11 +8,7 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Demos, moneda social',
 	'defaultController' => 'site/pre', 
-<<<<<<< HEAD:protected/config/main_example.php
-	'theme' => 'basic'),
-=======
 	'theme' => 'basic',
->>>>>>> master:protected/config/main_example.php
 	'language' => (isset($_COOKIE['language'])?$_COOKIE['language']:'en_US'),
 
 	// preloading 'log' component
@@ -29,11 +25,7 @@ return array(
 		
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-<<<<<<< HEAD:protected/config/main_example.php
-			'password'=>'contraseña',
-=======
 			'password'=>'password',
->>>>>>> master:protected/config/main_example.php
 		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),

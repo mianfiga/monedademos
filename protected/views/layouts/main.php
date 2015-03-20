@@ -159,7 +159,7 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
                         </div>
                     </div>
                 </div>        
-                Copyleft <?php echo date('Y'); ?> by monedademos.es<br/>
+                <?php echo date('Y'); ?> by monedademos.es GPL 2.0 (<a href="https://github.com/mianfiga/monedademos">sourcecode</a>)<br/>
                 <?php echo Yii::powered(); ?>
             </div><!-- footer -->
         </div>

@@ -74,7 +74,7 @@ class SiteController extends Controller {
         $this->render('index', array(
             'record' => Record::getLastRecord(),
             'rule' => Rule::getCurrentRule(),
-            'next_rule' => Rule::getDateRule(date('Y-m-d H:i:s', mktime(0, 0, 0, date("n") + 1))),
+            'next_rule' => Rule::getDateRule( date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1))),
             'dataProviderMarketAd' => $dataProviderMarketAd,
         ));
     }

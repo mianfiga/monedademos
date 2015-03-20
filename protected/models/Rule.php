@@ -15,15 +15,14 @@ class Rule extends RuleBase {
     const MIN_SALARY_DIVIDER_HIGH = 5;
     const SALARY_HIGH = 10;
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return RuleBase the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return RuleBase the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
     /**
      * @return array validation rules for model attributes.
@@ -91,28 +90,28 @@ class Rule extends RuleBase {
         return 1.0 / $this->multiplier;
     }
 
-    public static function getTomorrowRule() {
-        return self::model()->find('added <= \'' . date(Common::DATETIME_FORMAT, strtotime('tomorrow')) . '\' ORDER BY id DESC');
+    public static function getTomorrowRule($tribe_group_id = Tribe::DEFAULT_TRIBE) {
+        return self::model()->find('tribe_group_id = \'' . $tribe_group_id . '\' AND added <= \'' . date(Common::DATETIME_FORMAT, strtotime('tomorrow')) . '\' ORDER BY id DESC');
     }
 
-    public static function getCurrentRule() {
-        return self::model()->find('added <= \'' . date(Common::DATETIME_FORMAT) . '\' ORDER BY id DESC');
+    public static function getCurrentRule($tribe_group_id = Tribe::DEFAULT_TRIBE) {
+        return self::model()->find('tribe_group_id = \'' . $tribe_group_id . '\' AND added <= \'' . date(Common::DATETIME_FORMAT) . '\' ORDER BY id DESC');
     }
 
-    public static function getAdaptedRule() {
-        return self::model()->find('system_adapted=1 ORDER BY id DESC');
+    public static function getAdaptedRule($tribe_group_id = Tribe::DEFAULT_TRIBE) {
+        return self::model()->find('tribe_group_id = \'' . $tribe_group_id . '\' AND system_adapted=1 ORDER BY id DESC');
     }
 
-    public static function getPreviousRule() {
-        $rules = self::model()->findAll('added <= \'' . date(Common::DATETIME_FORMAT) . '\' ORDER BY id DESC');
+    public static function getPreviousRule($tribe_group_id = Tribe::DEFAULT_TRIBE) {
+        $rules = self::model()->findAll('tribe_group_id = \'' . $tribe_group_id . '\' AND added <= \'' . date(Common::DATETIME_FORMAT) . '\' ORDER BY id DESC');
         return $rules->next();
     }
 
-    public static function getDateRule($date) {
-        return self::model()->find('added <= \'' . $date . '\' ORDER BY id DESC');
+    public static function getDateRule($date, $tribe_group_id = Tribe::DEFAULT_TRIBE) {
+        return self::model()->find('tribe_group_id = \'' . $tribe_group_id . '\' AND added <= \'' . $date . '\' ORDER BY id DESC');
     }
 
-    public static function addPeriodRule($period = null) {
+    /*public static function addPeriodRule($period = null) {
         if ($period === null) {
             $period = Period::getLast();
         }
@@ -125,15 +124,43 @@ class Rule extends RuleBase {
 
         $newRule->multiplier = $curRule->multiplier;
         $newRule->salary = $period->movements / $period->active_users;
-        if ($newRule->salary < Transaction::amountUserToSystem(Rule::SALARY_HIGH))
-        {
+        if ($newRule->salary < Transaction::amountUserToSystem(Rule::SALARY_HIGH)) {
             $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_LOW;
-        }
-        else
-        {
+        } else {
             $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_HIGH;
         }
-        $newRule->added = date('Y-m-d H:i:s', mktime (0, 0, 0, date("n")+1));
+        $newRule->added = date('Y-m-d H:i:s', mktime(0, 0, 0, date("n") + 1));
+        $newRule->system_adapted = 0;
+
+        $newRule->save();
+    }*/
+
+    public static function addTribeGroupRule($tribe_group_id) {
+        $tribes = Tribe::model()->findByAttributes(array('tribe_group_id' => $tribe_group_id));
+
+        $movements = 0;
+        $active_users = 0;
+        foreach ($tribes as $tribe) {
+            $period = Period::getLast($tribe->id);
+            if ($period->active_users == 0)
+                continue;
+            $movements += $period->movements;
+            $active_users +=$period->active_users;
+        }
+        if ($period->active_users == 0)
+            return;
+
+        $newRule = new Rule;
+        $curRule = self::getCurrentRule($tribe_group_id);
+        
+        $newRule->multiplier = $curRule->multiplier;
+        $newRule->salary = $movements / $active_users;
+        if ($newRule->salary < Transaction::amountUserToSystem(Rule::SALARY_HIGH)) {
+            $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_LOW;
+        } else {
+            $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER_HIGH;
+        }
+        $newRule->added = date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1));
         $newRule->system_adapted = 0;
 
         $newRule->save();

@@ -49,24 +49,24 @@ $is_admin = isset(Yii::app()->user->logged) && $model->created_by == Yii::app()-
                 ?>
             </div>
         </div>
-        <?php
-        echo $this->renderPartial('/market/_list', array(
-            'dataProvider' => $adsDataProvider,
-        ));
-        ?>
+<?php
+echo $this->renderPartial('/market/_list', array(
+    'dataProvider' => $adsDataProvider,
+));
+?>
     </div>
     <div class="small-12 large-5 columns">
         <?php if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) { ?>
             <br/>
             <div class="row">
                 <div class="small-12 columns">
-                    <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $model->id), array('class' => "button")); ?>
+    <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit'), array('update', 'id' => $model->id), array('class' => "button")); ?>
                 </div>
             </div>
-        <?php } ?>
+<?php } ?>
 
 
-        <?php if ($model->image != '') { ?>
+<?php if ($model->image != '') { ?>
             <img src="<?php echo Yii::app()->request->baseUrl . '/images/brands/' . $model->image ?>" alt="<?php echo CHtml::encode($model->name) ?>"/>
         <?php } ?>
         <?php

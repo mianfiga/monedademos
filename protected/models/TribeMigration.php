@@ -1,20 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "{{tribe_group}}".
+ * This is the model class for table "{{tribe_migration}}".
  *
- * The followings are the available columns in table '{{tribe_group}}':
+ * The followings are the available columns in table '{{tribe_migration}}':
  * @property string $id
+ * @property string $entity_id
+ * @property string $to_id
+ * @property string $added
+ * @property string $executed_at
  *
  * The followings are the available model relations:
- * @property Tribe[] $tribes
+ * @property Entity $entity
+ * @property Tribe $to
  */
-class TribeGroup extends TribeGroupBase
+class TribeMigration extends TribeMigrationBase
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return TribeGroup the static model class
+	 * @return TribeMigrationBase the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -26,7 +31,7 @@ class TribeGroup extends TribeGroupBase
 	 */
 	public function tableName()
 	{
-		return '{{tribe_group}}';
+		return '{{tribe_migration}}';
 	}
 
 	/**
@@ -37,9 +42,12 @@ class TribeGroup extends TribeGroupBase
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('entity_id, to_id', 'required'),
+			array('entity_id, to_id', 'length', 'max'=>11),
+			array('added, executed_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id', 'safe', 'on'=>'search'),
+			array('id, entity_id, to_id, added, executed_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,7 +59,8 @@ class TribeGroup extends TribeGroupBase
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'tribes' => array(self::HAS_MANY, 'Tribe', 'group_id'),
+			'entity' => array(self::BELONGS_TO, 'Entity', 'entity_id'),
+			'to' => array(self::BELONGS_TO, 'Tribe', 'to_id'),
 		);
 	}
 
@@ -62,6 +71,10 @@ class TribeGroup extends TribeGroupBase
 	{
 		return array(
 			'id' => 'ID',
+			'entity_id' => 'Entity',
+			'to_id' => 'To',
+			'added' => 'Added',
+			'executed_at' => 'Executed At',
 		);
 	}
 
@@ -77,6 +90,10 @@ class TribeGroup extends TribeGroupBase
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('entity_id',$this->entity_id,true);
+		$criteria->compare('to_id',$this->to_id,true);
+		$criteria->compare('added',$this->added,true);
+		$criteria->compare('executed_at',$this->executed_at,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

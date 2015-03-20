@@ -5,9 +5,13 @@
  *
  * The followings are the available columns in table '{{period}}':
  * @property string $id
+ * @property string $tribe_id
  * @property string $added
  * @property string $movements
  * @property string $active_users
+ *
+ * The followings are the available model relations:
+ * @property Tribe $tribe
  */
 class PeriodBase extends CActiveRecord
 {
@@ -38,10 +42,11 @@ class PeriodBase extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('added', 'required'),
+			array('tribe_id', 'length', 'max'=>11),
 			array('movements, active_users', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, added, movements, active_users', 'safe', 'on'=>'search'),
+			array('id, tribe_id, added, movements, active_users', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,6 +58,7 @@ class PeriodBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'tribe' => array(self::BELONGS_TO, 'Tribe', 'tribe_id'),
 		);
 	}
 
@@ -63,6 +69,7 @@ class PeriodBase extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'tribe_id' => 'Tribe',
 			'added' => 'Added',
 			'movements' => 'Movements',
 			'active_users' => 'Active Users',
@@ -81,6 +88,7 @@ class PeriodBase extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
+		$criteria->compare('tribe_id',$this->tribe_id,true);
 		$criteria->compare('added',$this->added,true);
 		$criteria->compare('movements',$this->movements,true);
 		$criteria->compare('active_users',$this->active_users,true);

@@ -19,12 +19,23 @@ if ($model == null) {
     ?>
     <h1><?php echo (($charge_errors | $deposit_errors) != 0 ? Yii::t('app', 'Transaction NOT completed') : Yii::t('app', 'Transaction not accessible')) ?></h1>
     <?php
-    if ($charge_errors != 0)
-        echo Yii::t('app', 'Errors found in the charge (source) account') . ".<br/>";
-    if ($deposit_errors != 0)
-        echo Yii::t('app', 'Errors found in the deposit (destination) account') . ".<br/>";
-}
-else {
+    if ($charge_errors != 0) {
+        echo '<b>' . Yii::t('app', 'Errors found in the charge (source) account') . "</b>.<br/>";
+        switch ($charge_errors) {
+            case Account::ERROR_BLOCKED:
+                echo "<br/>Para solucionar este problema es necesario que contacte con <b>contacto@monedademos.es</b>.<br/>";
+                break;
+        }
+    }
+    if ($deposit_errors != 0) {
+        echo '<b>' . Yii::t('app', 'Errors found in the deposit (destination) account') . "</b>.<br/>";
+        switch ($deposit_errors) {
+            case Account::ERROR_BLOCKED:
+                echo "<br/>Para solucionar este problema es necesario que contacte con <b>contacto@monedademos.es</b>.<br/>";
+                break;
+        }
+    }
+} else {
     ?>
     <h1>View Transaction #<?php echo $model->id; ?></h1>
 

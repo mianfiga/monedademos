@@ -23,8 +23,9 @@
  * @property Entity $createdBy
  * @property TribeGroup $group
  */
-class Tribe extends CActiveRecord
+class Tribe extends TribeBase
 {
+    const DEFAULT_TRIBE = 1;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -128,4 +129,122 @@ class Tribe extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    protected function beforeSave() {
+        if (parent::beforeSave()) {
+
+            if ($this->isNewRecord) {
+                $this->_isNew = true;
+                $this->added = Common::datetime();
+                $this->created_by = Yii::app()->user->logged;
+                $creator = Entity::model()->findByPk($this->created_by);
+                $this->culture = $creator->culture;
+                
+                $group = new TribeGroup;
+                $group->save();
+                $this->group_id = $group->id;
+            } else {
+                $this->_isNew = false;
+            }
+
+            $this->form_image = EUploadedImage::getInstance($this, 'form_image');
+
+            if ($this->form_image != null) {
+                $this->form_image->maxWidth = 500;
+                $this->form_image->maxHeight = 400;
+
+                $this->form_image->thumb = array(
+                    'maxWidth' => 150,
+                    'maxHeight' => 120,
+//				    'dir' => Yii::getPathOfAlias('webroot.images.market'),
+                    'prefix' => Brand::THUMB_PREFIX,
+                );
+
+                $ext = substr($this->form_image, strrpos($this->form_image, '.'));
+                $img_name = uniqid();
+                $this->form_image->saveAs(Yii::getPathOfAlias('webroot.images.brands') . '/' . $img_name . $ext);
+                $this->image = $img_name . $ext;
+            }
+
+            $this->updated = Common::datetime();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    protected function afterSave() {
+        if ($this->_isNew) {
+            $logged_entity = Yii::app()->user->logged;
+            $entity = new Entity;
+            $entity->class = get_class($this);
+            $entity->object_id = $this->id;
+            $entity->tribe_id = $this->id;
+            $entity->save();
+
+            $date = Common::datetime();
+            $this->_isNew = false;
+            
+            //Fund account
+            $acc = new Account;
+            $acc->title = $this->name . ' FUND';
+            $acc->added = $date;
+            $acc->last_action = $date;
+            $acc->class = Account::CLASS_FUND;
+            $acc->save();
+
+            $auth = new Authorization;
+            $auth->entity_id = $entity->id;
+            $auth->account_id = $acc->id;
+            $auth->code = User::randCode();
+            $auth->title = $acc->title;
+            $auth->added = $date;
+            $auth->save();
+            
+            //System Account
+            $acc2 = new Account;
+            $acc2->title = $this->name . ' SYSTEM';
+            $acc2->added = $date;
+            $acc2->last_action = $date;
+            $acc2->class = Account::CLASS_SYSTEM;
+            $acc2->save();
+
+            $auth2 = new Authorization;
+            $auth2->entity_id = $entity->id;
+            $auth2->account_id = $acc2->id;
+            $auth2->code = User::randCode();
+            $auth2->title = $acc->title;
+            $auth2->added = $date;
+            $auth2->save();
+
+            $auth3 = new Authorization;
+            $auth3->entity_id = $logged_entity;
+            $auth3->account_id = $acc2->id;
+            $auth3->code = User::randCode();
+            $auth3->title = $acc->title;
+            $auth3->class = Authorization::CLASS_AUTHORIZED;
+            $auth3->added = $date;
+            $auth3->save();
+
+            $role = new Role;
+            $role->actor_id = $logged_entity;
+            $role->part_id = $entity->id;
+            $role->save();
+
+            $roles = Yii::app()->user->roles;
+            $roles[$entity->id] = $this->name;
+            Yii::app()->user->roles = $roles;
+        }
+        parent::afterSave();
+    }
+    
+    protected function afterFind() {
+        parent::afterFind();
+
+        $this->contribution_title = $this->name;
+        $this->contribution_text = $this->summary;
+    }
+
+    public function getSurname() {
+        return '';
+    }
 }

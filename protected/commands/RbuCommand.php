@@ -171,18 +171,32 @@ class RbuCommand extends CConsoleCommand {
         if ($date == null) {
             $date = strtotime('first day of this month');
         }
-        $this->actionUpdateLastTransaction();
-        $transaction = Yii::app()->db->beginTransaction();
-        try {
-            $rule = Rule::getCurrentRule();
-            $period = Period::calculate();
-            Account::chargeTaxes($rule);
-            Account::paySalaries($date, $rule);
-            Rule::addPeriodRule($period);
-            $period->save();
-            $transaction->commit();
-        } catch (Exception $e) {
-            $transaction->rollBack();
+
+        $tribes = Tribe::model()->findAll();
+
+        foreach ($tribes as $tribe) {
+            $transaction = Yii::app()->db->beginTransaction();
+            try {
+                $rule = Rule::getCurrentRule($tribe->group_id);
+                $period = Period::calculate($tribe->id);
+                Account::chargeTaxes($tribe, $rule);
+                $ret = Account::paySalaries($tribe, $date, $rule);
+
+                $period->negative_accounts = $ret->negative_accounts;
+                $period->negative_amount = $ret->negative_amount;
+                $period->positive_accounts = $ret->positive_accounts;
+                $period->positive_amount = $ret->positive_amount;
+
+                $period->save();
+                $transaction->commit();
+            } catch (Exception $e) {
+                $transaction->rollBack();
+            }
+        }
+        
+        $groups = TribeGroup::model()->findAll();
+        foreach ($groups as $group) {
+            Rule::addTribeGroupRule($group);
         }
     }
 
@@ -202,17 +216,18 @@ class RbuCommand extends CConsoleCommand {
         $acc->addSalary($date);
     }
 
-    public function actionNewRule($date = null, $salary = null, $min_salary = null, $multiplier = null) {
+    public function actionNewRule($tribe_id, $date = null, $salary = null, $min_salary = null, $multiplier = null) {
         if ($date == null) {
             $date = time();
         }
 
-        $rule = Rule::getCurrentRule();
+        $rule = Rule::getCurrentRule($tribe_id);
 
         $newRule = new Rule;
         $newRule->salary = $salary;
         $newRule->min_salary = $min_salary;
         $newRule->multiplier = $multiplier;
+        $newRule->tribe_id = $tribe_id;
         $newRule->added = date('YmdHis');
         $newRule->save();
 
@@ -262,11 +277,14 @@ class RbuCommand extends CConsoleCommand {
             Notification::addNotification(Notification::MARKET_AD_EXPIRED, $ad->created_by, Sid::getSID($ad), $notif_data);
         }
 
-        $newRule = Rule::getTomorrowRule();
-        $rule = Rule::getAdaptedRule();
-        if ($newRule->id != $rule->id) {
-            //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
-            Account::adaptFunds($newRule);
+        $groups = TribeGroup::model()->findAll();
+        foreach ($groups as $group) {
+            $newRule = Rule::getTomorrowRule($group->id);
+            $rule = Rule::getAdaptedRule($group->id);
+            if ($newRule->id != $rule->id) {
+                //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
+                Account::adaptFunds($newRule);
+            }
         }
     }
 
@@ -277,7 +295,7 @@ class RbuCommand extends CConsoleCommand {
         }
     }
 
-    public function actionMoveMarketAdsToCreatorsIsland() {
+    public function actionMoveMarketAdsToCreatorsTribe() {
         $ads = MarketAd::model()->findAll();
         foreach ($ads as $ad) {
             if (count($ad->tribes) == 0 && $ad->createdBy->tribe_id != null) {

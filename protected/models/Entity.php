@@ -76,6 +76,7 @@ class Entity extends EntityBase {
                 'condition' => 'lastDepositTransaction.`class` = \'' . Transaction::CLASS_CHARGE . '\' OR lastDepositTransaction.`class` = \'' . Transaction::CLASS_TRANSFER . '\'',
                 'order' => 'lastDepositTransaction.executed_at DESC',
             ),
+            'tribe' => array(self::BELONGS_TO, 'Tribe', 'tribe_id'),
         );
     }
 

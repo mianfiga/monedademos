@@ -1,20 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "{{tribe_group}}".
+ * This is the model class for table "{{tribe_balance}}".
  *
- * The followings are the available columns in table '{{tribe_group}}':
- * @property string $id
+ * The followings are the available columns in table '{{tribe_balance}}':
+ * @property string $from_id
+ * @property string $to_id
+ * @property string $period_amount
+ * @property string $total_amount
  *
  * The followings are the available model relations:
- * @property Tribe[] $tribes
+ * @property Tribe $from
+ * @property Tribe $to
  */
-class TribeGroup extends TribeGroupBase
+class TribeBalanceBase extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return TribeGroup the static model class
+	 * @return TribeBalanceBase the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -26,7 +30,7 @@ class TribeGroup extends TribeGroupBase
 	 */
 	public function tableName()
 	{
-		return '{{tribe_group}}';
+		return '{{tribe_balance}}';
 	}
 
 	/**
@@ -37,9 +41,12 @@ class TribeGroup extends TribeGroupBase
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('from_id, to_id, period_amount, total_amount', 'required'),
+			array('from_id, to_id', 'length', 'max'=>11),
+			array('period_amount, total_amount', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id', 'safe', 'on'=>'search'),
+			array('from_id, to_id, period_amount, total_amount', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,7 +58,8 @@ class TribeGroup extends TribeGroupBase
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'tribes' => array(self::HAS_MANY, 'Tribe', 'group_id'),
+			'from' => array(self::BELONGS_TO, 'Tribe', 'from_id'),
+			'to' => array(self::BELONGS_TO, 'Tribe', 'to_id'),
 		);
 	}
 
@@ -61,7 +69,10 @@ class TribeGroup extends TribeGroupBase
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'from_id' => 'From',
+			'to_id' => 'To',
+			'period_amount' => 'Period Amount',
+			'total_amount' => 'Total Amount',
 		);
 	}
 
@@ -76,7 +87,10 @@ class TribeGroup extends TribeGroupBase
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
+		$criteria->compare('from_id',$this->from_id,true);
+		$criteria->compare('to_id',$this->to_id,true);
+		$criteria->compare('period_amount',$this->period_amount,true);
+		$criteria->compare('total_amount',$this->total_amount,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

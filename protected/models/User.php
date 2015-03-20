@@ -242,6 +242,8 @@ class User extends UserBase {
             $entity->object_id = $this->id;
             if ($this->created_by) {
                 $entity->tribe_id = $this->createdBy->tribe_id;
+            }else{
+                $entity->tribe_id = Tribe::DEFAULT_TRIBE;
             }
             $entity->save();
 
@@ -275,6 +277,8 @@ class User extends UserBase {
             }
 
             Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)));
+
+            ActivityLog::add($entity->id, ActivityLog::SIGNUP);
         }
         parent::afterSave();
     }

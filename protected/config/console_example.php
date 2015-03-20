@@ -20,15 +20,9 @@ return array(
 	            'charset' => 'utf8',
 	            'tablePrefix' => 'rbu_',
 	        ),
-<<<<<<< HEAD:protected/config/console_example.php
 		'request' => array(//MODIFY THIS TO MAKE NOTIFICATIONS WORK
 	            'hostInfo' => 'http://monedademos.es',
-	            'baseUrl' => 'BASE_URL',
-=======
-		'request' => array( //CHANGE THIS TO MAKE NOTIFICATIONS WORK
-	            'hostInfo' => 'http://monedademos.es',
 	            'baseUrl' => 'PATH_TO_HOME_DIRECTORY',
->>>>>>> master:protected/config/console_example.php
 	            'scriptUrl' => '',
 	        ),
 	),

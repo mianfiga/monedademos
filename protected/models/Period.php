@@ -85,35 +85,38 @@ class Period extends PeriodBase {
     /**
      * @return Period The last period registered.
      */
-    public static function getLast() {
-        return self::model()->find('1 ORDER BY added DESC');
+    public static function getLast($tribe_id = 1) {
+        return self::model()->find('tribe_id = \'' . $tribe_id . '\' ORDER BY added DESC');
     }
+
     /**
      * @return Period The pre-last period registered.
      */
-    
-    public static function getPrevious() {
-        $periods = self::model()->findAll('1 ORDER BY id DESC');
+    public static function getPrevious($tribe_id = 1) {
+        $periods = self::model()->findAll('tribe_id = \'' . $tribe_id . '\' ORDER BY id DESC');
         return next($periods);
     }
 
     /**
      * @return String The date when the last period was registered.
      */
-    public static function getLastDate() {
-        $period = self::getLast();
+    public static function getLastDate($tribe_id = Tribe::DEFAULT_TRIBE) {
+        $period = self::getLast($tribe_id);
         return $period->added;
     }
 
-    public static function calculate($save = false) {
+    public static function calculate($tribe_id = Tribe::DEFAULT_TRIBE, $save = false) {
         $period = new Period;
         $oldPeriodDate = self::getLastDate();
 
-
         $period->active_users = Entity::model()->count(
-                't.class=\'User\'AND last_transaction >  \''.$oldPeriodDate .'\'');
+                't.class=\'User\' AND t.tribe_id = \'' . $tribe_id . '\' AND last_transaction >  \''.$oldPeriodDate .'\'');
 
-        $sum = Account::model()->findBySql('select sum(`earned`) as `earned` from ' . Account::model()->tableSchema->name, array());
+        
+        $sum = Account::model()->findBySql('select sum(`earned`) as `earned` ' .
+                'from `' . Account::model()->tableSchema->name . '` as account' .
+                ' where tribe_id=\'' . $tribe_id . '\'', array());
+
         $period->movements = $sum->earned;
         $period->added = date('Y-m-d');
         if ($save) {
