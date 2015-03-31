@@ -16,7 +16,6 @@ if (strpos($model->abilities, User::ABILITY_INVITE) !== false) {
     );
 }
 
-//print_r($model);
 ?>
 
 <h1>User <?php echo $model->username; ?></h1>

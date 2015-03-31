@@ -164,9 +164,146 @@ class RbuCommand extends CConsoleCommand {
         }
     }
 
+    public function actionMigrate() {
+        $modified_tribes = array();
+        $tribes = Tribe::model()->findAll();
+        foreach ($tribes as $tribe) {
+            $fund_account = Account::getFundAccount($tribe->id);
+            if (!$fund_account && count($tribe->migrations) > 3) {//Activate tribe: create accounts and rule
+                $tribe->activate();
+                $modified_tribes[$tribe->id] = true;
+            }
+        }
+
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+
+            $migrations = TribeMigration::model()->findAll('status="confirmed" AND executed_at is null');
+            foreach ($migrations as $migration) {
+                $tribe = $migration->to;
+                if (!Account::getFundAccount($tribe->id)) {
+                    continue;
+                }
+
+                if ($migration->entity->class == get_class(User::model())) {
+                    //Refund system money from source tribe
+                    $source_sys_accs = Account::getSystemAccounts($migration->entity->tribe_id);
+                    $source_fund_acc = Account::getFundAccount($migration->entity->tribe_id);
+
+                    $source_tribe_entity = Entity::get($migration->entity->tribe);
+                    $previous_migration = TribeMigration::model()->find('entity_id=' . $migration->entity_id . ' AND executed_at is not null order by id DESC');
+                    if ($previous_migration) {
+                        $last_migration_date = $previous_migration->executed_at;
+                    } else {
+                        $last_migration_date = $migration->entity->getObject()->created;
+                    }
+                    $last_migration_rule = Rule::getDateRule($last_migration_date, $migration->entity->tribe->group_id);
+
+
+                    foreach ($source_sys_accs as $sys_acc) {
+                        $system_refund = new Transaction;
+                        $system_refund->charge_account = $sys_acc->id;
+                        $system_refund->deposit_account = $source_fund_acc->id;
+                        $system_refund->charge_entity = $source_tribe_entity->id;
+                        $system_refund->deposit_entity = $source_tribe_entity->id;
+                        $system_refund->class = Transaction::CLASS_SYSTEM_REFUND;
+                        $system_refund->amount = $last_migration_rule->salary;
+                        $system_refund->subject = 'Emigration';
+                        $system_refund->save();
+                    }
+
+                    //take money related to this user out of the source tribe
+                    $num_sys_accs = count($source_sys_accs);
+                    $source_current_rule = Rule::getAdaptedRule($migration->entity->tribe->group_id);
+
+                    $source_fund_acc = Account::getFundAccount($migration->entity->tribe_id);
+                    $source_fund_acc->credit -= $last_migration_rule->salary * $num_sys_accs + $source_current_rule->salary * $source_current_rule->multiplier;
+                    $source_fund_acc->save();
+
+                    //put money in the destination tribe fund account
+                    $destination_current_rule = Rule::getAdaptedRule($tribe->group_id);
+                    $destination_sys_accs = Account::getSystemAccounts($tribe->id);
+                    $num_sys_accs = count($destination_sys_accs);
+                    $destination_fund_acc = Account::getFundAccount($tribe->id);
+                    $destination_fund_acc->credit += $destination_current_rule->salary * $num_sys_accs + $destination_current_rule->salary * $destination_current_rule->multiplier;
+                    $destination_fund_acc->save();
+
+                    $destination_tribe_entity = Entity::get($tribe);
+
+                    //add money to system account
+                    foreach ($destination_sys_accs as $sys_acc) {
+                        $system_new_user = new Transaction;
+                        $system_new_user->charge_account = $destination_fund_acc->id;
+                        $system_new_user->deposit_account = $sys_acc->id;
+                        $system_new_user->charge_entity = $destination_tribe_entity->id;
+                        $system_new_user->deposit_entity = $destination_tribe_entity->id;
+                        $system_new_user->class = Transaction::CLASS_SALARY;
+                        $system_new_user->amount = $destination_current_rule->salary;
+                        $system_new_user->subject = 'Inmigration, new user';
+                        $system_new_user->save();
+                    }
+                }
+
+                //moving accounts to new tribe
+                foreach ($migration->entity->holdingAccounts as $account) {
+                    $tribe_balance = TribeBalance::get($account->tribe_id, $tribe->id);
+                    $balance = $account->earned - $account->spended - $account->balance;
+                    $tribe_balance->period_amount += $balance;
+                    $tribe_balance->total_amount += $balance;
+                    $tribe_balance->save();
+
+                    $account->tribe_id = $tribe->id;
+                    $account->save();
+                }
+
+                //exceptionally we also add active market ads to the new island
+                $ads = $migration->entity->marketAdCreator;
+                foreach ($ads as $ad) {
+                    if ($ad->expiration < Common::date()) {
+                        continue;
+                    }
+                    $ad_tribe = new MarketAdTribe;
+                    $ad_tribe->ad_id = $ad->id;
+                    $ad_tribe->tribe_id = $tribe->id;
+                    $ad_tribe->save();
+                }
+
+                $modified_tribes[$migration->entity->tribe_id] = true;
+                $modified_tribes[$tribe->id] = true;
+
+                $migration->entity->tribe_id = $tribe->id;
+                $migration->entity->save();
+
+                $migration->executed_at = Common::datetime();
+                $migration->save();
+            }
+
+            foreach ($modified_tribes as $tribe_id => $modified) {
+                if (!$modified) {
+                    continue;
+                }
+                //Records Update
+                $users = User::model()->with('entity')->findAll('entity.tribe_id = \'' . $tribe_id . '\' AND deleted is NULL');
+                $accounts = Account::model()->findAll('tribe_id = \'' . $tribe_id . '\'');
+                $total_amount = 0;
+                foreach ($accounts as $account) {
+                    $total_amount += $account->credit;
+                }
+
+                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)), $tribe_id);
+            }
+
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            die($e->getMessage());
+        }
+    }
+
     //ChargeTaxes and paySalaries
     public function actionAddPeriod($date = null) {
         $this->actionUpdateLastTransaction();
+        $this->actionMigrate();
 
         if ($date == null) {
             $date = strtotime('first day of this month');
@@ -174,29 +311,62 @@ class RbuCommand extends CConsoleCommand {
 
         $tribes = Tribe::model()->findAll();
 
-        foreach ($tribes as $tribe) {
-            $transaction = Yii::app()->db->beginTransaction();
-            try {
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+
+            $period = array();
+            $ret = array();
+            foreach ($tribes as $tribe) {
+                if (!Account::getFundAccount($tribe->id)) {
+                    continue;
+                }
                 $rule = Rule::getCurrentRule($tribe->group_id);
-                $period = Period::calculate($tribe->id);
+                $period[$tribe->id] = Period::calculate($tribe->id);
                 Account::chargeTaxes($tribe, $rule);
-                $ret = Account::paySalaries($tribe, $date, $rule);
 
-                $period->negative_accounts = $ret->negative_accounts;
-                $period->negative_amount = $ret->negative_amount;
-                $period->positive_accounts = $ret->positive_accounts;
-                $period->positive_amount = $ret->positive_amount;
+                $ret[$tribe->id] = Account::preSalaryData($tribe);
+                $period[$tribe->id]['negative_accounts'] = $ret[$tribe->id]['negative_accounts'];
+                $period[$tribe->id]['negative_amount'] = $ret[$tribe->id]['negative_amount'];
+                $period[$tribe->id]['positive_accounts'] = $ret[$tribe->id]['positive_accounts'];
+                $period[$tribe->id]['positive_amount'] = $ret[$tribe->id]['positive_amount'];
 
-                $period->save();
-                $transaction->commit();
-            } catch (Exception $e) {
-                $transaction->rollBack();
+                $ret[$tribe->id]['penalties'] = Account::payPenalizedSalaries($tribe, $ret[$tribe->id], $date, $rule);
             }
-        }
-        
-        $groups = TribeGroup::model()->findAll();
-        foreach ($groups as $group) {
-            Rule::addTribeGroupRule($group);
+
+            $tribes2 = $tribes;
+            //Add penalties from other tribes
+            foreach ($tribes as $from) {
+                foreach ($tribes2 as $to) {
+                    $balance = TribeBalance::getPeriodBalance($from->id, $to->id);
+                    if ($balance > 0) {
+                        $ret[$from->id]['penalties'] += $ret[$to->id]['penalties'] * ($balance / $ret[$to->id]->positive_amount);
+                    }
+                }
+            }
+
+            foreach ($tribes as $tribe) {
+                if (!Account::getFundAccount($tribe->id)) {
+                    continue;
+                }
+                $rule = Rule::getCurrentRule($tribe->group_id);
+                Account::payCompensatedSalaries($tribe, $ret[$tribe->id], $date, $rule);
+            }
+            
+            foreach ($period as $per) {
+                $per->save();
+            }
+
+            Account::postSalariesReset();
+            $groups = TribeGroup::model()->findAll();
+            foreach ($groups as $group) {
+                Rule::addTribeGroupRule($group->id);
+            }
+
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            echo $e->getMessage();
+            echo $e->getTraceAsString();
         }
     }
 
@@ -204,7 +374,7 @@ class RbuCommand extends CConsoleCommand {
         $date = Period::getLastDate();
         $entities = Entity::model()->findAll(); //->with('lastChargeTransaction','lastDepositTransaction')->findAll('lastChargeTransaction.executed_at >= \''.$date.'\' OR lastDepositTransaction.executed_at >= \''.$date.'\'')-;
         foreach ($entities as $entity) {
-            $entity->saveAttributes(array('last_transaction' => max($entity->lastChargeTransaction->executed_at, $entity->lastDepositTransaction->executed_at)));
+            $entity->saveAttributes(array('last_transaction' => max((!$entity->lastChargeTransaction ? 0 : $entity->lastChargeTransaction->executed_at), (!$entity->lastDepositTransaction ? 0 : $entity->lastDepositTransaction->executed_at))));
         }
     }
 
@@ -216,7 +386,7 @@ class RbuCommand extends CConsoleCommand {
         $acc->addSalary($date);
     }
 
-    public function actionNewRule($tribe_id, $date = null, $salary = null, $min_salary = null, $multiplier = null) {
+    public function actionNewRule($tribe_group_id, $date = null, $salary = null, $min_salary = null, $multiplier = null) {
         if ($date == null) {
             $date = time();
         }
@@ -227,7 +397,7 @@ class RbuCommand extends CConsoleCommand {
         $newRule->salary = $salary;
         $newRule->min_salary = $min_salary;
         $newRule->multiplier = $multiplier;
-        $newRule->tribe_id = $tribe_id;
+        $newRule->tribe_group_id = $tribe_group_id;
         $newRule->added = date('YmdHis');
         $newRule->save();
 

@@ -244,34 +244,57 @@ class Transaction extends TransactionBase {
                 }
 
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
-                    if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
-                        $charge->spended += $this->amount;
-                        $charge->total_spended += $this->amount;
-                    } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
-                        $charge->earned -= $this->amount;
-                        $charge->total_earned -= $this->amount;
-                    }
-
-                    $charge->credit -= $this->amount;
-                    $charge->save();
-
-                    $deposit = Account::model()->findByPk($this->deposit_account);
-                    if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
-                        $deposit->earned += $this->amount;
-                        $deposit->total_earned += $this->amount;
-                        $rule = Rule::getCurrentRule();
-                        if ($deposit->earned >= $rule->min_salary) {
-                            $deposit->balance = 0;
+                    $transaction = Yii::app()->db->beginTransaction();
+                    try {
+                        if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
+                            $charge->spended += $this->amount;
+                            $charge->total_spended += $this->amount;
+                        } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
+                            $charge->earned -= $this->amount;
+                            $charge->total_earned -= $this->amount;
                         }
-                    } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
-                        $deposit->spended -= $this->amount;
-                        $deposit->total_spended -= $this->amount;
-                    }
-                    $deposit->credit += $this->amount;
-                    $deposit->save();
 
-                    //registramos la transacción
-                    return true;
+                        $charge->credit -= $this->amount;
+                        $charge->save();
+
+                        $deposit = Account::model()->findByPk($this->deposit_account);
+                        if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
+                            $deposit->earned += $this->amount;
+                            $deposit->total_earned += $this->amount;
+                            $rule = Rule::getCurrentRule();
+                            if ($deposit->earned >= $rule->min_salary) {
+                                $deposit->balance = 0;
+                            }
+                        } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
+                            $deposit->spended -= $this->amount;
+                            $deposit->total_spended -= $this->amount;
+                        }
+                        $deposit->credit += $this->amount;
+                        $deposit->save();
+
+                        $charge_fund = Account::model()->findByAttributes(array('class' => Account::CLASS_FUND, 'tribe_id' => $charge->tribe_id));
+                        $charge_fund->credit += $this->amount;
+                        $charge_fund->save();
+
+                        $deposit_fund = Account::model()->findByAttributes(array('class' => Account::CLASS_FUND, 'tribe_id' => $deposit->tribe_id));
+                        $deposit_fund->credit -= $this->amount;
+                        $deposit_fund->save();
+                        
+                        $tribe_balance = TribeBalance::get($charge->tribe_id, $deposit->tribe_id);
+                        $tribe_balance->period_amount -= $this->amount;
+                        $tribe_balance->total_amount -= $this->amount;
+                        $tribe_balance->save();
+                        
+                        $this->charge_tribe = $charge->tribe_id;
+                        $this->deposit_tribe = $deposit->tribe_id;
+                        
+                        $transaction->commit();
+                        
+                        return true;
+                    } catch (Exception $e) {
+                        $transaction->rollBack();
+                        return false;
+                    }
                 } else {
                     if ($this->charge_errors != 0) {
                         ActivityLog::add($this->charge_entity, ActivityLog::E_TRANSACTION, 'ER-' . $this->charge_errors . '-' . $this->charge_account);

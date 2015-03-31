@@ -98,6 +98,9 @@ class User extends UserBase {
             'exemption' => array(self::BELONGS_TO, 'Exemption', 'exemption_id'),
             'createdBy' => array(self::BELONGS_TO, 'User', 'created_by'),
             'hasCreated' => array(self::HAS_MANY, 'User', 'created_by'),
+            'entity' => array(self::BELONGS_TO, 'Entity', 'id',
+                'on' => '`entity`.`class`=\'' . get_class(self::model()) . '\''
+            ),
         );
     }
 
@@ -241,8 +244,8 @@ class User extends UserBase {
             $entity->class = get_class($this);
             $entity->object_id = $this->id;
             if ($this->created_by) {
-                $entity->tribe_id = $this->createdBy->tribe_id;
-            }else{
+                $entity->tribe_id = Entity::get($this->createdBy)->tribe_id;
+            } else {
                 $entity->tribe_id = Tribe::DEFAULT_TRIBE;
             }
             $entity->save();
@@ -254,6 +257,7 @@ class User extends UserBase {
             $acc->added = $date;
             $acc->last_action = $date;
             $acc->class = Account::CLASS_USER;
+            $acc->tribe_id = $entity->tribe_id;
             $acc->save();
 
             $auth = new Authorization;
@@ -269,14 +273,14 @@ class User extends UserBase {
             $acc->addSalary();
 
             //Records Update
-            $users = User::model()->findAll('deleted is NULL');
-            $accounts = Account::model()->findAll();
+            $users = User::model()->with('entity')->findAll('entity.tribe_id = \'' . $entity->tribe_id . '\' AND deleted is NULL');
+            $accounts = Account::model()->findAll('tribe_id = \'' . $entity->tribe_id . '\'');
             $total_amount = 0;
             foreach ($accounts as $account) {
                 $total_amount += $account->credit;
             }
 
-            Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)));
+            Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)), $entity->tribe_id);
 
             ActivityLog::add($entity->id, ActivityLog::SIGNUP);
         }

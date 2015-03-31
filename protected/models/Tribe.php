@@ -23,112 +23,113 @@
  * @property Entity $createdBy
  * @property TribeGroup $group
  */
-class Tribe extends TribeBase
-{
+class Tribe extends TribeBase {
+
     const DEFAULT_TRIBE = 1;
-	/**
-	 * Returns the static model of the specified AR class.
-	 * @param string $className active record class name.
-	 * @return Tribe the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+    const DEFAULT_TRIBE_GROUP = 1;
 
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return '{{tribe}}';
-	}
+    public $contribution_title;
+    public $contribution_text;
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('nickname, email', 'required'),
-			array('nickname, name', 'length', 'max'=>127),
-			array('email', 'length', 'max'=>255),
-			array('image', 'length', 'max'=>254),
-			array('group_id, created_by', 'length', 'max'=>10),
-			array('summary, description, last_action, added, updated, deleted', 'safe'),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, nickname, name, email, summary, description, image, last_action, group_id, created_by, added, updated, deleted', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * Returns the static model of the specified AR class.
+     * @param string $className active record class name.
+     * @return Tribe the static model class
+     */
+    public static function model($className = __CLASS__) {
+        return parent::model($className);
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-			'marketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_ad_tribe}}(tribe_id, ad_id)'),
-			'createdBy' => array(self::BELONGS_TO, 'Entity', 'created_by'),
-			'group' => array(self::BELONGS_TO, 'TribeGroup', 'group_id'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName() {
+        return '{{tribe}}';
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'id' => 'ID',
-			'nickname' => 'Nickname',
-			'name' => 'Name',
-			'email' => 'Email',
-			'summary' => 'Summary',
-			'description' => 'Description',
-			'image' => 'Image',
-			'last_action' => 'Last Action',
-			'group_id' => 'Group',
-			'created_by' => 'Created By',
-			'added' => 'Added',
-			'updated' => 'Updated',
-			'deleted' => 'Deleted',
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules() {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('nickname, email', 'required'),
+            array('nickname, name', 'length', 'max' => 127),
+            array('email', 'length', 'max' => 255),
+            array('image', 'length', 'max' => 254),
+            array('group_id, created_by', 'length', 'max' => 10),
+            array('summary, description, last_action, added, updated, deleted', 'safe'),
+            // The following rule is used by search().
+            // Please remove those attributes that should not be searched.
+            array('id, nickname, name, email, summary, description, image, last_action, group_id, created_by, added, updated, deleted', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+    /**
+     * @return array relational rules.
+     */
+    public function relations() {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+            'marketAds' => array(self::MANY_MANY, 'MarketAd', '{{market_ad_tribe}}(tribe_id, ad_id)'),
+            'createdBy' => array(self::BELONGS_TO, 'Entity', 'created_by'),
+            'group' => array(self::BELONGS_TO, 'TribeGroup', 'group_id'),
+            'migrations' => array(self::HAS_MANY, 'TribeMigration', 'to_id'),
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels() {
+        return array(
+            'id' => 'ID',
+            'nickname' => 'Nickname',
+            'name' => 'Name',
+            'email' => 'Email',
+            'summary' => 'Summary',
+            'description' => 'Description',
+            'image' => 'Image',
+            'last_action' => 'Last Action',
+            'group_id' => 'Group',
+            'created_by' => 'Created By',
+            'added' => 'Added',
+            'updated' => 'Updated',
+            'deleted' => 'Deleted',
+        );
+    }
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('nickname',$this->nickname,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('email',$this->email,true);
-		$criteria->compare('summary',$this->summary,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('image',$this->image,true);
-		$criteria->compare('last_action',$this->last_action,true);
-		$criteria->compare('group_id',$this->group_id,true);
-		$criteria->compare('created_by',$this->created_by,true);
-		$criteria->compare('added',$this->added,true);
-		$criteria->compare('updated',$this->updated,true);
-		$criteria->compare('deleted',$this->deleted,true);
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function search() {
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+        $criteria = new CDbCriteria;
+
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('nickname', $this->nickname, true);
+        $criteria->compare('name', $this->name, true);
+        $criteria->compare('email', $this->email, true);
+        $criteria->compare('summary', $this->summary, true);
+        $criteria->compare('description', $this->description, true);
+        $criteria->compare('image', $this->image, true);
+        $criteria->compare('last_action', $this->last_action, true);
+        $criteria->compare('group_id', $this->group_id, true);
+        $criteria->compare('created_by', $this->created_by, true);
+        $criteria->compare('added', $this->added, true);
+        $criteria->compare('updated', $this->updated, true);
+        $criteria->compare('deleted', $this->deleted, true);
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
     protected function beforeSave() {
         if (parent::beforeSave()) {
 
@@ -138,7 +139,7 @@ class Tribe extends TribeBase
                 $this->created_by = Yii::app()->user->logged;
                 $creator = Entity::model()->findByPk($this->created_by);
                 $this->culture = $creator->culture;
-                
+
                 $group = new TribeGroup;
                 $group->save();
                 $this->group_id = $group->id;
@@ -167,8 +168,7 @@ class Tribe extends TribeBase
 
             $this->updated = Common::datetime();
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -183,7 +183,7 @@ class Tribe extends TribeBase
 
             $date = Common::datetime();
             $this->_isNew = false;
-            
+
             //Fund account
             $acc = new Account;
             $acc->title = $this->name . ' FUND';
@@ -199,7 +199,7 @@ class Tribe extends TribeBase
             $auth->title = $acc->title;
             $auth->added = $date;
             $auth->save();
-            
+
             //System Account
             $acc2 = new Account;
             $acc2->title = $this->name . ' SYSTEM';
@@ -236,7 +236,7 @@ class Tribe extends TribeBase
         }
         parent::afterSave();
     }
-    
+
     protected function afterFind() {
         parent::afterFind();
 
@@ -247,4 +247,72 @@ class Tribe extends TribeBase
     public function getSurname() {
         return '';
     }
+
+    public function getLastRecord() {
+        return Record::getLastRecord($this->id);
+    }
+
+    public function getCurrentRule() {
+        return Rule::getCurrentRule($this->group_id);
+    }
+
+    public function getNextRule() {
+        return Rule::getDateRule(date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1)), $this->group_id);
+    }
+
+    public function activate() {
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $date = Common::datetime();
+
+            //Fund account creation
+            $fund_account = new Account;
+            $fund_account->title = 'Fund account';
+            $fund_account->added = $date;
+            $fund_account->last_action = $date;
+            $fund_account->class = Account::CLASS_FUND;
+            $fund_account->tribe_id = $this->id;
+            $fund_account->access = Account::ACCESS_PUBLIC;
+            $fund_account->save();
+            
+            //System account creation
+            $syst_account = new Account;
+            $syst_account->title = 'System account';
+            $syst_account->added = $date;
+            $syst_account->last_action = $date;
+            $syst_account->class = Account::CLASS_SYSTEM;
+            $syst_account->tribe_id = $this->id;
+            $fund_account->access = Account::ACCESS_PUBLIC;
+            $syst_account->save();
+
+
+            //New rule calculation
+            if (!Rule::model()->findByAttributes(Array('tribe_group_id' => $this->group_id))) {
+                $new_rule = new Rule;
+                $new_rule->salary = 0;
+                $new_rule->tribe_group_id = $this->group_id;
+
+                foreach ($this->migrations as $migration) {
+                    $rule = $migration->entity->tribe->getNextRule();
+                    $new_rule->salary += $rule->salary;
+                }
+
+                $new_rule->multiplier = $rule->multiplier;
+                $new_rule->added = Common::datetime();
+                $new_rule->system_adapted = true;
+                $new_rule->salary = $new_rule->salary / count($this->migrations);
+                if ($new_rule->salary < Transaction::amountUserToSystem(Rule::SALARY_HIGH)) {
+                    $new_rule->min_salary = $new_rule->salary / Rule::MIN_SALARY_DIVIDER_LOW;
+                } else {
+                    $new_rule->min_salary = $new_rule->salary / Rule::MIN_SALARY_DIVIDER_HIGH;
+                }
+                $new_rule->save();
+            }
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            die($e->getMessage());
+        }
+    }
+
 }

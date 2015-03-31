@@ -9,6 +9,7 @@ return CMap::mergeArray(
 			),
 			/* uncomment the following to provide test database connection
 			'db'=>array(
+                'pdoClass' => 'NestedPDO',
 				'connectionString'=>'DSN for test database',
 			),
 			*/

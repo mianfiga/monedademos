@@ -85,14 +85,14 @@ class Period extends PeriodBase {
     /**
      * @return Period The last period registered.
      */
-    public static function getLast($tribe_id = 1) {
+    public static function getLast($tribe_id = Tribe::DEFAULT_TRIBE) {
         return self::model()->find('tribe_id = \'' . $tribe_id . '\' ORDER BY added DESC');
     }
 
     /**
      * @return Period The pre-last period registered.
      */
-    public static function getPrevious($tribe_id = 1) {
+    public static function getPrevious($tribe_id = Tribe::DEFAULT_TRIBE) {
         $periods = self::model()->findAll('tribe_id = \'' . $tribe_id . '\' ORDER BY id DESC');
         return next($periods);
     }
@@ -107,6 +107,7 @@ class Period extends PeriodBase {
 
     public static function calculate($tribe_id = Tribe::DEFAULT_TRIBE, $save = false) {
         $period = new Period;
+        $period->tribe_id = $tribe_id;
         $oldPeriodDate = self::getLastDate();
 
         $period->active_users = Entity::model()->count(

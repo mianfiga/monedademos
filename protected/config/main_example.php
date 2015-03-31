@@ -51,6 +51,7 @@ return array(
 		),
 		*/
 		'db'=>array(
+            'pdoClass' => 'NestedPDO',
             'connectionString' => 'mysql:host=localhost;dbname=rbu',
             'emulatePrepare' => true,
             'username' => 'root',

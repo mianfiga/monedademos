@@ -87,11 +87,11 @@ class Record extends RecordBase {
         ));
     }
 
-    public static function getLastRecord($tribe_id=1) {
+    public static function getLastRecord($tribe_id = 1) {
         return self::model()->find("tribe_id='" . $tribe_id . "' ORDER BY id DESC");
     }
 
-    public static function updateRecord($array) {
+    public static function updateRecord($array, $tribe_id = null) {
         $record = self::getLastRecord();
         $date = common::date();
         if (isset($array['total_amount']))
@@ -105,6 +105,7 @@ class Record extends RecordBase {
             $record->setIsNewRecord(true);
             $record->id = null;
         }
+        $record->tribe_id = $tribe_id;
         $record->save();
     }
 

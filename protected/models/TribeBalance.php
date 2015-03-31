@@ -96,4 +96,29 @@ class TribeBalance extends TribeBalanceBase
 			'criteria'=>$criteria,
 		));
 	}
+    static function get($from_id,$to_id){
+        $ret = self::model()->findByAttributes(array('from_id'=>$from_id,'to_id'=>$to_id));
+        if(!$ret){
+            $ret = new TribeBalance;
+            $ret->from_id=$from_id;
+            $ret->to_id=$to_id;
+            $ret->period_amount=0;
+            $ret->total_amount=0;
+        }
+        return $ret;
+    }
+    
+    static function getPeriodBalance($from_id,$to_id){
+        $forward = self::get($from_id,$to_id);
+        $backward = self::get($to_id,$from_id);
+
+        return $forward->period_amount - $backward->period_amount;
+    }
+    
+    static function getTotalBalance($from_id,$to_id){
+        $forward = self::get($from_id,$to_id);
+        $backward = self::get($to_id,$from_id);
+
+        return $forward->total_amount - $backward->total_amount;
+    }
 }

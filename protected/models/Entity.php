@@ -59,6 +59,12 @@ class Entity extends EntityBase {
             'brands' => array(self::HAS_MANY, 'Brand', 'created_by'),
             'links' => array(self::HAS_MANY, 'Link', 'entity_id'),
             'accounts' => array(self::MANY_MANY, 'Account', '{{authorization}}(entity_id, account_id)'),
+            'holdingAccounts' => array(
+                self::MANY_MANY,
+                'Account',
+                '{{authorization}}(entity_id, account_id)',
+                'on' => '`holdingAccounts_holdingAccounts`.`class`=\'' . Authorization::CLASS_HOLDER . '\''
+            ),
             'chargeTransactions' => array(self::HAS_MANY, 'Transaction', 'charge_entity'),
             'depositTransactions' => array(self::HAS_MANY, 'Transaction', 'deposit_entity'),
             'user' => array(self::BELONGS_TO, 'User', 'object_id'),

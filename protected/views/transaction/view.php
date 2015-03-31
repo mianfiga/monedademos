@@ -118,7 +118,7 @@ if ($model == null) {
 <br/>
 <?php
 if (isset($rate)) {
-    //$this->renderPartial('/rate/_embedded', array('model' => $rate));
+    $this->renderPartial('/rate/_embedded', array('model' => $rate));
 }
 ?>
 <?php

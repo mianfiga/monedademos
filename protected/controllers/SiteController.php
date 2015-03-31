@@ -49,33 +49,25 @@ class SiteController extends Controller {
     public function actionIndex() {
         Site::mobileCheck();
         Site::languageCheck();
-		
-		$entity_id = null;
-		if(Yii::app()->user){
-			$entity_id = Yii::app()->user->getId();
-		}
-        $dataProviderMarketAd = MarketAd::getAds(3, $entity_id, null,10);
-		
-		/*new CActiveDataProvider('MarketAd', array(
-            'criteria' => array(
-                'condition' => 'visible=1 AND expiration >= curdate()',
-                'order' => ' t.updated DESC',
-                'limit' => 10,
-            ),
-            'pagination' => false,
-        ));*/
-		
-		$dataProviderMarketAd->setPagination(false);
+
+        $entity_id = null;
+        if (Yii::app()->user) {
+            $entity_id = Yii::app()->user->getId();
+        }
+        $dataProviderMarketAd = MarketAd::getAds(3, $entity_id, null, 10);
+
+        $dataProviderMarketAd->setPagination(false);
 
         if (Yii::app()->session['mobile'])
             Yii::app()->setTheme('mobile');
         // renders the view file 'protected/views/site/index.php'
         // using the default layout 'protected/views/layouts/main.php'
         $this->render('index', array(
-            'record' => Record::getLastRecord(),
-            'rule' => Rule::getCurrentRule(),
-            'next_rule' => Rule::getDateRule( date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1))),
+//            'record' => Record::getLastRecord(),
+//            'rule' => Rule::getCurrentRule(),
+//            'next_rule' => Rule::getDateRule(date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1))),
             'dataProviderMarketAd' => $dataProviderMarketAd,
+            'tribes' => Tribe::Model()->findAll()
         ));
     }
 

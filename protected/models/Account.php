@@ -25,6 +25,8 @@
  */
 class Account extends AccountBase {
 
+    const ACCESS_PUBLIC = 'public';
+    const ACCESS_PRIVATE = 'private';
     const ERROR_NOFUNDS = 1;
     const ERROR_WRONG = 2;
     const ERROR_BLOCKED = 4;
@@ -107,6 +109,7 @@ class Account extends AccountBase {
                 'condition' => '`class` = \'' . Transaction::CLASS_SALARY . '\'',
                 'order' => 'executed_at ASC',
             ),
+            'tribe' => array(self::BELONGS_TO, 'Tribe', 'tribe_id'),
         );
     }
 
@@ -138,7 +141,7 @@ class Account extends AccountBase {
         }
 
         $percent = $rule->getTaxProportion();
-        $dateLastPeriod = Period::getLastDate($rule->tribe_id);
+        $dateLastPeriod = Period::getLastDate();
 
         $transaction = new Transaction;
 
@@ -164,12 +167,15 @@ class Account extends AccountBase {
         }
 
         //Transaction registration
+        if (!($holder = $this->getHolder())) {
+            $holder = Entity::get($this->tribe);
+        }
         $transaction->amount = $tax;
         $transaction->class = Transaction::CLASS_TAX;
-        $transaction->deposit_account = self::FUND_ACCOUNT;
+        $transaction->deposit_account = Account::getFundAccount($this->tribe_id)->id;
         $transaction->charge_account = $this->id;
-        $transaction->charge_entity = $this->getHolder()->id;
-        $transaction->deposit_entity = self::FUND_ENTITY;
+        $transaction->charge_entity = $holder->id;
+        $transaction->deposit_entity = Entity::get($this->tribe)->id;
 
         if (!$transaction->save()) {
 //			echo "ERROR";
@@ -194,7 +200,7 @@ class Account extends AccountBase {
             $date = strtotime('today');
         }
         if ($rule === null) {
-            $rule = Rule::getCurrentRule($this->holder->tribe->group_id);
+            $rule = Rule::getCurrentRule($this->tribe->group_id);
         }
 
         // We only pay proportionaly to the current day of month
@@ -228,19 +234,19 @@ class Account extends AccountBase {
             if ($amount < 0) {
                 $max_penalty = $rule->salary - $rule->min_salary;
                 $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
-            }else{
+            } else {
                 $penalty = 0;
             }
-            
+
             //returning array
             $ret = array(
-                "salary" => $salary,
-                "penalty" => $penalty,
+                'salary' => $salary,
+                'penalty' => $penalty,
+                'compensation' => 0
             );
             $transaction = new Transaction;
 
             $transaction->subject = "Minimum salary (" . Transaction::amountSystemToUser($rule->min_salary) . ')';
-
         } else if ($amount < 0) {//If have wasted more than have earned: penalty
             $max_penalty = $rule->salary - $rule->min_salary;
             $penalty = ($related_value == 0 ? 0 : min(min(abs($amount / $related_value * $max_penalty), abs($amount)), $max_penalty));
@@ -272,12 +278,15 @@ class Account extends AccountBase {
         }
 
         //Add salary transaction
+        if (!($holder = $this->getHolder())) {
+            $holder = Entity::get($this->tribe);
+        }
         $transaction->amount = round($salary);
         $transaction->class = Transaction::CLASS_SALARY;
-        $transaction->deposit_entity = $this->getHolder()->id;
+        $transaction->deposit_entity = $holder->id;
         $transaction->deposit_account = $this->id;
-        $transaction->charge_entity = self::FUND_ENTITY;
-        $transaction->charge_account = self::FUND_ACCOUNT;
+        $transaction->charge_entity = Entity::get($this->tribe)->id;
+        $transaction->charge_account = Account::getFundAccount($this->tribe_id)->id;
 
 
         if (!$transaction->save()) {
@@ -287,28 +296,22 @@ class Account extends AccountBase {
         return $ret;
     }
 
-    /**
-     * Add Salary to all the accounts who can earn it.
-     * @param $date date corresponding to de salary to register.
-     * @param Rule $rule rule to follow to add the salary.
-     */
-    public static function paySalaries(Tribe $tribe, $date = null, $rule = null) {
+//    /**
+//     * Add Salary to all the accounts who can earn it.
+//     * @param $date date corresponding to de salary to register.
+//     * @param Rule $rule rule to follow to add the salary.
+//     */
+//    public static function paySalaries(Tribe $tribe, $date = null, $rule = null) {
+//        
+//    }
 
-        if ($date === null)
-            $date = strtotime('today');
-
-        if ($rule === null)
-            $rule = Rule::getCurrentRule($tribe->group_id);
-
+    public static function preSalaryData(Tribe $tribe) {
         $accounts = self::getUserAccounts($tribe->id);
 
         $positive = 0;
         $negative = 0;
         $positive_count = 0;
         $negative_count = 0;
-
-        $penalties = 0;
-        $compensation = 0;
 
         $dateLastPeriod = Period::getLastDate();
 
@@ -327,6 +330,47 @@ class Account extends AccountBase {
             }
         }
 
+        //Tribes that this tribe has negative balance with count as positive
+        //users and the balance as the positive amount as we need to compensate
+        //users in those tribes.
+        $other_tribes = Tribe::model()->findAll('id != ' . $tribe->id);
+        foreach ($other_tribes as $other_tribe) {
+            $amount = TribeBalance::getPeriodBalance($tribe->id, $other_tribe->id);
+            if ($amount < 0) {
+                $positive -= $amount;
+                $positive_count++;
+            }
+        }
+
+        return Array('negative_accounts' => $negative_count, 'negative_amount' => $negative,
+            'positive_accounts' => $positive_count, 'positive_amount' => $positive);
+    }
+
+    /**
+     * Add Salary to all penaltied accounts who can earn it.
+     * @param $date date corresponding to de salary to register.
+     * @param Rule $rule rule to follow to add the salary.
+     */
+    public static function payPenalizedSalaries(Tribe $tribe, $salary_data, $date = null, $rule = null) {
+
+        if ($date === null)
+            $date = strtotime('today');
+
+        if ($rule === null) {
+            $rule = Rule::getCurrentRule($tribe->group_id);
+        }
+
+        $accounts = self::getUserAccounts($tribe->id);
+
+        //$positive = $salary_data['positive_amount'];
+        $negative = $salary_data['negative_amount'];
+        $positive_count = $salary_data['positive_accounts'];
+        $negative_count = $salary_data['negative_accounts'];
+
+        $penalties = 0;
+        $dateLastPeriod = Period::getLastDate();
+
+
         if ($negative_count == 0 || $positive_count == 0) {
             $negative_average = 0;
         } else {
@@ -336,12 +380,41 @@ class Account extends AccountBase {
 
         //Assign penaltied salaries
         foreach ($accounts as $acc) {
-            if ($dateLastPeriod <= $acc->last_action
-                    && (($acc->earned - $acc->spended - $acc->balance) < 0)) {
+            if ($dateLastPeriod <= $acc->last_action && (($acc->earned - $acc->spended - $acc->balance) < 0)) {
                 $ret = $acc->addSalary($date, $rule, $negative_average);
                 $penalties += $ret['penalty'];
             }
         }
+
+        return $penalties;
+    }
+
+    /**
+     * Add Salary to all penaltied accounts who can earn it.
+     * @param $date date corresponding to de salary to register.
+     * @param Rule $rule rule to follow to add the salary.
+     */
+    public static function payCompensatedSalaries(Tribe $tribe, $salary_data, $date = null, $rule = null) {
+
+        if ($date === null){
+            $date = strtotime('today');
+        }
+
+        if ($rule === null){
+            $rule = Rule::getCurrentRule($tribe->group_id);
+        }
+
+        $accounts = self::getUserAccounts($tribe->id);
+
+        $positive = $salary_data['positive_amount'];
+//        $negative = $salary_data['negative_amount'];
+//        $positive_count = $salary_data['positive_accounts'];
+//        $negative_count = $salary_data['negative_accounts'];
+        $penalties = $salary_data['penalties'];
+
+        $compensation = 0;
+
+        $dateLastPeriod = Period::getLastDate();
 
         //Assign compensed salaries
 
@@ -354,29 +427,27 @@ class Account extends AccountBase {
             }
         }
 
-        //log penalties & compensations to check everything is shared
+        return $compensation;
+    }
+
+    public static function postSalariesReset($tribe_id = null, $date = null) {
+
+        if ($date === null)
+            $date = strtotime('today');
+
         //System accounts
-        $accounts = self::getSystemAccounts($tribe->id);
+        $accounts = self::getSystemAccounts($tribe_id);
         foreach ($accounts as $acc) {
-            /* $ret = */ $acc->addSalary($date, $rule);
+            
+            $acc->addSalary($date, Rule::getCurrentRule($acc->tribe_id));
             $acc->saveAttributes(array(
                 'earned' => 0,
                 'spended' => 0,
                 'balance' => 0));
         }
 
-        //System accounts
-        $accounts = self::getSystemAccounts($tribe->id);
-        foreach ($accounts as $acc) {
-            /* $ret = */ $acc->addSalary($date, $rule);
-            $acc->saveAttributes(array(
-                'earned' => 0,
-                'spended' => 0,
-                'balance' => 0));
-        }
-        
         //Group accounts
-        $accounts = self::getGroupAccounts($tribe->id);
+        $accounts = self::getGroupAccounts($tribe_id);
         foreach ($accounts as $acc) {
             $acc->saveAttributes(array(
                 'earned' => 0,
@@ -384,20 +455,21 @@ class Account extends AccountBase {
                 'balance' => 0));
         }
 
-        
         //Reset user earned and spended
-        $accounts = self::getUserAccounts($tribe->id);
+        $accounts = self::getUserAccounts($tribe_id);
         foreach ($accounts as $acc) {
-            $amount = $acc->earned - $acc->spended - $acc->balance * 2;
+            $amount = $acc->earned - $acc->spended - $acc->balance;
             $acc->saveAttributes(array(
                 'earned' => 0,
                 'spended' => 0,
                 'balance' => ($amount > 0 ? 0 : -$amount)));
         }
-        
-        
-        return Array('negative_accounts' => $negative_count, 'negative_amount' => $negative,
-                     'positive_accounts' => $positive_count, 'positive_amount' => $positive);
+
+        //reset period tribe balance
+        $tribes_balances = TribeBalance::model()->findAll($tribe_id !== null ? 't.from_id = \'' . $tribe_id . '\'' : '');
+        foreach ($tribes_balances as $tribe_balance) {
+            $tribe_balance->saveAttributes(array('period_amount' => 0));
+        }
     }
 
     /**
@@ -432,7 +504,7 @@ class Account extends AccountBase {
     }
 
     public static function getUserAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
-        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_USER . '\' AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
+        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_USER . '\'' . ($tribe_id !== null ? ' AND t.tribe_id = \'' . $tribe_id . '\'' : '') . ' AND t.deleted is null');
     }
 
     public static function getTaxesAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
@@ -442,9 +514,9 @@ class Account extends AccountBase {
     public static function getSalaryAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
         return Account::model()->findAll('( `t`.`class`=\'' . Account::CLASS_USER . '\' OR `t`.`class`=\'' . Account::CLASS_SYSTEM . '\' ) AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
     }
-    
+
     public static function getGroupAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
-        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_GROUP . ' AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
+        return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_GROUP . '\'' . ($tribe_id !== null ? ' AND t.tribe_id = \'' . $tribe_id . '\'' : '') . ' AND t.deleted is null');
     }
 
     public static function getIsolatedAccounts() {
@@ -478,6 +550,16 @@ class Account extends AccountBase {
             $fund = Account::getFundAccount($tribe->id);
             $fund->credit += (($newRule->salary * $newRule->multiplier) - ($rule->salary * $rule->multiplier)) * count(Account::getSalaryAccounts());
             $fund->save();
+
+            //Records Update
+            $users = User::model()->with('entity')->findAll('entity.tribe_id = \'' . $tribe->id . '\' AND deleted is NULL');
+            $accounts = Account::model()->findAll('tribe_id = \'' . $tribe->id . '\'');
+            $total_amount = 0;
+            foreach ($accounts as $account) {
+                $total_amount += $account->credit;
+            }
+
+            Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)), $tribe->id);
         }
 
         if ($newRule->isNewRecord) {
@@ -486,59 +568,47 @@ class Account extends AccountBase {
         } else {
             $newRule->saveAttributes(array('system_adapted' => 1));
         }
-
-        //Records Update
-        $users = User::model()->findAll('deleted is NULL');
-        $accounts = Account::model()->findAll();
-        $total_amount = 0;
-        foreach ($accounts as $account) {
-            $total_amount += $account->credit;
-        }
-
-        Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)));
     }
 
     protected function beforeSave() {
-        if (parent::beforeSave()) {
-            if ($this->isNewRecord) {
-                $this->_isNew = true;
-            } else {
-                $this->_isNew = false;
-            }
-            return true;
-        } else
+        if (!parent::beforeSave()) {
             return false;
+        }
+        if ($this->isNewRecord) {
+            $this->_isNew = true;
+        } else {
+            $this->_isNew = false;
+        }
+        return true;
     }
 
     protected function afterSave() {
-        if ($this->_isNew) {
-            $this->_isNew = false;
-
+        if ($this->_isNew && $this->class == self::CLASS_USER) {
             //When new user account we add funds to system.
-            if ($this->class == self::CLASS_USER) {
-                $adaptedRule = Rule::getAdaptedRule();
-                $rule = Rule::getCurrentRule();
+            $adaptedRule = Rule::getAdaptedRule($this->tribe->group_id);
+            $rule = Rule::getCurrentRule($this->tribe->group_id);
 
-                $systemAccs = self::getSystemAccounts();
+            $systemAccs = self::getSystemAccounts($this->tribe_id);
 
-                $fund = self::getFundAccount();
-                $fund->credit += $adaptedRule->salary * ($adaptedRule->multiplier + count($systemAccs));
-                $fund->save();
+            $fund = self::getFundAccount($this->tribe_id);
+            $fund->credit += $adaptedRule->salary * ($adaptedRule->multiplier + count($systemAccs));
+            $fund->save();
 
-                //Add money to system accounts
-                foreach ($systemAccs as $sysAcc) {
-                    $tran = new Transaction;
-                    $tran->charge_account = $fund->id;
-                    $tran->deposit_account = $sysAcc->id;
-                    $tran->charge_entity = self::FUND_ENTITY;
-                    $tran->deposit_entity = self::FUND_ENTITY;
-                    $tran->class = Transaction::CLASS_SALARY;
-                    $tran->amount = $rule->salary;
-                    $tran->subject = 'New user payment';
-                    $tran->save();
-                }
+            //Add money to system accounts
+            foreach ($systemAccs as $sysAcc) {
+                $entity = Entity::get($sysAcc->tribe);
+                $tran = new Transaction;
+                $tran->charge_account = $fund->id;
+                $tran->deposit_account = $sysAcc->id;
+                $tran->charge_entity = $entity->id;
+                $tran->deposit_entity = $entity->id;
+                $tran->class = Transaction::CLASS_SALARY;
+                $tran->amount = $rule->salary;
+                $tran->subject = 'New user payment';
+                $tran->save();
             }
         }
+        $this->_isNew = false;
         parent::afterSave();
     }
 
@@ -547,7 +617,7 @@ class Account extends AccountBase {
     }
 
     public static function getSystemAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
-        return self::model()->findAll('t.class=\'' . self::CLASS_SYSTEM . '\' AND t.tribe_id = \'' . $tribe_id . '\' AND t.deleted is NULL');
+        return self::model()->findAll('t.class=\'' . self::CLASS_SYSTEM . '\'' . ($tribe_id !== null ? ' AND t.tribe_id = \'' . $tribe_id . '\'' : '') . ' AND t.deleted is NULL');
     }
 
     /**
