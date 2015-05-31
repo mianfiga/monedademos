@@ -33,9 +33,8 @@
     <?php if ($scenario == 'update') { ?>
         <br/>
         <fieldset>
-            <legend><?php echo Yii::t('app', 'Change Pin & Unlock account') ?></legend>
+            <legend><?php echo Yii::t('app', 'Change Pin & Unlock account') ?> <span class="subheader"><?php echo Yii::t('app', '(3 steps are compulsory)') ?></span></legend>
             <div class="row transparent">
-
                 <div class="small-12 large-6 push-6 columns">
                     <?php echo Yii::t('app', '<strong>1st</strong> Write your user password.') ?>
                 </div>
@@ -46,8 +45,6 @@
                         <?php echo $form->error($model, 'user_password'); ?>
                     </div>
                 </div>
-
-
             </div>
             <br/>
 

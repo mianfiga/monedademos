@@ -21,6 +21,8 @@
  * @property User $depositUser
  */
 class Transaction extends TransactionBase {
+    
+    private $db_transaction;
 
     const CLASS_SALARY = 'salary'; // 1;
     const CLASS_TAX = 'tax'; //2;
@@ -244,7 +246,7 @@ class Transaction extends TransactionBase {
                 }
 
                 if ($this->charge_errors == 0 && $this->deposit_errors == 0) {
-                    $transaction = Yii::app()->db->beginTransaction();
+                    $this->db_transaction = Yii::app()->db->beginTransaction();
                     try {
                         if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
                             $charge->spended += $this->amount;
@@ -288,11 +290,9 @@ class Transaction extends TransactionBase {
                         $this->charge_tribe = $charge->tribe_id;
                         $this->deposit_tribe = $deposit->tribe_id;
                         
-                        $transaction->commit();
-                        
                         return true;
                     } catch (Exception $e) {
-                        $transaction->rollBack();
+                        $this->db_transaction->rollBack();
                         return false;
                     }
                 } else {
@@ -314,6 +314,7 @@ class Transaction extends TransactionBase {
     }
 
     protected function afterSave() {
+        $this->db_transaction->commit();
         parent::afterSave();
         if ($this->refered_pending != null) {
             $pending = Pending::model()->findByPk($this->refered_pending);

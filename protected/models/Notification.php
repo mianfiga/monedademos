@@ -169,8 +169,8 @@ class Notification extends NotificationBase {
 
             $udate = strtotime($notif->sent); //date_timestamp_get(DateTime::createFromFormat('Y-m-d H:i:s',$notif->sent));
 
-            if ($configuration->mailmode == NotificationConfiguration::MAILMODE_INSTANTLY || ($configuration->mailmode == NotificationConfiguration::MAILMODE_DAILY &&
-                    ($udate + 86400) < time() )) {
+            if ($notif->entity->getEmail() && ($configuration->mailmode == NotificationConfiguration::MAILMODE_INSTANTLY || ($configuration->mailmode == NotificationConfiguration::MAILMODE_DAILY &&
+                    ($udate + 86400) < time() ))) {
                 Yii::app()->setLanguage($notif->entity->getCulture());
                 if (mail($notif->entity->getEmail(), '=?UTF-8?B?' . base64_encode($notif->subject()) . '?=', CController::renderInternal(Yii::getPathOfAlias('application.views') . ($notif->notification->view != '' ? $notif->notification->view : '/notification/_mail') . '.php', array('data' => $notif), true), $headers)) {
                     $notif->sent = date('YmdHis');

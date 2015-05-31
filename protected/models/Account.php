@@ -396,11 +396,11 @@ class Account extends AccountBase {
      */
     public static function payCompensatedSalaries(Tribe $tribe, $salary_data, $date = null, $rule = null) {
 
-        if ($date === null){
+        if ($date === null) {
             $date = strtotime('today');
         }
 
-        if ($rule === null){
+        if ($rule === null) {
             $rule = Rule::getCurrentRule($tribe->group_id);
         }
 
@@ -438,7 +438,7 @@ class Account extends AccountBase {
         //System accounts
         $accounts = self::getSystemAccounts($tribe_id);
         foreach ($accounts as $acc) {
-            
+
             $acc->addSalary($date, Rule::getCurrentRule($acc->tribe_id));
             $acc->saveAttributes(array(
                 'earned' => 0,
@@ -515,6 +515,10 @@ class Account extends AccountBase {
         return Account::model()->findAll('( `t`.`class`=\'' . Account::CLASS_USER . '\' OR `t`.`class`=\'' . Account::CLASS_SYSTEM . '\' ) AND t.tribe_id=\'' . $tribe_id . '\' AND t.deleted is null');
     }
 
+//    public static function getTribeGroupSalaryAccounts($tribe_group_id = Tribe::DEFAULT_TRIBE_GROUP) {
+//        return Account::model()->with('tribe')->findAll('( `t`.`class`=\'' . Account::CLASS_USER . '\' OR `t`.`class`=\'' . Account::CLASS_SYSTEM . '\' ) AND tribe.group_id=\'' . $tribe_group_id . '\' AND t.deleted is null');
+//    }
+
     public static function getGroupAccounts($tribe_id = Tribe::DEFAULT_TRIBE) {
         return Account::model()->findAll('`t`.`class`=\'' . Account::CLASS_GROUP . '\'' . ($tribe_id !== null ? ' AND t.tribe_id = \'' . $tribe_id . '\'' : '') . ' AND t.deleted is null');
     }
@@ -529,44 +533,50 @@ class Account extends AccountBase {
      * @param Rule $currRule The rule to copy from.
      */
     public static function adaptFunds(Rule $newRule, Rule $currRule = null) {
-
-        if ($currRule === null) {
-            $currRule = Rule::getCurrentRule($newRule->tribe_group_id);
-        }
-        if ($newRule->salary == null) {
-            $newRule->salary = $currRule->salary;
-        }
-        if ($newRule->min_salary == null) {
-            $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER;
-        }
-        if ($newRule->multiplier == null) {
-            $newRule->multiplier = $currRule->multiplier;
-        }
-
-        $rule = Rule::getAdaptedRule($newRule->tribe_group_id);
-
-        $tribes = Tribe::model()->findByAttributes(array('tribe_group_id' => $newRule->tribe_group_id));
-        foreach ($tribes as $tribe) {
-            $fund = Account::getFundAccount($tribe->id);
-            $fund->credit += (($newRule->salary * $newRule->multiplier) - ($rule->salary * $rule->multiplier)) * count(Account::getSalaryAccounts());
-            $fund->save();
-
-            //Records Update
-            $users = User::model()->with('entity')->findAll('entity.tribe_id = \'' . $tribe->id . '\' AND deleted is NULL');
-            $accounts = Account::model()->findAll('tribe_id = \'' . $tribe->id . '\'');
-            $total_amount = 0;
-            foreach ($accounts as $account) {
-                $total_amount += $account->credit;
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            if ($currRule === null) {
+                $currRule = Rule::getCurrentRule($newRule->tribe_group_id);
+            }
+            if ($newRule->salary == null) {
+                $newRule->salary = $currRule->salary;
+            }
+            if ($newRule->min_salary == null) {
+                $newRule->min_salary = $newRule->salary / Rule::MIN_SALARY_DIVIDER;
+            }
+            if ($newRule->multiplier == null) {
+                $newRule->multiplier = $currRule->multiplier;
             }
 
-            Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)), $tribe->id);
-        }
+            $rule = Rule::getAdaptedRule($newRule->tribe_group_id);
 
-        if ($newRule->isNewRecord) {
-            $newRule->system_adapted = 1;
-            $newRule->save();
-        } else {
-            $newRule->saveAttributes(array('system_adapted' => 1));
+            $tribes = Tribe::model()->findAllByAttributes(array('group_id' => $newRule->tribe_group_id));
+            foreach ($tribes as $tribe) {
+                $fund = Account::getFundAccount($tribe->id);
+                $fund->credit += (($newRule->salary * $newRule->multiplier) - ($rule->salary * $rule->multiplier)) * count(Account::getSalaryAccounts($tribe->id));
+                $fund->save();
+
+                //Records Update
+                $user_count = User::model()->with('entity')->count('entity.tribe_id = \'' . $tribe->id . '\' AND deleted is NULL');
+                $accounts = Account::model()->findAll('tribe_id = \'' . $tribe->id . '\'');
+                $total_amount = 0;
+                foreach ($accounts as $account) {
+                    $total_amount += $account->credit;
+                }
+
+                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => $user_count), $tribe->id);
+            }
+
+            if ($newRule->isNewRecord) {
+                $newRule->system_adapted = 1;
+                $newRule->save();
+            } else {
+                $newRule->saveAttributes(array('system_adapted' => 1));
+            }
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            die($e->getMessage());
         }
     }
 

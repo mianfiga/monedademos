@@ -165,18 +165,18 @@ class RbuCommand extends CConsoleCommand {
     }
 
     public function actionMigrate() {
-        $modified_tribes = array();
-        $tribes = Tribe::model()->findAll();
-        foreach ($tribes as $tribe) {
-            $fund_account = Account::getFundAccount($tribe->id);
-            if (!$fund_account && count($tribe->migrations) > 3) {//Activate tribe: create accounts and rule
-                $tribe->activate();
-                $modified_tribes[$tribe->id] = true;
-            }
-        }
-
         $transaction = Yii::app()->db->beginTransaction();
         try {
+            $modified_tribes = array();
+            $tribes = Tribe::model()->findAll();
+            foreach ($tribes as $tribe) {
+                $fund_account = Account::getFundAccount($tribe->id);
+                if (!$fund_account && count($tribe->migrations) > 3) {//Activate tribe: create accounts and rule
+                    $tribe->activate();
+                    $modified_tribes[$tribe->id] = true;
+                }
+            }
+
 
             $migrations = TribeMigration::model()->findAll('status="confirmed" AND executed_at is null');
             foreach ($migrations as $migration) {
@@ -283,14 +283,14 @@ class RbuCommand extends CConsoleCommand {
                     continue;
                 }
                 //Records Update
-                $users = User::model()->with('entity')->findAll('entity.tribe_id = \'' . $tribe_id . '\' AND deleted is NULL');
+                $user_count = User::model()->with('entity')->count('entity.tribe_id = \'' . $tribe_id . '\' AND t.deleted is NULL');
                 $accounts = Account::model()->findAll('tribe_id = \'' . $tribe_id . '\'');
                 $total_amount = 0;
                 foreach ($accounts as $account) {
                     $total_amount += $account->credit;
                 }
 
-                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => count($users)), $tribe_id);
+                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => $user_count), $tribe_id);
             }
 
             $transaction->commit();
@@ -351,9 +351,23 @@ class RbuCommand extends CConsoleCommand {
                 $rule = Rule::getCurrentRule($tribe->group_id);
                 Account::payCompensatedSalaries($tribe, $ret[$tribe->id], $date, $rule);
             }
-            
-            foreach ($period as $per) {
+
+            foreach ($period as $tribe_id => $per) {
+                if (!$per) {
+                    continue;
+                }
+
                 $per->save();
+
+//                //Records Update
+//                $user_count = User::model()->with('entity')->count('entity.tribe_id = \'' . $tribe_id . '\' AND t.deleted is NULL');
+//                $accounts = Account::model()->findAll('tribe_id = \'' . $tribe_id . '\'');
+//                $total_amount = 0;
+//                foreach ($accounts as $account) {
+//                    $total_amount += $account->credit;
+//                }
+//
+//                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => $user_count), $tribe_id);
             }
 
             Account::postSalariesReset();
@@ -451,7 +465,7 @@ class RbuCommand extends CConsoleCommand {
         foreach ($groups as $group) {
             $newRule = Rule::getTomorrowRule($group->id);
             $rule = Rule::getAdaptedRule($group->id);
-            if ($newRule->id != $rule->id) {
+            if ($newRule && $rule && $newRule->id != $rule->id) {
                 //Contamos las cuentas con sueldo y adaptamos la cantidad del fondo.
                 Account::adaptFunds($newRule);
             }

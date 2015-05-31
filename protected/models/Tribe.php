@@ -265,6 +265,16 @@ class Tribe extends TribeBase {
         try {
             $date = Common::datetime();
 
+
+            $entity = Entity::get($this);
+            if (!$entity) {
+                $entity = new Entity;
+                $entity->class = get_class($this);
+                $entity->object_id = $this->id;
+                $entity->tribe_id = $this->id;
+                $entity->save();
+            }
+
             //Fund account creation
             $fund_account = new Account;
             $fund_account->title = 'Fund account';
@@ -274,7 +284,7 @@ class Tribe extends TribeBase {
             $fund_account->tribe_id = $this->id;
             $fund_account->access = Account::ACCESS_PUBLIC;
             $fund_account->save();
-            
+
             //System account creation
             $syst_account = new Account;
             $syst_account->title = 'System account';

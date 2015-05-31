@@ -14,10 +14,10 @@ $this->menu = array(
 );
 ?>
 <a class="mk_rss" href="<?php echo Yii::app()->createUrl('market/rss') ?>"><img src="<?php echo Yii::app()->request->baseUrl ?>/images/fc-webicon-rss-m.png" alt="Market RSS" /></a>
-<h1>Market</h1>  
+<h1>Market<?php echo ($tribe?'<span class="subheader"> '.$tribe->name.'</span>':'') ?></h1> 
 
 
-<p>Anuncios de productos y servicios tanto gratuítos como sufragables, al menos parcialmente, con Demos.</p>
+<p>Anuncios de productos y servicios no especulativos (<a href="http://monedademos.blogspot.com.es/2014/04/declaracion-de-la-asamblea-demos-acerca.html">?</a>), tanto gratuítos como sufragables, al menos parcialmente, con Demos.</p>
 <?php
 echo $this->renderPartial('/market/_list', array(
     'dataProvider' => $dataProvider,

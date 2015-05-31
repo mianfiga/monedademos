@@ -116,7 +116,7 @@ class Period extends PeriodBase {
         
         $sum = Account::model()->findBySql('select sum(`earned`) as `earned` ' .
                 'from `' . Account::model()->tableSchema->name . '` as account' .
-                ' where tribe_id=\'' . $tribe_id . '\'', array());
+                ' where `class`=\'user\' AND tribe_id=\'' . $tribe_id . '\'', array());
 
         $period->movements = $sum->earned;
         $period->added = date('Y-m-d');

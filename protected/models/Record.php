@@ -87,19 +87,22 @@ class Record extends RecordBase {
         ));
     }
 
-    public static function getLastRecord($tribe_id = 1) {
+    public static function getLastRecord($tribe_id = Tribe::DEFAULT_TRIBE) {
         return self::model()->find("tribe_id='" . $tribe_id . "' ORDER BY id DESC");
     }
 
     public static function updateRecord($array, $tribe_id = null) {
-        $record = self::getLastRecord();
+        $record = self::getLastRecord($tribe_id);
         $date = common::date();
-        if (isset($array['total_amount']))
+        if (isset($array['total_amount'])){
             $record->total_amount = $array['total_amount'];
-        if (isset($array['user_count']))
+        }
+        if (isset($array['user_count'])){
             $record->user_count = $array['user_count'];
-        if (isset($array['account_count']))
+        }
+        if (isset($array['account_count'])){
             $record->account_acount = $array['account_count'];
+        }
         if ($date != $record->added) {
             $record->added = $date;
             $record->setIsNewRecord(true);

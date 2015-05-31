@@ -156,6 +156,7 @@ return array(
     'Promos & Ads' => 'Promos y Anuncios',
     'Contributors' => 'Colaboradores',
     'Change Pin & Unlock account' => 'Cambio de Pin y desbloqueo de cuenta',
+    '(3 steps are compulsory)' => '(Debes completar los 3 pasos)',
     '<strong>1st</strong> Write your user password.' => '<strong>1º</strong> Escribe tu contraseña de usuario.',
     '<strong>2nd</strong> Write your new account pin twice (will be asked to confirm your future payments).' => '<strong>2º</strong> Escribe tu nuevo pin dos veces (te lo pedirá para confirmar tus pagos futuros).',
     '<strong>3rd</strong> Saves changes.' => '<strong>3º</strong> Guarda los cambios.',

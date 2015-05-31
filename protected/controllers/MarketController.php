@@ -312,15 +312,20 @@ class MarketController extends Controller {
         $entity_id = Yii::app()->user->getId();
         $dataProvider = MarketAd::getAds($mode, $entity_id,$tribe_id);
 
-
+        
         $model = new MarketAd('search');
         $model->unsetAttributes();  // clear any default values
+        $tribe= null;
+        if ($tribe_id){
+            $tribe = Tribe::model()->findByPk($tribe_id);
+        }
         if (isset($_GET['MarketAd']))
             $model->attributes = $_GET['MarketAd'];
 
         $this->render('index', array(
             'dataProvider' => $dataProvider,
             'model' => $model,
+            'tribe' => $tribe
         ));
     }
 
