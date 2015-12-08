@@ -164,6 +164,12 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
             </div><!-- footer -->
         </div>
         </div><!-- page -->
-
+        <div style="position:fixed; bottom:0px; background-color: #FFF; width: 100%;">
+            <div class="row">
+                <div class="small-12 columns" style="margin: 5px">
+                    Utilizamos <a href="http://es.wikipedia.org/wiki/Cookie_(inform%C3%A1tica)" target="_blank">cookies</a> para ofrecer nuestros servicios. Si utilizas esta web sin la configuración necesaria para evitarlo significará que aceptas su uso.
+                </div>            
+            </div>
+        </div>
     </body>
 </html>
