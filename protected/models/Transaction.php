@@ -174,7 +174,7 @@ class Transaction extends TransactionBase {
     protected function beforeValidate(){
         $this->form_amount = str_replace(',','.',str_replace(' ','',$this->form_amount));
         $this->charge_account_number = str_replace(' ','',$this->charge_account_number);
-        $this->deposit_account_number = str_replace(' ','',$this->charge_account_number);
+        $this->deposit_account_number = str_replace(' ','',$this->deposit_account_number);
         return parent::beforeValidate();
     }
     protected function afterValidate() {
