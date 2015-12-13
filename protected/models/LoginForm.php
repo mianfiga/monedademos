@@ -77,4 +77,9 @@ class LoginForm extends CFormModel
 		else
 			return false;
 	}
+    
+    protected function beforeValidate(){
+        $this->username = str_replace(' ','',$this->username);
+        return parent::beforeValidate();
+    }
 }
