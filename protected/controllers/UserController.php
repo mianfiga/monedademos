@@ -42,7 +42,8 @@ class UserController extends Controller {
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('index', 'delete', 'admin'),
+		'actions' => array('index', 'view', 'update', 'edit'),
+                //'actions' => array('index', 'delete', 'admin'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -108,14 +109,14 @@ class UserController extends Controller {
             if ($model->save()) {
                 $invitation->used = date('YmdHis');
                 $invitation->save();
-                
+
                 $modelLogIn = new LoginForm;
                 $modelLogIn->username = $model->username;
                 $modelLogIn->password = $model->plain_password;
                 $modelLogIn->validate() && $modelLogIn->login();
-                
+
                 ActivityLog::add(Entity::get($model)->id, ActivityLog::SIGNUP);
-                
+
                 Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(array(Yii::app()->defaultController));
             }
@@ -149,9 +150,9 @@ class UserController extends Controller {
                 $modelLogIn->username = $model->username;
                 $modelLogIn->password = $model->plain_password;
                 $modelLogIn->validate() && $modelLogIn->login();
-                
+
                 //ActivityLog::add(Entity::get($model)->id, ActivityLog::SIGNUP);
-                
+
                 Yii::app()->user->setFlash('success', Yii::t('app', 'Welcome to DEMOS'));
                 $this->redirect(array(Yii::app()->defaultController));
             }
@@ -168,7 +169,9 @@ class UserController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionEdit($id) {
-
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         if (Yii::app()->user->getId() != $id)
             $this->redirect(array('site/index'));
 
@@ -205,6 +208,9 @@ class UserController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         if (Yii::app()->user->getId() != $id)
             $this->redirect(array('site/index'));
 
@@ -331,6 +337,9 @@ class UserController extends Controller {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         $model = User::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');

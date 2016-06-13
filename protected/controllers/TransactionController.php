@@ -372,6 +372,9 @@ class TransactionController extends Controller {
               $condition='charge_account='.Post::STATUS_PUBLISHED
               .' OR deposit_account='.Post::STATUS_ARCHIVED;
               else */
+            if(!is_numeric($id)){
+              throw new CHttpException(404, 'Access denied.');
+            }
             $condition = '';
             $this->_model = Transaction::model()->findByPk($id, $condition);
 

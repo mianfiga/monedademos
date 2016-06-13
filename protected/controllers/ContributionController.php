@@ -110,7 +110,7 @@ class ContributionController extends Controller {
             'logged' => $logged,
         ));
     }
-    
+
     public function actionContactEnt($id) {
         $model = new ContributionContactForm;
         $entity = Entity::model()->findByPk(Yii::app()->user->getId());
@@ -122,6 +122,9 @@ class ContributionController extends Controller {
         if (isset($_POST['ContributionContactForm'])) {
             $model->attributes = $_POST['ContributionContactForm'];
             if ($model->validate()) {
+                if(!is_numeric($id)){
+                  throw new CHttpException(404, 'Access denied.');
+                }
                 $recipent = Entity::model()->findByPk($id); //$this->loadModel($id);
                 $headers = "From: contacto@monedademos.es\r\nReply-To: {$logged->email}";
                 if (mail($recipent->email, '[Contact from DEMOS] ' . $model->subject, $model->body, $headers)) {
@@ -167,6 +170,9 @@ class ContributionController extends Controller {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         $model = User::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');

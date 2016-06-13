@@ -219,8 +219,18 @@ class MarketAd extends MarketAdBase {
     static public function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null) {
 
         $with = array();
-
-
+        if(!!$mode && !is_numeric($mode)){
+            $mode = null;
+    	  }
+        if(!!$entity_id && !is_numeric($entity_id)){
+            $entity_id = null;
+       	}
+        if(!!$tribe_id && !is_numeric($tribe_id)){
+            $tribe_id = null;
+    	  }
+        if(!!$limit && !is_numeric($limit)){
+            $limit = null;
+    	  }
 
         if ($entity_id) {
             $with['joined'] = array(

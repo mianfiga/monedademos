@@ -28,7 +28,7 @@ class InvitationController extends Controller {
         foreach ($users as $user) {
             $can_invite[] = $user->username;
         }
-        
+
         return array(
             /* 			array('allow',  // allow all users to perform 'index' and 'view' actions
               'actions'=>array(),
@@ -154,6 +154,9 @@ class InvitationController extends Controller {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         $model = Invitation::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');

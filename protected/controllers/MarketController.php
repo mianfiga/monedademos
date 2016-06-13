@@ -49,6 +49,9 @@ class MarketController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $entity_id = Yii::app()->user->getId();
         $model = MarketAd::model()->with(
                 array(
@@ -66,6 +69,9 @@ class MarketController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionPanel($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $model = $this->loadModel($id); //MarketAd::model()->with('users')->findByPk($id);
         if (isset(Yii::app()->user->roles[$model->created_by])) {
             $criteria = new CDbCriteria;
@@ -99,6 +105,9 @@ class MarketController extends Controller {
     }
 
     public function actionPanelView($ad_id, $entity_id) {
+        if(!is_numeric($ad_id) || !is_numeric($entity_id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $ad = $this->loadModel($ad_id);
         if (!isset(Yii::app()->user->roles[$model->created_by])) {
             $entity = Entity::model()->findByPk($entity_id);
@@ -186,6 +195,9 @@ class MarketController extends Controller {
      * @param integer $id the ID of the model to be updated
      */
     public function actionUpdate($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $model = $this->loadModel($id);
         if (!isset(Yii::app()->user->roles[$model->created_by])) {
             Yii::app()->user->setFlash('error', Yii::t('market', 'You can not update this advertisement'));
@@ -213,6 +225,9 @@ class MarketController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionExpire($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $model = $this->loadModel($id);
 
         if (!isset(Yii::app()->user->roles[$model->created_by])) {
@@ -235,6 +250,9 @@ class MarketController extends Controller {
      * @param integer $id the ID of the model to be deleted
      */
     public function actionDelete($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $model = $this->loadModel($id);
         if (!isset(Yii::app()->user->roles[$model->created_by])) {
             Yii::app()->user->setFlash('error', Yii::t('market', 'You can not delete this advertisement'));
@@ -260,6 +278,9 @@ class MarketController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionJoin($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $ad = $this->loadModel($id);
         $entity_id = Yii::app()->user->getId();
         $model = MarketJoined::model()->findByPk(array('ad_id' => $id, 'entity_id' => $entity_id));
@@ -302,6 +323,9 @@ class MarketController extends Controller {
      * Lists all models.
      */
     public function actionList($mode = null, $tribe_id=null) {
+        if((!!$mode && !is_numeric($mode)) || (!!$tribe_id && !is_numeric($tribe_id))){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $this->actionIndex($mode,$tribe_id);
     }
 
@@ -309,6 +333,9 @@ class MarketController extends Controller {
      * Lists all models.
      */
     public function actionIndex($mode = null, $tribe_id=null) {
+        if((!!$mode && !is_numeric($mode)) || (!!$tribe_id && !is_numeric($tribe_id))){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $entity_id = Yii::app()->user->getId();
         $dataProvider = MarketAd::getAds($mode, $entity_id,$tribe_id);
 
@@ -316,7 +343,7 @@ class MarketController extends Controller {
         $model = new MarketAd('search');
         $model->unsetAttributes();  // clear any default values
         $tribe= null;
-        if ($tribe_id){
+        if ($tribe_id && is_numeric($tribe_id)){
             $tribe = Tribe::model()->findByPk($tribe_id);
         }
         if (isset($_GET['MarketAd']))
@@ -363,6 +390,9 @@ class MarketController extends Controller {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
+        if(!is_numeric($id)){
+            throw new CHttpException(404, 'Access denied.');
+        }
         $model = MarketAd::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');

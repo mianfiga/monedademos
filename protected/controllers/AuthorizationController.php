@@ -147,6 +147,9 @@ class AuthorizationController extends Controller
 	 */
 	public function loadModel($entity_id, $account_id)
 	{
+  	if(!is_numeric($entity_id) || !is_numeric($account_id)){
+    	throw new CHttpException(404, 'Access denied.');
+    }
 		$model=Authorization::model()->findByPk(array("entity_id" => $entity_id, "account_id" => $account_id));
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
@@ -195,7 +198,7 @@ class AuthorizationController extends Controller
 					}
 
 					$pending = new Pending;
-					
+
 					$pending->setAttributes($opmodel->attributes,false);
 					$pending->save();
 
@@ -225,13 +228,13 @@ class AuthorizationController extends Controller
 						$opmodel = Yii::app()->session['operations'][$sid]['model'];
 
                         $url = Yii::app()->session['operations'][$sid]['url'];
-                        
+
 						if($opmodel->save()){
                             $array= Yii::app()->session['operations'];
                             unset($array[$sid]);
                             Yii::app()->session['operations'] = $array;
                         }
-                        
+
 						$this->redirect(array($url,
 								'id' => $opmodel->id,
 								'charge_errors' => $opmodel->charge_errors,

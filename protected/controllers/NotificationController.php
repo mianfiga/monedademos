@@ -148,6 +148,12 @@ class NotificationController extends Controller {
      * Lists all models.
      */
     public function actionUnsubscribe($e_id, $n_id, $m) {
+        if(!is_numeric($e_id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
+        if(!is_numeric($n_id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         $entity = Entity::model()->findByPk($e_id);
         if (!$entity || $entity->getMagic() != $m) {
             throw new CHttpException(404, 'Invalid options');
@@ -179,6 +185,9 @@ class NotificationController extends Controller {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         $model = Notification::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');

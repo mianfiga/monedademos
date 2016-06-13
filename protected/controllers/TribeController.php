@@ -143,6 +143,9 @@ class TribeController extends Controller {
      * @param integer the ID of the model to be loaded
      */
     public function loadModel($id) {
+        if(!is_numeric($id)){
+          throw new CHttpException(404, 'Access denied.');
+        }
         $model = Tribe::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
