@@ -93,7 +93,15 @@ class Record extends RecordBase {
 
     public static function updateRecord($array, $tribe_id = null) {
         $record = self::getLastRecord($tribe_id);
-        $date = common::date();
+        $date = Common::date();
+        if(!$record){
+            $record = new Record;
+            $record->added = $date;
+            $record->total_amount = 0;
+            $record->user_count = 0;
+            $record->account_count = 0;
+        }
+
         if (isset($array['total_amount'])){
             $record->total_amount = $array['total_amount'];
         }
@@ -101,7 +109,7 @@ class Record extends RecordBase {
             $record->user_count = $array['user_count'];
         }
         if (isset($array['account_count'])){
-            $record->account_acount = $array['account_count'];
+            $record->account_count = $array['account_count'];
         }
         if ($date != $record->added) {
             $record->added = $date;
@@ -109,7 +117,10 @@ class Record extends RecordBase {
             $record->id = null;
         }
         $record->tribe_id = $tribe_id;
-        $record->save();
+        if(!$record->save()){
+          print_r($record->attributes);
+          throw new Exception('Record::UpdateRecord failed');
+        };
     }
 
 }

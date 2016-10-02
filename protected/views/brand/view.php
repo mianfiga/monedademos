@@ -70,9 +70,9 @@ echo $this->renderPartial('/market/_list', array(
             <img src="<?php echo Yii::app()->request->baseUrl . '/images/brands/' . $model->image ?>" alt="<?php echo CHtml::encode($model->name) ?>"/>
         <?php } ?>
         <?php
-        echo $this->renderPartial('/link/_list', array(
+/*        echo $this->renderPartial('/link/_list', array(
             'links' => $entity->links,
-            'edit' => $is_admin));
+            'edit' => $is_admin));*/
         ?>
         <?php
         echo $this->renderPartial('/rate/_list', array(

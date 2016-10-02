@@ -8,5 +8,5 @@ if ($model != null) {
     <div class='mk_updated'><?php echo Yii::t('app', 'Updated') . ': ' . $model->updated ?></div>
     <?php echo $this->renderPartial('/rate/_form', array('model' => $model)); ?>
 
-<? }
+<?php }
 ?>

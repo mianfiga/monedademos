@@ -21,7 +21,7 @@
  * @property User $depositUser
  */
 class Transaction extends TransactionBase {
-    
+
     private $db_transaction;
 
     const CLASS_SALARY = 'salary'; // 1;
@@ -133,7 +133,7 @@ class Transaction extends TransactionBase {
         $criteria->compare('charge_account_number', $this->charge_account_number, true);
         $criteria->compare('deposit_account_number', $this->deposit_account_number, true);
 
-        $criteria->order = 'id DESC'; // last_login DESC, 
+        $criteria->order = 'id DESC'; // last_login DESC,
         $criteria->condition = "(charge_account='" . $acc['account_id'] . "')" . /* AND charge_entity='".$acc['entity_id']."')". */
                 " OR (deposit_account='" . $acc['account_id'] . "')"; /* AND deposit_entity='".$acc['entity_id']."')", */
 
@@ -256,10 +256,10 @@ class Transaction extends TransactionBase {
                         if ($this->class == self::CLASS_TRANSFER || $this->class == self::CLASS_CHARGE) {
                             $charge->spended += $this->amount;
                             $charge->total_spended += $this->amount;
-                        } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
+                        } else if ($this->class == self::CLASS_REFUND) {
                             $charge->earned -= $this->amount;
                             $charge->total_earned -= $this->amount;
-                        }
+                        }//else if($this->class == self::CLASS_SYSTEM_REFUND) we do nothing in this case as long as salaries don't count
 
                         $charge->credit -= $this->amount;
                         $charge->save();
@@ -272,10 +272,10 @@ class Transaction extends TransactionBase {
                             if ($deposit->earned >= $rule->min_salary) {
                                 $deposit->balance = 0;
                             }
-                        } else if ($this->class == self::CLASS_REFUND || $this->class == self::CLASS_SYSTEM_REFUND) {
+                        } else if ($this->class == self::CLASS_REFUND) {
                             $deposit->spended -= $this->amount;
                             $deposit->total_spended -= $this->amount;
-                        }
+                        } //else if($this->class == self::CLASS_SYSTEM_REFUND) we do nothing in this case as long as salaries don't count
                         $deposit->credit += $this->amount;
                         $deposit->save();
 
@@ -286,15 +286,14 @@ class Transaction extends TransactionBase {
                         $deposit_fund = Account::model()->findByAttributes(array('class' => Account::CLASS_FUND, 'tribe_id' => $deposit->tribe_id));
                         $deposit_fund->credit -= $this->amount;
                         $deposit_fund->save();
-                        
+
                         $tribe_balance = TribeBalance::get($charge->tribe_id, $deposit->tribe_id);
-                        $tribe_balance->period_amount -= $this->amount;
-                        $tribe_balance->total_amount -= $this->amount;
+                        $tribe_balance->period_amount += $this->amount;
+                        $tribe_balance->total_amount += $this->amount;
                         $tribe_balance->save();
-                        
+
                         $this->charge_tribe = $charge->tribe_id;
                         $this->deposit_tribe = $deposit->tribe_id;
-                        
                         return true;
                     } catch (Exception $e) {
                         $this->db_transaction->rollBack();
@@ -319,7 +318,7 @@ class Transaction extends TransactionBase {
     }
 
     protected function afterSave() {
-        $this->db_transaction->commit();
+        $this->db_transaction->getActive() && $this->db_transaction->commit();
         parent::afterSave();
         if ($this->refered_pending != null) {
             $pending = Pending::model()->findByPk($this->refered_pending);

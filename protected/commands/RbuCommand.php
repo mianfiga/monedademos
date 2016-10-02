@@ -123,29 +123,47 @@ class RbuCommand extends CConsoleCommand {
     }
 
     public function actionSystemTransaction($amount, $subject, $charge_account = 1, $deposit_account = 1, $charge_entity = 1, $deposit_entity = 1) {
-        $rb = new Transaction;
-        $rb->charge_account = $charge_account;
-        $rb->deposit_account = $deposit_account;
+        $transaction = Yii::app()->db->beginTransaction();
+        try{
+            $rb = new Transaction;
+            $rb->charge_account = $charge_account;
+            $rb->deposit_account = $deposit_account;
 
-        $rb->charge_entity = $charge_entity;
-        $rb->deposit_entity = $deposit_entity;
-        $rb->class = Transaction::CLASS_SYSTEM;
-        $rb->amount = $amount;
-        $rb->subject = $subject;
-        $rb->save();
+            $rb->charge_entity = $charge_entity;
+            $rb->deposit_entity = $deposit_entity;
+            $rb->class = Transaction::CLASS_SYSTEM;
+            $rb->amount = $amount;
+            $rb->subject = $subject;
+            $rb->save();
+            $transaction->commit();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            echo $e->getTraceAsString();
+            $transaction->rollBack();
+
+        }
     }
 
     public function actionSystemRefund($amount, $subject, $charge_account = 1, $deposit_account = 1, $charge_entity = 1, $deposit_entity = 1) {
-        $rb = new Transaction;
-        $rb->charge_account = $charge_account;
-        $rb->deposit_account = $deposit_account;
+      $transaction = Yii::app()->db->beginTransaction();
+      try{
+          $rb = new Transaction;
+          $rb->charge_account = $charge_account;
+          $rb->deposit_account = $deposit_account;
 
-        $rb->charge_entity = $charge_entity;
-        $rb->deposit_entity = $deposit_entity;
-        $rb->class = Transaction::CLASS_SYSTEM_REFUND;
-        $rb->amount = $amount;
-        $rb->subject = $subject;
-        $rb->save();
+          $rb->charge_entity = $charge_entity;
+          $rb->deposit_entity = $deposit_entity;
+          $rb->class = Transaction::CLASS_SYSTEM_REFUND;
+          $rb->amount = $amount;
+          $rb->subject = $subject;
+          $rb->save();
+          $transaction->commit();
+      } catch (Exception $e) {
+          echo $e->getMessage();
+          echo $e->getTraceAsString();
+          $transaction->rollBack();
+
+      }
     }
 
     public function actionPaySalaries($date = null) {
@@ -209,7 +227,9 @@ class RbuCommand extends CConsoleCommand {
                         $system_refund->class = Transaction::CLASS_SYSTEM_REFUND;
                         $system_refund->amount = $last_migration_rule->salary;
                         $system_refund->subject = 'Emigration';
-                        $system_refund->save();
+                        if(!$system_refund->save()){
+                          throw new Exception('save failed');
+                        }
                     }
 
                     //take money related to this user out of the source tribe
@@ -218,7 +238,11 @@ class RbuCommand extends CConsoleCommand {
 
                     $source_fund_acc = Account::getFundAccount($migration->entity->tribe_id);
                     $source_fund_acc->credit -= $last_migration_rule->salary * $num_sys_accs + $source_current_rule->salary * $source_current_rule->multiplier;
-                    $source_fund_acc->save();
+                    $source_fund_acc->last_action = Common::datetime();
+
+                    if(!$source_fund_acc->save()){
+                      throw new Exception('save failed');
+                    }
 
                     //put money in the destination tribe fund account
                     $destination_current_rule = Rule::getAdaptedRule($tribe->group_id);
@@ -226,8 +250,11 @@ class RbuCommand extends CConsoleCommand {
                     $num_sys_accs = count($destination_sys_accs);
                     $destination_fund_acc = Account::getFundAccount($tribe->id);
                     $destination_fund_acc->credit += $destination_current_rule->salary * $num_sys_accs + $destination_current_rule->salary * $destination_current_rule->multiplier;
-                    $destination_fund_acc->save();
+                    $destination_fund_acc->last_action = Common::datetime();
 
+                    if(!$destination_fund_acc->save()){
+                      throw new Exception('save failed');
+                    }
                     $destination_tribe_entity = Entity::get($tribe);
 
                     //add money to system account
@@ -240,7 +267,9 @@ class RbuCommand extends CConsoleCommand {
                         $system_new_user->class = Transaction::CLASS_SALARY;
                         $system_new_user->amount = $destination_current_rule->salary;
                         $system_new_user->subject = 'Inmigration, new user';
-                        $system_new_user->save();
+                        if(!$system_new_user->save()){
+                          throw new Exception('save failed');
+                        }
                     }
                 }
 
@@ -250,10 +279,16 @@ class RbuCommand extends CConsoleCommand {
                     $balance = $account->earned - $account->spended - $account->balance;
                     $tribe_balance->period_amount += $balance;
                     $tribe_balance->total_amount += $balance;
-                    $tribe_balance->save();
+
+                    if(!$tribe_balance->save()){
+                      throw new Exception('save failed');
+                    }
 
                     $account->tribe_id = $tribe->id;
-                    $account->save();
+
+                    if(!$account->save()){
+                      throw new Exception('save failed');
+                    }
                 }
 
                 //exceptionally we also add active market ads to the new island
@@ -265,19 +300,23 @@ class RbuCommand extends CConsoleCommand {
                     $ad_tribe = new MarketAdTribe;
                     $ad_tribe->ad_id = $ad->id;
                     $ad_tribe->tribe_id = $tribe->id;
-                    $ad_tribe->save();
+
+                    if(!$ad_tribe->save()){
+                      throw new Exception('save failed');
+                    }
                 }
 
                 $modified_tribes[$migration->entity->tribe_id] = true;
                 $modified_tribes[$tribe->id] = true;
 
-                $migration->entity->tribe_id = $tribe->id;
-                $migration->entity->save();
+                $migration->entity->saveAttributes(array('tribe_id' => $tribe->id));
 
                 $migration->executed_at = Common::datetime();
-                $migration->save();
-            }
 
+                if(!$migration->save()){
+                  throw new Exception('save failed');
+                }
+            }
             foreach ($modified_tribes as $tribe_id => $modified) {
                 if (!$modified) {
                     continue;
@@ -290,13 +329,14 @@ class RbuCommand extends CConsoleCommand {
                     $total_amount += $account->credit;
                 }
 
-                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => $user_count), $tribe_id);
+                Record::updateRecord(array('total_amount' => $total_amount, 'user_count' => $user_count, 'account_count' => count($accounts)), $tribe_id);
             }
-
             $transaction->commit();
         } catch (Exception $e) {
+            echo $e->getMessage();
+            echo $e->getTraceAsString();
             $transaction->rollBack();
-            die($e->getMessage());
+            die();
         }
     }
 
