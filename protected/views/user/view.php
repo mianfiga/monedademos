@@ -9,6 +9,7 @@ $this->menu = array(
     array('label' => Yii::t('app', 'Update user info'), 'url' => array('update', 'id' => Yii::app()->user->getId())),
 //	array('label'=>'Delete User', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 //	array('label'=>'Manage User', 'url'=>array('admin')),
+    array('label' => Yii::t('app', 'Connect to Telegram'), 'url' => 'https://telegram.me/monedademos_bot?start='. $entity->id . '-' . $entity->getMagic()),
 );
 if (strpos($model->abilities, User::ABILITY_INVITE) !== false) {
     $this->menu[] = array(

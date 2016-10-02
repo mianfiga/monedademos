@@ -114,7 +114,7 @@ class NotificationMessage extends NotificationMessageBase {
     }
 
     public function viewedNotification() {
-        
+
     }
 
     public function emailNotification() {
@@ -211,6 +211,11 @@ class NotificationMessage extends NotificationMessageBase {
 
     public function read() {
         $this->saveAttributes(array('read' => date('YmdHis')));
+    }
+
+    protected function afterSave() {
+    	parent::afterSave();
+    	Notification::notifyPush($this);
     }
 
 }

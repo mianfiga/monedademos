@@ -65,6 +65,10 @@ class UserController extends Controller {
             if ($entity->class == 'Brand') {
                 $this->redirect(array('brand/view', 'id' => $entity->object_id));
             }
+            if(!$entity->magic){
+              $entity->magic = Entity::randString(32);
+              $entity->save();
+            }
 
             $model = $entity->getObject();
             $dataProvider = Rate::getTo($entity->id);

@@ -22,8 +22,10 @@ class NotificationConfiguration extends NotificationConfigurationBase
 	 */
   const MAILMODE_INSTANTLY = 'instantly';
   const MAILMODE_DAILY = 'daily';
+  const MODE_ACTIVE = 'active';
   const MAILMODE_NONE = 'none';
-  
+
+
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);

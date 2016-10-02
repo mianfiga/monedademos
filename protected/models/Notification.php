@@ -121,6 +121,9 @@ class Notification extends NotificationBase {
             array_unshift($pre_data, $data);
         }
         $notif_mess->data = json_encode($pre_data);
+        $notif_mess->sent = null;
+        $notif_mess->read = null;
+        $notif_mess->shown = null;
         $notif_mess->save();
     }
 
@@ -182,4 +185,17 @@ class Notification extends NotificationBase {
         }
     }
 
+    public static function notifyPush($notif_msg) {
+      $configuration = NotificationConfiguration::model()->find("notification_id=$notif_msg->notification_id AND (entity_id=$notif_msg->entity_id OR entity_id=1) ORDER BY entity_id DESC");
+
+      $udate = strtotime($notif_msg->sent); //date_timestamp_get(DateTime::createFromFormat('Y-m-d H:i:s',$notif->sent));
+
+      if($notif_msg->entity->apiTelegram && $configuration->pushmode == NotificationConfiguration::MODE_ACTIVE) {
+        Yii::app()->setLanguage($notif_msg->entity->getCulture());
+        ApiTelegram::sendMessage(
+          $notif_msg->entity->apiTelegram->chat_id,
+          CController::renderInternal(Yii::getPathOfAlias('application.views') . '/notification/_push.php', array('data' => $notif_msg), true)
+        );
+      }
+    }
 }

@@ -83,6 +83,7 @@ class Entity extends EntityBase {
                 'order' => 'lastDepositTransaction.executed_at DESC',
             ),
             'tribe' => array(self::BELONGS_TO, 'Tribe', 'tribe_id'),
+            'apiTelegram' => array(self::HAS_ONE,'ApiTelegram','entity_id')
         );
     }
 
@@ -157,8 +158,8 @@ class Entity extends EntityBase {
         if ($this->magic != null ) {
             return $this->magic;
         }
-        
-        $this->magic = Entity::randString(64);
+
+        $this->magic = Entity::randString(16);
         $this->saveAttributes(array('magic' => $this->magic));
         return $this->magic;
     }

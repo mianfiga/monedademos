@@ -113,4 +113,5 @@ class NotificationMessageBase extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
 }
