@@ -58,6 +58,7 @@ class BrandController extends Controller {
             'entity' => $entity,
             'ratesDataProvider' => $ratesDataProvider,
             'adsDataProvider' => $adsDataProvider,
+            'is_admin' => $this->isAdmin($entity),
         ));
     }
 
@@ -90,7 +91,8 @@ class BrandController extends Controller {
     public function actionUpdate($id) {
 
         $model = $this->loadModel($id);
-        if (Yii::app()->user->logged != $model->created_by) {
+        $entity = Entity::get($model/*,'links'*/);
+        if (!$this->isAdmin($entity)) {
             $this->redirect(array('site/index'));
         }
 
@@ -188,6 +190,9 @@ class BrandController extends Controller {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
+    }
+    protected function isAdmin($entity){
+      return isset(Yii::app()->user->logged) && isset(Yii::app()->user->roles[$entity->id]);
     }
 
 }

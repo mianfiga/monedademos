@@ -26,10 +26,10 @@ $this->menu = array(
     <img class="mk_view_img" src="<?php echo Yii::app()->request->baseUrl . '/images/market/' . $model->image ?>" alt="<?php echo CHtml::encode($model->title) ?>"/>
 <?php } ?>
 <h4 class="subheader"><?php echo Yii::t('market', 'Summary') ?></h4>
-<p><?php echo strip_tags($model->summary,'<a>'); ?></p>
+<pre class="mk_summary"><?php echo strip_tags($model->summary,'<a>'); ?></pre>
 <?php if ($model->description != '') { ?>
     <h4 class="subheader"><?php echo Yii::t('market', 'Description') ?></h4>
-    <div><?php echo nl2br(strip_tags($model->description,'<a><img><table>')); ?></div>
+    <pre class="mk_description"><?php echo nl2br(strip_tags($model->description,'<a><img><table>')); ?></pre>
 <?php } ?>
 <br/>
 <div class="mk_bottom_bar">
@@ -40,7 +40,7 @@ $this->menu = array(
         ?>
         <div class="mk_data mk_status mk_<?php echo $model->joined[0]->status ?>">Your status: <?php echo $status_list[$model->joined[0]->status] ?></div>
     <?php } ?>
-    <?php if ($model->zip != '') { ?>    
+    <?php if ($model->zip != '') { ?>
         <div class="mk_data mk_zip"><?php echo $model->zip ?></div>
     <?php } ?>
     <?php

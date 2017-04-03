@@ -102,15 +102,22 @@ class NotificationMessage extends NotificationMessageBase {
     }
 
     protected function beforeSave() {
-        if (parent::beforeSave()) {
-            if ($this->isNewRecord) {
-                $this->added = date('YmdHis');
-            }
-            if ($this->getScenario() != 'notify')
-                $this->updated = date('YmdHis');
-            return true;
+        if (!parent::beforeSave()) {
+          return false;
         }
-        return false;
+        if ($this->isNewRecord) {
+            $this->sent = null;
+            $this->read = null;
+            $this->shown = null;
+            $this->added = Common::datetime();
+        }
+        if ($this->getScenario() != 'notify'){
+            $this->updated = Common::datetime();
+            if (strtok($this->sid,'-') != 'bc'){ //broadcast
+               Notification::notifyPush($this);
+            }
+        }
+        return true;
     }
 
     public function viewedNotification() {
@@ -155,6 +162,8 @@ class NotificationMessage extends NotificationMessageBase {
                 return Yii::app()->createAbsoluteUrl('market/view', array('id' => $object->ad_id));
             case Notification::CONTRIBUTION_COMM:
                 return null;
+            case Notification::BROADCAST_MARKET_AD_NEW:
+                return Yii::app()->createAbsoluteUrl('market/view', array('id' => $object->id));
         }
     }
 
@@ -212,10 +221,4 @@ class NotificationMessage extends NotificationMessageBase {
     public function read() {
         $this->saveAttributes(array('read' => date('YmdHis')));
     }
-
-    protected function afterSave() {
-    	parent::afterSave();
-    	Notification::notifyPush($this);
-    }
-
 }

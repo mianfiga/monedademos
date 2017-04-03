@@ -12,7 +12,7 @@
     <?php } ?>
     <?php echo CHtml::link('<img class="mk_button_join" src="' . Yii::app()->request->baseUrl . '/images/join.png" alt="Join" title="Join"/>', array('market/join', 'id' => $data->id)); ?>
     <h4 class="no-space"><?php echo CHtml::link(CHtml::encode($data->title), array('market/view', 'id' => $data->id)); ?></h4>
-    <?php echo strip_tags($data->summary,'<a>'); ?>
+    <pre><?php echo strip_tags($data->summary,'<a>'); ?></pre>
     <?php echo CHtml::link(Yii::t('market', 'view more'), array('market/view', 'id' => $data->id)); ?>
 
     <div class="mk_bottom_bar">
@@ -23,7 +23,7 @@
             ?>
             <div class="mk_data mk_status mk_<?php echo $data->joined[0]->status ?>"><?php echo $status_list[$data->joined[0]->status] ?></div>
         <?php } ?>
-        <?php if ($data->zip != '') { ?>    
+        <?php if ($data->zip != '') { ?>
             <div class="mk_data mk_zip"><?php echo $data->zip ?></div>
         <?php } ?>
         <?php

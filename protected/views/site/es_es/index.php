@@ -33,7 +33,7 @@
     </div>
     <div class="small-12 large-6 columns">
         <div class="flex-video widescreen">
-            <iframe width="560" height="315" src="http://www.youtube.com/embed/V9mY8MKop6s" frameborder="0" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/V9mY8MKop6s" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 </div>

@@ -131,11 +131,31 @@ class ApiTelegram extends CActiveRecord
 			return $record->save();
 	}
 	public static function sendMessage($chat_id, $text){
-		$api_url = 'https://api.telegram.org/bot'. Yii::app()->params['telegram_token'] .'/';
-
-		$sendto =$api_url . 'sendmessage?chat_id=' .$chat_id. '&text=' . $text;
-		file_get_contents($sendto);
-
+		return self::doSend('sendmessage?chat_id=' .$chat_id. '&text=' . urlencode ($text));
+	}
+	public static function answerCallbackQuery($callback_query_id, $text='', $show_alert=false, $url){
+		$sendto ='answerCallbackQuery?callback_query_id=' . $callback_query_id . '&text=' . urlencode ($text) .'&show_alert='.$show_alert.'&url='.urlencode ($url);
+		return self::doSend($sendto);
 	}
 
+	public static function doSend($sendto){
+		$api_url = 'https://api.telegram.org/bot'. Yii::app()->params['telegram_token'] .'/';
+		$message = $api_url . $sendto;
+		$result = file_get_contents($message);
+		$data_result = json_decode($result,true);
+		return isset($data_result['ok']) && $data_result['ok'];
+	}
+
+	public static function setMarketNotifications($chat_id, $active) {
+			$record = self::model()->findByAttributes(array(
+				'chat_id' => $chat_id
+			));
+			if(!record){
+				return false;
+			}
+			$record->market_notifications = $active;
+			$date = Common::datetime();
+			$record->last_action = $date;
+			return $record->save();
+	}
 }

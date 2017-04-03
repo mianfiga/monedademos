@@ -15,8 +15,6 @@ $this->breadcrumbs = array(
   array('label' => 'Delete Brand', 'url' => '#', 'linkOptions' => array('submit' => array('delete', 'id' => $model->id), 'confirm' => 'Are you sure you want to delete this item?')),
   array('label' => 'Manage Brand', 'url' => array('admin')),
   ); */
-
-$is_admin = isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged;
 ?>
 <div class="row">
     <div class="small-12 large-7 columns">
@@ -56,7 +54,7 @@ echo $this->renderPartial('/market/_list', array(
 ?>
     </div>
     <div class="small-12 large-5 columns">
-        <?php if (isset(Yii::app()->user->logged) && $model->created_by == Yii::app()->user->logged) { ?>
+        <?php if ($is_admin) { ?>
             <br/>
             <div class="row">
                 <div class="small-12 columns">

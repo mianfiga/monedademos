@@ -1,5 +1,5 @@
 <?php
-return array( 
+return array(
     'New payment' => 'Nuevo pago',
     '[DEMOS] New Payment' => '[DEMOS] Nuevo Pago',
     'Received {amount} from {charge_account_number} by {charge_user_name} to your account {deposit_account_number}, subject: "{subject}".' => 'Recibidos {amount} desde {charge_account_number} por {charge_user_name} a tu cuenta {deposit_account_number}, concepto: "{subject}".',
@@ -39,12 +39,17 @@ return array(
     'New comment in advertisement' => 'Nuevo comentario en anuncio',
     '[DEMOS Market] New comment in {ad_title}' => '[DEMOS Market] Nuevo comentario en {ad_title}',
     'New communication in advert {ad_title}|New communications in advert {ad_title}' => 'Nueva comunicación en el anuncio {ad_title}|Nuevas comunicaciones en el anuncio {ad_title}',
-    
+
     '[DEMOS] Password recovery' => '[DEMOS] Recuperación de contraseña',
     'Password recovery' =>'Recuperación de contraseña',
     'Click in the following link to set a new password'=>'Haga clic en el siguiente link para establecer una nueva contraseña',
-    
+
     'Welcome to Demos, this is your first salary' => 'Bienvenid@ a Demos, este es tu primer sueldo',
+
+    'New market ad' => 'Nuevo anuncio en el Market',
+    '[DEMOS Market] New Market add "{title}"' => '[DEMOS Market] Nuevo anuncio en el Market "{title}"',
+    'New market ad "{title}"' => 'Nuevo anuncio en el Market "{title}"',
+
 
 );
 ?>

@@ -35,6 +35,8 @@ class Notification extends NotificationBase {
     const RECIPROCITY_LACK = 17;
     const FIRST_SALARY = 18;
     const NEVER_SELL = 19;
+    const BROADCAST_MESSAGE = 20;
+    const BROADCAST_MARKET_AD_NEW = 21;
 
     /**
      * Returns the static model of the specified AR class.
@@ -112,6 +114,9 @@ class Notification extends NotificationBase {
             $notif_mess->notification_id = $notification_id;
             $notif_mess->entity_id = $entity_id;
             $notif_mess->sid = $SID;
+            $notif_mess->sent = null;
+            $notif_mess->read = null;
+            $notif_mess->shown = null;
         }
         $pre_data = ($notif_mess->data != null ? json_decode($notif_mess->data, true) : array());
         reset($data);
@@ -121,9 +126,6 @@ class Notification extends NotificationBase {
             array_unshift($pre_data, $data);
         }
         $notif_mess->data = json_encode($pre_data);
-        $notif_mess->sent = null;
-        $notif_mess->read = null;
-        $notif_mess->shown = null;
         $notif_mess->save();
     }
 
@@ -153,9 +155,8 @@ class Notification extends NotificationBase {
     }
 
     public static function notify() {
-
         $notifs = NotificationMessage::model()->findAll(
-                array('condition' => 't.`sent` < t.`updated` AND t.`read` < t.`updated` AND t.`shown` < t.`updated`',
+                array('condition' => '(t.`sent` is null or t.`sent` < t.`updated`) AND (t.`read` is null or t.`read` < t.`updated`) AND (t.`shown` is null or t.`shown` < t.`updated`)',
                     'with' => array('notification' => array('together' => true),
                         'entity' => array('together' => true),
 //                                  'configuration' => array('together' => true),
@@ -167,6 +168,11 @@ class Notification extends NotificationBase {
         //$headers_common .= "From: noreply@monedademos.es\r\n";
 
         foreach ($notifs as $notif) {
+            if (strtok($notif->sid,'-') == 'bc'){ //broadcast
+        	     Notification::notifyPushBroadcast($notif);
+               continue;
+            }
+
             $headers = $headers_common . "From: noreply+" . $notif->notification_id . "@monedademos.es\r\nList-Unsubscribe: <" . Yii::app()->createAbsoluteUrl('notification/unsubscribe', array('e_id' => $notif->entity_id, 'n_id' => $notif->notification_id, 'm' => $notif->entity->getMagic())) . ">";
             $configuration = NotificationConfiguration::model()->find("notification_id=$notif->notification_id AND (entity_id=$notif->entity_id OR entity_id=1) ORDER BY entity_id DESC");
 
@@ -192,10 +198,39 @@ class Notification extends NotificationBase {
 
       if($notif_msg->entity->apiTelegram && $configuration->pushmode == NotificationConfiguration::MODE_ACTIVE) {
         Yii::app()->setLanguage($notif_msg->entity->getCulture());
-        ApiTelegram::sendMessage(
+        if(ApiTelegram::sendMessage(
           $notif_msg->entity->apiTelegram->chat_id,
           CController::renderInternal(Yii::getPathOfAlias('application.views') . '/notification/_push.php', array('data' => $notif_msg), true)
-        );
+        )){
+          $notif_msg->sent = date('YmdHis');
+        }
       }
+    }
+
+    public static function notifyPushBroadcast($notif_msg) {
+      $sid_array = explode('-',$notif_msg->sid);
+      if($sid_array[0] != 'bc'){
+        return false;
+      }
+      switch($sid_array[1]){
+        case 'ad':
+          $entities = Entity::model()->with('apiTelegram')->findAll('apiTelegram.market_notifications=1');
+          break;
+        case 'msg':
+          $entities = Entity::model()->with('apiTelegram')->findAll('apiTelegram.chat_id is not null');
+      }
+      $udate = strtotime($notif_msg->sent);
+      foreach ($entities as $entity) {
+        $configuration = NotificationConfiguration::model()->find("notification_id=$notif_msg->notification_id AND (entity_id=$entity->id OR entity_id=1) ORDER BY entity_id DESC");
+        if($configuration->pushmode == NotificationConfiguration::MODE_ACTIVE) {
+          Yii::app()->setLanguage($entity->getCulture());
+          ApiTelegram::sendMessage(
+            $entity->apiTelegram->chat_id,
+            CController::renderInternal(Yii::getPathOfAlias('application.views') . '/notification/_push.php', array('data' => $notif_msg), true)
+          );
+        }
+      }
+      $notif_msg->sent = Common::datetime();
+      $notif_msg->save();
     }
 }

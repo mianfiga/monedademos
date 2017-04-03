@@ -36,6 +36,9 @@ class Sid {
             return null;
 
         $data = explode('-', $sid);
+        if($data[0] == 'bc'){
+          array_shift($data);
+        }
         switch ($data[0]) {
             case 'tr':
                 return Transaction::model()->findByPk($data[1]);

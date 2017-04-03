@@ -2,6 +2,36 @@
 
 class ApiController extends Controller
 {
+	public function filters() {
+			return array(
+					'accessControl', // perform access control for CRUD operations
+			);
+	}
+
+	/**
+	 * Specifies the access control rules.
+	 * This method is used by the 'accessControl' filter.
+	 * @return array access control rules
+	 */
+	public function accessRules() {
+			return array(
+					array('allow', // allow all users to perform 'index' and 'view' actions
+							'actions' => array('telegram'),
+							'users' => array('*'),
+					),
+					array('allow', // allow authenticated user to perform 'create' and 'update' actions
+							'actions' => array('connectTelegram'),
+							'users' => array('@'),
+					),
+					array('allow', // allow admin user to perform 'admin' and 'delete' actions
+							'actions' => array('index'),
+							'users' => array('admin'),
+					),
+					array('deny', // deny all users
+							'users' => array('*'),
+					),
+			);
+	}
 	public function actionTelegram($u)
 	{
 		$request = Yii::app()->getRequest();
@@ -28,7 +58,7 @@ class ApiController extends Controller
 			$chat_id = $update['message']['chat']['id'];
 			$text = $update['message']['text'];
 
-			$sendto =$api_url . 'sendmessage?chat_id=' .$chat_id. '&text=' . $update['message']['text'];
+			$answer = $update['message']['text'];
 			//$update['message']
 			if($text[0] == '/'){ //command
 				$command = explode(' ', $text);
@@ -42,19 +72,71 @@ class ApiController extends Controller
 								ApiTelegram::updateRecord($entity->id, $chat_id, $update['message']['from']['id'] ,(isset($update['message']['from']['username'])?$update['message']['from']['username']:''));
 							}
 							Yii::app()->setLanguage($entity->getCulture());
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'Welcome to Moneda Demos\' bot'));
+							return;
+						}else{
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'Welcome to Moneda Demos\' bot'));
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'We need you connect this bot to your monedademos\' user. You can do it by following this link:'));
+							ApiTelegram::sendMessage($chat_id, 'https://monedademos.es/index.php?r=api/connectTelegram&c='. $chat_id . '&u='.  $update['message']['from']['id'] . (isset($update['message']['from']['username'])?'&un='.$update['message']['from']['username']:''));
 						}
-						$sendto =$api_url . 'sendmessage?chat_id=' .$chat_id. '&text=' . Yii::t('apiTelegram', 'Welcome to Moneda Demos\' bot');
-						break;
+						$this->render('telegram');
+						return;
+					case '/market_on':
+						$apiTelegram = ApiTelegram::model()->with('entity')->findByAttributes(array('chat_id'=> $update['message']['chat']['id']));
+						Yii::app()->setLanguage($apiTelegram->entity->getCulture());
+						if(ApiTelegram::setMarketNotifications($chat_id, true)){
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'Market notifications ON'));
+						}else{
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'Something failed'));
+						}
+						$this->render('telegram');
+						return;
+					case '/market_off':
+						$apiTelegram = ApiTelegram::model()->with('entity')->findByAttributes(array('chat_id'=> $update['message']['chat']['id']));
+						Yii::app()->setLanguage($apiTelegram->entity->getCulture());
+						if(ApiTelegram::setMarketNotifications($chat_id, false)){
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'Market notifications OFF'));
+						}else{
+							ApiTelegram::sendMessage($chat_id, Yii::t('apiTelegram', 'Something failed'));
+						}
+						$this->render('telegram');
+						return;
 					default:
 				}
 			}
-			file_get_contents($sendto);
+			ApiTelegram::sendMessage($chat_id, $answer);
 
-		}else if(isset($update["inline_query"])){//inline mode
+		}else if(isset($update['inline_query'])){//inline mode
+
+		}else if(isset($update['callback_query'])){//inline mode
+			$callback_query_id=$update["callback_query"]['id'];
+			$game = $update["callback_query"]['game_short_name'];
+			switch($game){
+					case 'Pay':
+						ApiTelegram::answerCallbackQuery($callback_query_id, '', false, 'https://monedademos.es/api_telegram_bot_pay.html');
+						break;
+					default:
+						ApiTelegram::answerCallbackQuery($callback_query_id, 'Sorry I couldn\'t do anything', true, '');
+			}
+		}else{
 
 		}
 
 		$this->render('telegram');
+	}
+
+	public function actionConnectTelegram($c,$u,$un){
+		$id = Yii::app()->user->getId();
+		$entity = Entity::model()->findByPk($id);
+		if ($entity === null) {
+				throw new CHttpException(404, 'The requested page does not exist.');
+		}
+		$success = ApiTelegram::updateRecord($id, $c, $u, $un);
+		ApiTelegram::sendMessage($c,Yii::t('apiTelegram','You have conected this bot to you monedademos user'));
+		$this->render('connectTelegram', array(
+				'success' => $success,
+				'entity' => $entity
+		));
 	}
 
 	// Uncomment the following methods and override them if needed

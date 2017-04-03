@@ -120,7 +120,7 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
                                 echo $this->renderPartial('//site/_languageForm', array('model' => $language));
                                 ?>
                             </li>
-                        </ul> 
+                        </ul>
                     </div>
 
                     <?php if (isset(Yii::app()->user->roles) && Yii::app()->user->getId() && count(Yii::app()->user->roles) > 1) { ?>
@@ -134,7 +134,7 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
                                     echo $this->renderPartial('//site/_rolesForm', array('model' => $roles));
                                     ?>
                                 </li>
-                            </ul> 
+                            </ul>
                         </div>
                     <?php } ?>
 
@@ -151,14 +151,15 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
                     <div class="small-12 large-2 columns links">
                         <div class="social_box">
                             <ul class="inline-list">
-                                <li class="social twitter"><a href="http://twitter.com/monedademos">@monedademos</a></li>
-                                <li class="social facebook"><a href="http://facebook.com/monedaDemos">Moneda Demos</a></li>
-                                <li class="social googleplus"><a href="https://plus.google.com/113493943316049288613" rel="publisher">Moneda Demos</a></li>
+                                <li class="social telegram"><a href="https://telegram.me/monedademos">@monedademos</a></li>
+                                <li class="social twitter"><a href="https://twitter.com/monedademos">@monedademos</a></li>
+                                <li class="social facebook"><a href="https://facebook.com/monedaDemos">Moneda Demos</a></li>
+                                <?php //<li class="social googleplus"><a href="https://plus.google.com/113493943316049288613" rel="publisher">Moneda Demos</a></li> ?>
                                 <li class="social blog"><a href="http://blog.monedademos.es">Blog de DEMOS</a></li>
                             </ul>
                         </div>
                     </div>
-                </div>        
+                </div>
                 <?php echo date('Y'); ?> by monedademos.es GPL 2.0 (<a href="https://github.com/mianfiga/monedademos">sourcecode</a>)<br/>
                 <?php echo Yii::powered(); ?>
             </div><!-- footer -->
@@ -168,7 +169,7 @@ $cs->registerScript('foundation_topbar', '$(document).foundation(\'topbar\');', 
             <div class="row">
                 <div class="small-12 columns hide-for-small" style="margin: 5px">
                     Utilizamos <a href="http://es.wikipedia.org/wiki/Cookie_(inform%C3%A1tica)" target="_blank">cookies</a> para ofrecer nuestros servicios. Si utilizas esta web sin la configuración necesaria para evitarlo significará que aceptas su uso.
-                </div>            
+                </div>
             </div>
         </div>
     </body>
