@@ -15,6 +15,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
         'id' => 'user-form',
 //        'action' => CHtml::normalizeUrl(array('user/create')),
         'enableAjaxValidation' => false,
+        'htmlOptions' => array('enctype' => 'multipart/form-data')
             ));
 
     $scenario = $model->getScenario();
@@ -41,7 +42,15 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                 </div>
             </div>
         </div>
-        <br/><br/>
+        <br/>
+        <div class="row">
+            <div class="small-12 columns form_row">
+                    <?php echo $form->labelEx($model, 'form_image'); ?>
+                    <?php echo $form->fileField($model, 'form_image', array('maxlength' => 254)); ?>
+                    <?php echo $form->error($model, 'form_image'); ?>
+            </div>
+        </div>
+        <br/>
     <?php } ?>
 
     <?php if ($scenario == 'register' || $scenario == 'update') { ?>
@@ -103,7 +112,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                     ), // jquery plugin options
                     'htmlOptions' => array('readonly' => true) // HTML options
                 ));
-                ?> 
+                ?>
                 <?php echo $form->error($model, 'birthday'); ?>
             </div>
         </div>
@@ -127,7 +136,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                   'style'=>'height:20px;'
                   ),
                   )); */ ?>
-                <?php echo $form->dropDownList($model, 'identification_method', User::identificationList(), array('width' => '50px')); ?> 
+                <?php echo $form->dropDownList($model, 'identification_method', User::identificationList(), array('width' => '50px')); ?>
                 <?php echo $form->textField($model, 'identification_number', array('size' => 15, 'maxlength' => 255)); ?>
                 <?php echo $form->error($model, 'identification_method'); ?>
                 <?php echo $form->error($model, 'identification_number'); ?>
@@ -179,7 +188,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                 <?php echo $form->error($model, 'country'); ?>
             </div>
             <div class="hide-for-small large-5 columns form_row">
-                
+
             </div>
         </div>
     <?php } ?>
@@ -208,7 +217,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
             <div class="small-7 large-5 columns form_row">
                 <?php echo $form->labelEx($model, 'conditions'); ?>
                 <?php echo $form->checkBox($model, 'conditions'); ?> Acepto las <?php echo CHtml::link(Yii::t('app', 'Conditions'), array('/site/page', 'view' => 'conditions'), array('target' => '_blank')); ?>.
-                <?php echo $form->error($model, 'conditions'); ?> 
+                <?php echo $form->error($model, 'conditions'); ?>
             </div>
         </div>
     <?php } ?>

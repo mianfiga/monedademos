@@ -81,7 +81,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                 'view' => array
                     (
 //							'label'=>'...',     //Text label of the button.
-                    'url' => 'Yii::app()->createUrl("contribution/view", array("id"=>$data->id))', //A PHP expression for generating the URL of the button.
+                    'url' => 'Yii::app()->createUrl("user/view", array("id"=>$data->entity->id))', //A PHP expression for generating the URL of the button.
 //							'imageUrl'=>'...',  //Image URL of the button.
 //							'options'=>array(), //HTML options for the button tag.
 //							'click'=>'...',     //A JS function to be invoked when the button is clicked.

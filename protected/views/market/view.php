@@ -44,12 +44,11 @@ $this->menu = array(
         <div class="mk_data mk_zip"><?php echo $model->zip ?></div>
     <?php } ?>
     <?php
-    if ($model->createdBy->class == 'Brand') {
-        $brandname = $model->createdBy->getObject()->name;
-        $brandid = $model->createdBy->getObject()->id;
+    if (!$model->anonymous) {
+        $author_name = $model->createdBy->getObject()->name;
         ?>
         <div class="mk_data mk_autor">
-        <?php echo Yii::t('market', 'By') . ': ' . CHtml::link((strlen($brandname) > 30 ? substr($brandname, 0, 30) . '…' : $brandname), array('brand/view', 'id' => $brandid)); ?>
+            <?php echo Yii::t('market', 'By'). ': '.CHtml::link((strlen($author_name) > 30 ? substr($author_name, 0, 30) . '…' : $author_name), array('user/view', 'id' => $model->created_by)); ?>
         </div>
-<?php } ?>
+    <?php   } ?>
 </div>

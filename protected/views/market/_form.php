@@ -75,7 +75,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
         </div>
         <div class="row">
             <div class="small-12 columns">
-                <?php echo Yii::t('app', 'Examples: "12", "12.03" or "12.30" mind the dot and two digits when using cents.'); ?>       
+                <?php echo Yii::t('app', 'Examples: "12", "12.03" or "12.30" mind the dot and two digits when using cents.'); ?>
             </div>
         </div>
         <div class="row">
@@ -114,7 +114,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
       <?php echo $form->radioButtonList($model,'mailmode',MarketAd::mailmodeOptions()); ?>
       </div>
       <?php echo $form->error($model,'mailmode'); ?>
-      </div> 
+      </div>
 
     <div class="row">
         <div class="small-12 columns">
@@ -148,7 +148,7 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                     ), // jquery plugin options
                     'htmlOptions' => array('readonly' => true) // HTML options
                 ));
-                ?> 
+                ?>
                 <?php echo $form->error($model, 'expiration'); ?>
             </div>
         </div>
@@ -161,6 +161,16 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
                 <?php echo $form->labelEx($model, 'zip'); ?>
                 <?php echo $form->textField($model, 'zip', array('size' => 16, 'maxlength' => 16)); ?>
                 <?php echo $form->error($model, 'zip'); ?>
+            </div>
+        </div>
+    </div>
+<br/>
+    <div class="row">
+        <div class="small-7 large-5 columns">
+            <div class="form_row">
+                <?php echo $form->labelEx($model, 'anonymous'); ?>
+                <?php echo $form->checkBox($model, 'anonymous'); ?>
+                <?php echo $form->error($model, 'anonymous'); ?>
             </div>
         </div>
     </div>

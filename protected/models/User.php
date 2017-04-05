@@ -1,5 +1,6 @@
 <?php
 
+Yii::import('application.extensions.EUploadedImage');
 /**
  * This is the model class for table "{{user}}".
  *
@@ -39,6 +40,7 @@ class User extends UserBase {
     public $verifyCode;
     protected $_isNew = false;
     public $conditions;
+    public $form_image;
 
     /**
      * Returns the static model of the specified AR class.
@@ -78,6 +80,7 @@ class User extends UserBase {
             array('contact, contribution_text', 'safe', 'on' => 'register,edit'),
             array('verifyCode', 'captcha', 'allowEmpty' => !CCaptcha::checkRequirements(), 'on' => 'register,update, recovery'),
             array('conditions', 'match', 'pattern' => '/^1$/', 'on' => 'register'),
+            array('form_image', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true, 'on' => 'register,update'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('username, name, surname, contribution_title, contribution_text, zip, created, blocked, deleted', 'safe', 'on' => 'search'),
@@ -129,6 +132,7 @@ class User extends UserBase {
             'blocked' => Yii::t('app', 'Blocked'),
             'deleted' => Yii::t('app', 'Deleted'),
             'conditions' => Yii::t('app', 'Conditions'),
+            'form_image' => Yii::t('market', 'Image')
         );
     }
 
@@ -148,7 +152,7 @@ class User extends UserBase {
         $criteria->compare('deleted', null);
         $criteria->compare('zip', $this->zip, true);
 
-        $criteria->order = 'updated DESC, id DESC'; // last_login DESC, 
+        $criteria->order = 'updated DESC, id DESC'; // last_login DESC,
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -230,6 +234,25 @@ class User extends UserBase {
                     $this->salt = md5(self::randString(64));
                     $this->password = self::hashPassword($this->plain_password, $this->salt);
                 }
+            }
+
+            $this->form_image = EUploadedImage::getInstance($this, 'form_image');
+
+            if ($this->form_image != null) {
+                $this->form_image->maxWidth = 500;
+                $this->form_image->maxHeight = 400;
+
+                $this->form_image->thumb = array(
+                    'maxWidth' => 150,
+                    'maxHeight' => 120,
+//				    'dir' => Yii::getPathOfAlias('webroot.images.market'),
+                    'prefix' => Brand::THUMB_PREFIX,
+                );
+
+                $ext = substr($this->form_image, strrpos($this->form_image, '.'));
+                $img_name = uniqid();
+                $this->form_image->saveAs(Yii::getPathOfAlias('webroot.images.users') . '/' . $img_name . $ext);
+                $this->image = $img_name . $ext;
             }
 
             $this->identification = $this->identification_method . ': ' . $this->identification_number;

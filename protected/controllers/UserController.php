@@ -34,15 +34,15 @@ class UserController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('captcha', 'invited'/*,'create'*/, 'recovery', 'recoveryRequest'),
+                'actions' => array('captcha', 'invited' /*,'create'*/, 'recovery', 'recoveryRequest'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('index', 'view', 'update', 'edit'),
+                'actions' => array('index', 'view', 'me', 'update', 'edit'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-		'actions' => array('index', 'view', 'update', 'edit'),
+		            'actions' => array('index', 'view', 'me', 'update', 'edit'),
                 //'actions' => array('index', 'delete', 'admin'),
                 'users' => array('admin'),
             ),
@@ -57,7 +57,8 @@ class UserController extends Controller {
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
-        if (Yii::app()->user->getId() == $id) {
+      $this->layout = '//layouts/column1';
+        //if (Yii::app()->user->getId() == $id) {
             $entity = Entity::model()->findByPk($id);
             if ($entity === null) {
                 throw new CHttpException(404, 'The requested page does not exist.');
@@ -72,16 +73,49 @@ class UserController extends Controller {
 
             $model = $entity->getObject();
             $dataProvider = Rate::getTo($entity->id);
+            $ratesDataProvider = Rate::getTo($entity->id);
+            $adsDataProvider = MarketAd::getAds(4, $entity->id);
 
             $this->render('view', array(
                 'model' => $model,
                 'entity' => $entity,
                 'dataProvider' => $dataProvider,
+                'ratesDataProvider' => $ratesDataProvider,
+                'adsDataProvider' => $adsDataProvider,
+                'is_admin' => $id == Yii::app()->user->getId(),
             ));
-        } else {
-            $this->redirect(array('site/index'));
-        }
+        //} else {
+        //    $this->redirect(array('site/index'));
+        //}
     }
+
+    /**
+     * Displays a particular model.
+     * @param integer $id the ID of the model to be displayed
+     */
+    public function actionMe() {
+        $entity = Entity::model()->findByPk(Yii::app()->user->getId());
+        if ($entity === null) {
+            throw new CHttpException(404, 'The requested page does not exist.');
+        }
+        if ($entity->class == 'Brand') {
+            $this->redirect(array('brand/view', 'id' => $entity->object_id));
+        }
+        if(!$entity->magic){
+          $entity->magic = Entity::randString(32);
+          $entity->save();
+        }
+
+        $model = $entity->getObject();
+        $dataProvider = Rate::getTo($entity->id);
+
+        $this->render('me', array(
+            'model' => $model,
+            'entity' => $entity,
+            'dataProvider' => $dataProvider,
+        ));
+    }
+
 
     /**
      * Creates a new model.

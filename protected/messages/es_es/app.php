@@ -96,6 +96,7 @@ return array(
     'Contact' => 'Contacto',
     'Birthday' => 'Fecha de Nacimiento',
     'Zip code' => 'Código postal',
+    'Anonymous ad' => 'Anuncio anónimo',
     'Country' => 'País',
     'Verification Code' => 'Código de verificación',
     'Created' => 'Creado',

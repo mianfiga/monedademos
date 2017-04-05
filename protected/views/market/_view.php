@@ -33,14 +33,13 @@
         }
         ?>
         <?php
-        if ($data->createdBy->class == 'Brand') {
-            $brandname = $data->createdBy->getObject()->name;
-            $brandid = $data->createdBy->getObject()->id;
+        if (!$data->anonymous) {
+            $author_name = $data->createdBy->getObject()->name;
             ?>
             <div class="mk_data mk_autor">
-                <?php echo Yii::t('market', 'By'). ': '.CHtml::link((strlen($brandname) > 30 ? substr($brandname, 0, 30) . '…' : $brandname), array('brand/view', 'id' => $brandid)); ?>
+                <?php echo Yii::t('market', 'By'). ': '.CHtml::link((strlen($author_name) > 30 ? substr($author_name, 0, 30) . '…' : $author_name), array('user/view', 'id' => $data->created_by)); ?>
             </div>
-<?php  } ?>
+<?php   } ?>
 
     </div>
     <div class="mk_posbottom"> </div>

@@ -76,7 +76,7 @@ class MarketAd extends MarketAdBase {
             array('form_price', 'match', 'pattern' => '/^\d+(\.\d{2})?$/', 'message' => '{attribute} is invalid. Use: # or #.##'),
             array('form_image', 'file', 'types' => 'jpg, gif, png', 'allowEmpty' => true),
 //			array('mailmode', 'length', 'max'=>9),
-            array('summary, description, zip', 'safe'),
+            array('anonymous, summary, description, zip', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('title, class, type, summary, price, description, zip', 'safe', 'on' => 'search'),
@@ -114,6 +114,7 @@ class MarketAd extends MarketAdBase {
             'visible' => Yii::t('market', 'Public'),
             'expiration' => Yii::t('market', 'Expiration'),
             'zip' => Yii::t('app', 'Zip code'),
+            'anonymous' => Yii::t('app', 'Anonymous ad'),
         );
     }
 
@@ -255,7 +256,7 @@ class MarketAd extends MarketAdBase {
         );
 
         $criteria = array(
-            'condition' => 'visible=1' . ($mode == 1 ? ' AND t.created_by=\'' . $entity_id . '\'' : '') . ($mode == 3 ? ' AND expiration >= curdate()' : ''),
+            'condition' => 'visible=1' . ($mode == 1 ? ' AND t.created_by=\'' . $entity_id . '\'' : '') . ($mode == 3 ? ' AND expiration >= curdate()' : '') . ($mode == 4 ? ' AND t.created_by=\'' . $entity_id . '\' AND NOT(anonymous)' : ''),
             'with' => $with,
         );
 
