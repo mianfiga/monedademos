@@ -83,10 +83,7 @@ echo $this->renderPartial('/market/_list', array(
               </div>
           </div>
       <?php } ?>
-
-<?php if ($model->image != '') { ?>
-            <img src="<?php echo Yii::app()->request->baseUrl . '/images/users/' . $model->image ?>" alt="<?php echo CHtml::encode($model->name) ?>"/>
-        <?php } ?>
+          <img src="<?php echo Yii::app()->request->baseUrl . ($model->image != ''?'/images/users/' . $model->image : '/images/nophoto.png') ?>" alt="<?php echo CHtml::encode($model->name) ?>"/>
         <?php
 /*        echo $this->renderPartial('/link/_list', array(
             'links' => $entity->links,
