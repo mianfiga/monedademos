@@ -50,6 +50,8 @@ return array(
     '[DEMOS Market] New Market add "{title}"' => '[DEMOS Market] Nuevo anuncio en el Market "{title}"',
     'New market ad "{title}"' => 'Nuevo anuncio en el Market "{title}"',
 
-
+    'New contact by e-mail' => 'Nuevo contacto por e-mail',
+    '[DEMOS] New contact by e-mail' => '[DEMOS] Nuevo contacto por e-mail',
+    'You have been contacted by a user of monedademos, please check your e-mail (spam folder perhaps) someone is waiting for your answer' => 'Te han contactado a través de monedademos, por favor comprueba tu e-mail (quizás en la carpeta de spam) hay alguien esperando por tu respuesta',
 );
 ?>

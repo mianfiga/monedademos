@@ -96,6 +96,7 @@ class ContributionController extends Controller {
                 if (mail($recipent->email, '[Contact from DEMOS] ' . $model->subject, $model->body, $headers)) {
                     Yii::app()->user->setFlash('contact', Yii::t('app', 'Thank you for contacting'));
                     ActivityLog::add($entity->id, ActivityLog::CONTACT, Sid::getSID($recipent). '-Y');
+                    Notification::addNotification(Notification::CONTRIBUTION_CONTACT, $id, Sid::getSID($recipent), array());
                 }
                 else {
                     Yii::app()->user->setFlash('error', Yii::t('app', 'E-mail not sent'));

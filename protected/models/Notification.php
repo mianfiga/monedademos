@@ -37,6 +37,7 @@ class Notification extends NotificationBase {
     const NEVER_SELL = 19;
     const BROADCAST_MESSAGE = 20;
     const BROADCAST_MARKET_AD_NEW = 21;
+    const CONTRIBUTION_CONTACT = 22;
 
     /**
      * Returns the static model of the specified AR class.
