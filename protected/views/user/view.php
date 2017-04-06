@@ -64,7 +64,18 @@ echo $this->renderPartial('/market/_list', array(
 ?>
     </div>
     <div class="small-12 large-5 columns">
-      <?php if (!$is_admin) { ?>
+      <?php if ($is_admin) { ?>
+          <br/>
+          <div class="row">
+              <div class="small-12 columns">
+                <?php echo CHtml::link(Yii::t('app', 'Connect to Telegram'), 'https://telegram.me/monedademos_bot?start='. $entity->id . '-' . $entity->getMagic(), array('class' => "button")); ?>
+                <?php
+                if (strpos($model->abilities, User::ABILITY_INVITE) !== false) {
+                    echo '&nbsp;' . CHtml::link(Yii::t('app', 'Invite friend'), array('invitation/index'), array('class' => "button secondary"));
+                } ?>
+              </div>
+          </div>
+<?php } else {?>
           <br/>
           <div class="row">
               <div class="small-12 columns">
