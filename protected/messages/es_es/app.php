@@ -11,6 +11,7 @@ return array(
     'Logout' => 'Salir',
     'Invite friend' => 'Invitaciones',
     'Join now' => 'Únete ya',
+    'Join' => 'Únete',
     'Mobile version' => 'Versión móvil',
     'Create User' => 'Nuevo Usuario',
     'Notifications' => 'Notificaciones',
@@ -169,5 +170,6 @@ return array(
     'Username or e-mail not found.'=> 'Usuario o e-mail no encontrado',
     'Pasword updated successfully'=> 'Contraseña actualizada con éxito',
     'Check your E-mail for further instructions' => 'Comprueba tu e-mail para continuar',
+    'Public accounts' => 'Cuentas públicas',
 );
 ?>

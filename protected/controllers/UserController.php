@@ -63,8 +63,8 @@ class UserController extends Controller {
             if ($entity === null) {
                 throw new CHttpException(404, 'The requested page does not exist.');
             }
-            if ($entity->class == 'Brand') {
-                $this->redirect(array('brand/view', 'id' => $entity->object_id));
+            if ($entity->class != 'User') {
+                $this->redirect(array(strtolower($entity->class) . '/view', 'id' => $entity->object_id));
             }
             if(!$entity->magic){
               $entity->magic = Entity::randString(32);

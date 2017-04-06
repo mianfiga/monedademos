@@ -26,17 +26,17 @@ class TribeController extends Controller {
     public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
+                'actions' => array('view'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update'),
+                'actions' => array('migrationRequest'),
                 'users' => array('@'),
             ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+            /*array('allow', // allow admin user to perform 'admin' and 'delete' actions
+                'actions' => array('create', 'update', 'admin', 'delete'),
                 'users' => array('admin'),
-            ),
+            ),*/
             array('deny', // deny all users
                 'users' => array('*'),
             ),
@@ -49,10 +49,26 @@ class TribeController extends Controller {
      */
     public function actionView($id) {
         $model = $this->loadModel($id);
+        $entity = Yii::app()->user->getId()?Entity::model()->findByPk(Yii::app()->user->getId()):null;
+
+        $publicAccountDataProvider = new CActiveDataProvider('Account',
+                        array(
+                            'criteria' => array(
+                                'condition' => 'access = \'public\' AND tribe_id = ' . $model->id,
+                            ),
+                            'sort' => array(
+                                'defaultOrder' => 't.last_action DESC',
+                            )
+                ));
+
         $this->render('view', array(
             'model' => $model,
             'record' => Record::getLastRecord($id), //falta isla
             'rule' => Rule::getCurrentRule($model->group_id),
+            'entity' => $entity,
+            'adsDataProvider' => MarketAd::getAds(null, null, $model->id, 5, 5),
+            'newsDataProvider' => MarketAd::getAds(1, Entity::get($model)->id, null, 5, 5),
+            'publicAccountDataProvider' => $publicAccountDataProvider,
             'next_rule' => Rule::getDateRule(date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1)), $id),
         ));
     }
@@ -98,6 +114,45 @@ class TribeController extends Controller {
         $this->render('update', array(
             'model' => $model,
         ));
+    }
+
+    /**
+     * Updates a particular model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id the ID of the model to be updated
+     */
+    public function actionMigrationRequest($id) {
+      if(!is_numeric($id)){
+        $this->redirect(array('site/index'));
+        return;
+      }
+      $model = new TribeMigration;
+      $model->to_id = $id;
+
+      $entity = Entity::model()->findByPk(Yii::app()->user->getId());
+      if ($entity->tribe_id == $id){
+        Yii::app()->user->setFlash('notice', Yii::t('tribe', 'You are already member of this tribe'));
+        $this->redirect(array('tribe/view','id'=>$id));
+        return;
+      }
+
+      // Uncomment the following line if AJAX validation is needed
+      // $this->performAjaxValidation($model);
+
+      if (isset($_POST['TribeMigration'])) {
+        $model->attributes = $_POST['TribeMigration'];
+        $model->entity_id = Yii::app()->user->getId();
+        $model->status = TribeMigration::STATUS_PENDING;
+        $model->added = date('Y-m-d');
+        if ($model->save()){
+          Yii::app()->user->setFlash('success', Yii::t('tribe', 'Thanks for your interest on becoming part of this tribe. Your request will be attended shortly'));
+          $this->redirect(array('view', 'id' => $model->to_id));
+        }
+      }
+
+      $this->render('migrationRequest', array(
+        'model' => $model
+      ));
     }
 
     /**

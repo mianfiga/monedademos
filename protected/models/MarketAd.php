@@ -217,7 +217,7 @@ class MarketAd extends MarketAdBase {
         $this->expired = $this->expiration < date('Y-m-d');
     }
 
-    static public function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null) {
+    static public function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null, $pageSize = 10) {
 
         $with = array();
         if(!!$mode && !is_numeric($mode)){
@@ -268,6 +268,9 @@ class MarketAd extends MarketAdBase {
             'criteria' => $criteria,
             'sort' => array(
                 'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
+            ),
+            'pagination' => array(
+                'pageSize' => $pageSize,
             ),
         ));
     }

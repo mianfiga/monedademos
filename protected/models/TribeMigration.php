@@ -16,6 +16,11 @@
  */
 class TribeMigration extends TribeMigrationBase
 {
+
+	const STATUS_PENDING = 'pending';
+	const STATUS_CONFIRMED = 'confirmed';
+	const STATUS_REJECTED = 'rejected';
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -60,7 +65,7 @@ class TribeMigration extends TribeMigrationBase
 		// class name for the relations automatically generated below.
 		return array(
 			'entity' => array(self::BELONGS_TO, 'Entity', 'entity_id'),
-			'to' => array(self::BELONGS_TO, 'Tribe', 'to_id'),
+			'tribe' => array(self::BELONGS_TO, 'Tribe', 'to_id'),
 		);
 	}
 

@@ -141,7 +141,7 @@ class ApiTelegram extends CActiveRecord
 	public static function doSend($sendto){
 		$api_url = 'https://api.telegram.org/bot'. Yii::app()->params['telegram_token'] .'/';
 		$message = $api_url . $sendto;
-		$result = file_get_contents($message);
+		$result = @file_get_contents($message);
 		$data_result = json_decode($result,true);
 		return isset($data_result['ok']) && $data_result['ok'];
 	}

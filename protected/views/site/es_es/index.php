@@ -58,7 +58,7 @@ foreach ($tribes as $tribe) {
     }
     ?>
     <div class="row">
-        <div class="small-12 columns"><h3><?php echo $tribe->name; ?> <?php echo CHtml::link(Yii::t('app', 'Market'), array('market/index','tribe_id'=>$tribe->id), array('class' => 'tiny button secondary')); ?></h3></div>
+        <div class="small-12 columns"><h3><?php echo CHtml::link($tribe->name, array('/tribe/view', 'id' => $tribe->id)); ?> <?php echo CHtml::link(Yii::t('app', 'Market'), array('market/index','tribe_id'=>$tribe->id), array('class' => 'tiny button secondary')); ?></h3></div>
         <div class="small-12 columns">
             <div class="panel amount_data">
                 <span class="moving"><?php echo Yii::t('app', 'Moving <strong>{total_amount}</strong> within <strong>{user_count}</strong> users', array('{total_amount}' => Transaction::amountSystemToUser($record->total_amount), '{user_count}' => $record->user_count)) ?>.</span>

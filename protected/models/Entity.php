@@ -83,7 +83,14 @@ class Entity extends EntityBase {
                 'order' => 'lastDepositTransaction.executed_at DESC',
             ),
             'tribe' => array(self::BELONGS_TO, 'Tribe', 'tribe_id'),
-            'apiTelegram' => array(self::HAS_ONE,'ApiTelegram','entity_id')
+            'apiTelegram' => array(self::HAS_ONE,'ApiTelegram','entity_id'),
+            'lastMigration' => array(
+                self::HAS_ONE,
+                'TribeMigration',
+                'entity_id',
+                //'condition' => ' EXTRACT( YEAR_MONTH FROM lastMigration.`status_at` )  EXTRACT( YEAR_MONTH FROM CURRENT_DATE )',
+                'order' => 'lastMigration.added DESC',
+            )
         );
     }
 

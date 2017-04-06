@@ -145,6 +145,35 @@ class Transaction extends TransactionBase {
         ));
     }
 
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+     */
+    public function searchPublic($id) {
+        if(!is_numeric($id)){
+          return null;
+        }
+        $account = Account::model()->findByPk($id);
+        if($account->access != 'public'){
+          return null;
+        }
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
+
+        $criteria = new CDbCriteria;
+
+        $criteria->order = 'id DESC'; // last_login DESC,
+        $criteria->condition = "(charge_account='" . $id . "')" . /* AND charge_entity='".$acc['entity_id']."')". */
+                " OR (deposit_account='" . $id . "')"; /* AND deposit_entity='".$acc['entity_id']."')", */
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+            'pagination' => array(
+                'pageSize' => 30,
+            ),
+        ));
+    }
+
     public function getUrl() {
         return Yii::app()->createUrl('transaction/view', array(
                     'id' => $this->id,
