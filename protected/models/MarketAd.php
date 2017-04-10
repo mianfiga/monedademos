@@ -209,6 +209,10 @@ class MarketAd extends MarketAdBase {
             $relation_tribe->tribe_id = $this->createdBy->tribe_id;
             $relation_tribe->save();
         }
+        if(!$this->expired && $this->visible && !NotificationMessage::model()->findByAttributes(array('sid'=>'bc-' . Sid::getSID($this)))){
+          $notif_data = array('{title}' => $this->title);
+          Notification::addNotification(Notification::BROADCAST_MARKET_AD_NEW, $this->created_by, 'bc-' . Sid::getSID($this), $notif_data);
+        }
     }
 
     protected function afterFind() {

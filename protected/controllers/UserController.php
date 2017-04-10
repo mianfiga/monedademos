@@ -60,7 +60,8 @@ class UserController extends Controller {
       $this->layout = '//layouts/column1';
         //if (Yii::app()->user->getId() == $id) {
             $entity = Entity::model()->findByPk($id);
-            if ($entity === null) {
+
+            if ($entity === null || $entity->object->deleted) {
                 throw new CHttpException(404, 'The requested page does not exist.');
             }
             if ($entity->class != 'User') {
@@ -122,7 +123,7 @@ class UserController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionInvited($id, $code) {
-
+        $this->layout = '//layouts/column1';
 //buscamos la invitación
         $invitation = Invitation::model()->findByPk($id);
 //comprobamos que sea correcta

@@ -214,12 +214,20 @@ $cs->registerScript('foundation_reveal', '$(document).foundation(\'reveal\', { c
     <?php if ($scenario == 'register') { ?>
         <br/><br/>
         <div class="row">
+            <div class="small-12 columns">
+              <object data="images/codigo_etico.pdf" type="application/pdf" style="width:100%; height:70vh;">
+                <p><a href="images/codigo_etico.pdf" target="_blank">Código ético</a></p>
+              </object>
+            </div>
+        </div><br/>
+        <div class="row">
             <div class="small-7 large-5 columns form_row">
                 <?php echo $form->labelEx($model, 'conditions'); ?>
                 <?php echo $form->checkBox($model, 'conditions'); ?> Acepto las <?php echo CHtml::link(Yii::t('app', 'Conditions'), array('/site/page', 'view' => 'conditions'), array('target' => '_blank')); ?>.
                 <?php echo $form->error($model, 'conditions'); ?>
             </div>
         </div>
+
     <?php } ?>
     <br/><br/>
     <div class="row">
