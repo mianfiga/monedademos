@@ -26,8 +26,8 @@ Yii::import('application.extensions.EUploadedImage');
  * @property Entity $createdBy
  * @property User[] $rbuUsers
  */
-class MarketAd extends MarketAdBase {
-
+class MarketAd extends MarketAdBase
+{
     const MAX_EXPIRATION = 2592000; //3600*24*30
     const EXPIRATION_PRENOTIFICATION_DAYS = 5;
     const THUMB_PREFIX = 'thumb_';
@@ -35,16 +35,21 @@ class MarketAd extends MarketAdBase {
     public $form_price;
     public $form_image;
     public $expired;
+    
+    protected $_isNew = false;
 
-    public static function classOptions() {
+    public static function classOptions()
+    {
         return array('product' => Yii::t('market', 'Product'), 'service' => Yii::t('market', 'Service'));
     }
 
-    public static function typeOptions() {
+    public static function typeOptions()
+    {
         return array('offer' => Yii::t('market', 'Offer'), 'requirement' => Yii::t('market', 'Request'));
     }
 
-    public static function mailmodeOptions() {
+    public static function mailmodeOptions()
+    {
         return array('instantly' => Yii::t('market', 'Instantly'),
             'daily' => Yii::t('market', 'Daily'),
             'exired' => Yii::t('market', 'On expiration'));
@@ -55,14 +60,16 @@ class MarketAd extends MarketAdBase {
      * @param string $className active record class name.
      * @return MarketAdBase the static model class
      */
-    public static function model($className = __CLASS__) {
+    public static function model($className = __CLASS__)
+    {
         return parent::model($className);
     }
 
     /**
      * @return array validation rules for model attributes.
      */
-    public function rules() {
+    public function rules()
+    {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
@@ -86,7 +93,8 @@ class MarketAd extends MarketAdBase {
     /**
      * @return array relational rules.
      */
-    public function relations() {
+    public function relations()
+    {
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
@@ -100,7 +108,8 @@ class MarketAd extends MarketAdBase {
     /**
      * @return array customized attribute labels (name=>label)
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return array(
             'id' => 'ID',
             'title' => Yii::t('market', 'Title'),
@@ -122,7 +131,8 @@ class MarketAd extends MarketAdBase {
      * Retrieves a list of models based on the current search/filter conditions.
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
-    public function search() {
+    public function search()
+    {
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
@@ -144,52 +154,54 @@ class MarketAd extends MarketAdBase {
         ));
     }
 
-    protected function beforeSave() {
-        if (parent::beforeSave()) {
+    protected function beforeSave()
+    {
+        if (!parent::beforeSave()) {
+            return false;
+        }
+        $this->_isNew = $this->isNewRecord;
+        //check expiration date
+        $max_date = date('Y-m-d', self::MAX_EXPIRATION + date('U'));
 
-            //check expiration date
-
-            $max_date = date('Y-m-d', self::MAX_EXPIRATION + date('U'));
-            if ($this->expiration > $max_date) {
-                $this->addError('expiration', 'Max expiration is ' . (self::MAX_EXPIRATION / 86400) . ' days from today (' . $max_date . '). Update in the future to get extra time.');
-                return false;
+        if ($this->expiration > $max_date) {
+            $this->addError('expiration', 'Max expiration is ' . (self::MAX_EXPIRATION / 86400) . ' days from today (' . $max_date . '). Update in the future to get extra time.');
+            return false;
+        }
+        if ($this->isNewRecord) {
+            $this->added = date('YmdHis');
+            if ($this->created_by == null) {
+                $this->created_by = Yii::app()->user->getId();
             }
-            if ($this->isNewRecord) {
-                $this->added = date('YmdHis');
-                if ($this->created_by == null) {
-                    $this->created_by = Yii::app()->user->getId();
-                }
-            }
+        }
 
-            $this->form_image = EUploadedImage::getInstance($this, 'form_image');
+        $this->form_image = EUploadedImage::getInstance($this, 'form_image');
 
-            if ($this->form_image != null) {
-                $this->form_image->maxWidth = 500;
-                $this->form_image->maxHeight = 400;
+        if ($this->form_image != null) {
+            $this->form_image->maxWidth = 500;
+            $this->form_image->maxHeight = 400;
 
-                $this->form_image->thumb = array(
+            $this->form_image->thumb = array(
                     'maxWidth' => 150,
                     'maxHeight' => 120,
                     'prefix' => MarketAd::THUMB_PREFIX,
                 );
 
-                $ext = substr($this->form_image, strrpos($this->form_image, '.'));
-                $img_name = uniqid();
-                $this->form_image->saveAs(Yii::getPathOfAlias('webroot.images.market') . '/' . $img_name . $ext);
-                $this->image = $img_name . $ext;
-            }
+            $ext = substr($this->form_image, strrpos($this->form_image, '.'));
+            $img_name = uniqid();
+            $this->form_image->saveAs(Yii::getPathOfAlias('webroot.images.market') . '/' . $img_name . $ext);
+            $this->image = $img_name . $ext;
+        }
 
-            $this->updated = date('YmdHis');
+        $this->updated = date('YmdHis');
 
-            if ($this->form_price != null) {
-                $this->price = Transaction::amountUserToSystem($this->form_price);
-            }
-            return true;
-        } else
-            return false;
+        if ($this->form_price != null) {
+            $this->price = Transaction::amountUserToSystem($this->form_price);
+        }
+        return true;
     }
 
-    protected function afterSave() {
+    protected function afterSave()
+    {
         parent::afterSave();
         $this->expired = $this->expiration < date('Y-m-d');
         if ($this->expired) {
@@ -209,33 +221,34 @@ class MarketAd extends MarketAdBase {
             $relation_tribe->tribe_id = $this->createdBy->tribe_id;
             $relation_tribe->save();
         }
-        if(!$this->expired && $this->visible && !NotificationMessage::model()->findByAttributes(array('sid'=>'bc-' . Sid::getSID($this)))){
-          $notif_data = array('{title}' => $this->title);
-          Notification::addNotification(Notification::BROADCAST_MARKET_AD_NEW, $this->created_by, 'bc-' . Sid::getSID($this), $notif_data);
+        if (!$this->expired && $this->visible && !NotificationMessage::model()->findByAttributes(array('sid'=>'bc-' . Sid::getSID($this)))) {
+            $notif_data = array('{title}' => $this->title);
+            Notification::addNotification(Notification::BROADCAST_MARKET_AD_NEW, $this->created_by, 'bc-' . Sid::getSID($this), $notif_data);
         }
     }
 
-    protected function afterFind() {
+    protected function afterFind()
+    {
         parent::afterFind();
         $this->form_price = Transaction::amountSystemToUserNo($this->price);
         $this->expired = $this->expiration < date('Y-m-d');
     }
 
-    static public function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null, $pageSize = 10) {
-
+    public static function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null, $pageSize = 10)
+    {
         $with = array();
-        if(!!$mode && !is_numeric($mode)){
+        if (!!$mode && !is_numeric($mode)) {
             $mode = null;
-    	  }
-        if(!!$entity_id && !is_numeric($entity_id)){
+        }
+        if (!!$entity_id && !is_numeric($entity_id)) {
             $entity_id = null;
-       	}
-        if(!!$tribe_id && !is_numeric($tribe_id)){
+        }
+        if (!!$tribe_id && !is_numeric($tribe_id)) {
             $tribe_id = null;
-    	  }
-        if(!!$limit && !is_numeric($limit)){
+        }
+        if (!!$limit && !is_numeric($limit)) {
             $limit = null;
-    	  }
+        }
 
         if ($entity_id) {
             $with['joined'] = array(
@@ -278,5 +291,4 @@ class MarketAd extends MarketAdBase {
             ),
         ));
     }
-
 }
