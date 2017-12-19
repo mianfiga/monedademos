@@ -16,7 +16,7 @@
         </div>
         <div class="row collapse">
             <div class="small-10 large-4 columns">
-                <?php echo $form->textField($model, 'form_amount', array('size' => 10, 'maxlength' => 10, 'autofocus' => 'autofocus')); ?>
+               <?php echo $form->numberField($model, 'form_amount', array('size' => 10, 'maxlength' => 10, 'autofocus' => 'autofocus', 'step' => '0.01')); ?>
             </div>
             <div class="small-2 large-8 columns form_currency_symbol">
                 &nbsp;đ
@@ -24,7 +24,7 @@
         </div>
         <div class="row">
             <div class="small-12 columns">
-                <?php echo Yii::t('app', 'Examples: "12", "12.03" or "12.30" mind the dot and two digits when using cents.'); ?>       
+                <?php echo Yii::t('app', 'Examples: "12", "12.03" or "12.30" mind the dot and two digits when using cents.'); ?>
             </div>
         </div>
         <div class="row">

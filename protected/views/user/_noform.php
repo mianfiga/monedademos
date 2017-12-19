@@ -7,7 +7,7 @@
     <li><strong>Yasmina</strong>, <strong>Ibrahin</strong> y <strong>Miguel Ángel</strong> en el mercademos de La Isleta.</li>
     <li><strong>Rubén</strong> y <strong>Pino</strong> en el mercademos de 2º Paradigma.</li>
     <li><strong>Octavio</strong> en el mercademos de Suárez Naranjo.</li>
-    <li><strong>Sergi</strong> y <strong>Sayo</strong> en los encuentros y mercademos de <strong>Lanzarote</strong>.</li>
+    <li><strong>Playo</strong> en los encuentros y mercademos de <strong>Lanzarote</strong>.</li>
     <li><strong>Tirsa</strong> y <strong>Jose María</strong> en los mercademos de Galdar y Agaete.</li>
     <li><strong>Yolanda</strong> en Santa Brígida.</li>
     <li>En <strong>La Palma</strong> han creado un sitio con más información: <a href="http://monedademos.es/lapalma">Moneda Demos La Palma</a></li>
