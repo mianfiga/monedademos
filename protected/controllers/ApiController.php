@@ -125,8 +125,9 @@ class ApiController extends Controller
 		$this->render('telegram');
 	}
 
-	public function actionConnectTelegram($c,$u,$un){
+	public function actionConnectTelegram($c,$u){
 		$id = Yii::app()->user->getId();
+		$un = Yii::app()->request->getQuery('un');
 		$entity = Entity::model()->findByPk($id);
 		if ($entity === null) {
 				throw new CHttpException(404, 'The requested page does not exist.');
