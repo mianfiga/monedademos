@@ -2,9 +2,9 @@ SET FOREIGN_KEY_CHECKS=0;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_account`
--- 
+--
 
 CREATE TABLE `rbu_account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -16,8 +16,8 @@ CREATE TABLE `rbu_account` (
   `balance` bigint(20) NOT NULL DEFAULT '0',
   `title` varchar(127) DEFAULT NULL,
   `access` enum('private','public') NOT NULL DEFAULT 'private',
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `last_action` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `last_action` timestamp,
   `blocked` timestamp NULL DEFAULT NULL,
   `deleted` timestamp NULL DEFAULT NULL,
   `total_earned` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -34,9 +34,9 @@ CREATE TABLE `rbu_account` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_activity_log`
--- 
+--
 
 CREATE TABLE `rbu_activity_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,7 @@ CREATE TABLE `rbu_activity_log` (
   `action` varchar(127) NOT NULL,
   `related_sid` varchar(127) DEFAULT NULL,
   `ip` varchar(41) NOT NULL,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
   `risk_estimation` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `FK_activity_log` (`entity_id`)
@@ -52,9 +52,9 @@ CREATE TABLE `rbu_activity_log` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_authorization`
--- 
+--
 
 CREATE TABLE `rbu_authorization` (
   `entity_id` int(11) unsigned NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `rbu_authorization` (
   `salt` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
   `wrong_pass_count` tinyint(4) NOT NULL DEFAULT '0',
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
   `blocked` timestamp NULL DEFAULT NULL,
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`entity_id`,`account_id`),
@@ -74,9 +74,9 @@ CREATE TABLE `rbu_authorization` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_brand`
--- 
+--
 
 CREATE TABLE `rbu_brand` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -85,11 +85,11 @@ CREATE TABLE `rbu_brand` (
   `summary` text,
   `description` text,
   `image` varchar(254) DEFAULT NULL,
-  `last_action` timestamp NULL DEFAULT NULL,
+  `last_action` timestamp,
   `created_by` int(10) unsigned DEFAULT NULL,
   `culture` varchar(7) NOT NULL DEFAULT 'es_es',
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
@@ -97,9 +97,9 @@ CREATE TABLE `rbu_brand` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_entity`
--- 
+--
 
 CREATE TABLE `rbu_entity` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -114,9 +114,9 @@ CREATE TABLE `rbu_entity` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_exemption`
--- 
+--
 
 CREATE TABLE `rbu_exemption` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -126,16 +126,16 @@ CREATE TABLE `rbu_exemption` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_invitation`
--- 
+--
 
 CREATE TABLE `rbu_invitation` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `note` varchar(127) NOT NULL DEFAULT '',
   `code` varchar(8) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` timestamp NOT NULL,
   `sent` timestamp NULL DEFAULT NULL,
   `used` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -156,11 +156,11 @@ CREATE TABLE IF NOT EXISTS `rbu_tribe` (
   `summary` text,
   `description` text,
   `image` varchar(254) DEFAULT NULL,
-  `last_action` timestamp NULL DEFAULT NULL,
+  `last_action` timestamp,
   `group_id` int(10) unsigned DEFAULT NULL,
   `created_by` int(10) unsigned DEFAULT NULL,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nickname` (`nickname`),
@@ -204,8 +204,8 @@ CREATE TABLE IF NOT EXISTS `rbu_tribe_migration` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `entity_id` int(11) unsigned NOT NULL,
   `to_id` int(11) unsigned NOT NULL,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `executed_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `executed_at` timestamp NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_tribe_migration_entity` (`entity_id`),
   KEY `FK_tribe_migration_to` (`to_id`)
@@ -231,9 +231,9 @@ CREATE TABLE IF NOT EXISTS `rbu_link` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_market_ad`
--- 
+--
 
 CREATE TABLE `rbu_market_ad` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -249,17 +249,17 @@ CREATE TABLE `rbu_market_ad` (
   `expiration` date NOT NULL,
   `zip` varchar(16) DEFAULT NULL,
   `created_by` int(10) unsigned DEFAULT NULL,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_market_ad_created_by` (`created_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_market_joined`
--- 
+--
 
 CREATE TABLE `rbu_market_joined` (
   `ad_id` bigint(20) unsigned NOT NULL,
@@ -267,17 +267,17 @@ CREATE TABLE `rbu_market_joined` (
   `comment` text,
   `show_mail` tinyint(1) NOT NULL DEFAULT '0',
   `status` enum('pending','accepted','substitute','rejected') NOT NULL DEFAULT 'pending',
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
   PRIMARY KEY (`ad_id`,`entity_id`),
   KEY `FK_market_joined_user_id` (`entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_notification`
--- 
+--
 
 CREATE TABLE `rbu_notification` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -290,9 +290,9 @@ CREATE TABLE `rbu_notification` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_notification_configuration`
--- 
+--
 
 CREATE TABLE `rbu_notification_configuration` (
   `entity_id` int(11) unsigned NOT NULL,
@@ -306,33 +306,33 @@ CREATE TABLE `rbu_notification_configuration` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_notification_message`
--- 
+--
 
 CREATE TABLE `rbu_notification_message` (
   `entity_id` int(11) unsigned NOT NULL,
   `notification_id` int(10) unsigned NOT NULL,
   `sid` varchar(127) NOT NULL DEFAULT '',
   `data` text,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `sent` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `read` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `shown` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `sent` timestamp NOT NULL,
+  `read` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
+  `shown` timestamp NOT NULL,
   PRIMARY KEY (`entity_id`,`notification_id`,`sid`),
   KEY `FK_notification_user_noti` (`notification_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_pending`
--- 
+--
 
 CREATE TABLE `rbu_pending` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `executed_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `executed_at` timestamp NOT NULL,
   `class` enum('salary','tax','transfer','charge','movement') NOT NULL,
   `amount` bigint(20) unsigned NOT NULL,
   `charge_account` int(10) unsigned NOT NULL,
@@ -349,9 +349,9 @@ CREATE TABLE `rbu_pending` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_period`
--- 
+--
 
 CREATE TABLE `rbu_period` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -369,9 +369,9 @@ CREATE TABLE `rbu_period` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_rate`
--- 
+--
 
 CREATE TABLE `rbu_rate` (
   `to_id` int(11) unsigned NOT NULL,
@@ -380,17 +380,17 @@ CREATE TABLE `rbu_rate` (
   `type` enum('neutral','client','vendor') NOT NULL DEFAULT 'neutral',
   `puntuation` tinyint(4) NOT NULL DEFAULT '3',
   `comment` text,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
   PRIMARY KEY (`to_id`,`from_id`,`sid`),
   KEY `FK_rate_entity_from` (`from_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_record`
--- 
+--
 
 CREATE TABLE `rbu_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -405,15 +405,15 @@ CREATE TABLE `rbu_record` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_role`
--- 
+--
 
 CREATE TABLE `rbu_role` (
   `actor_id` int(11) unsigned NOT NULL DEFAULT '0',
   `part_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
+  `updated` timestamp NOT NULL,
   `deleted` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`actor_id`,`part_id`),
   KEY `FK_role_part` (`part_id`)
@@ -421,14 +421,14 @@ CREATE TABLE `rbu_role` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_rule`
--- 
+--
 
 CREATE TABLE `rbu_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tribe_group_id` int(11) unsigned DEFAULT '1',
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `added` timestamp NOT NULL,
   `salary` bigint(20) unsigned NOT NULL,
   `min_salary` bigint(20) unsigned NOT NULL,
   `multiplier` smallint(5) unsigned NOT NULL,
@@ -439,13 +439,13 @@ CREATE TABLE `rbu_rule` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_transaction`
--- 
+--
 
 CREATE TABLE `rbu_transaction` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `executed_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `executed_at` timestamp NOT NULL,
   `class` enum('salary','tax','transfer','charge','movement','system') NOT NULL,
   `amount` bigint(20) unsigned NOT NULL,
   `charge_account` int(10) unsigned NOT NULL,
@@ -462,9 +462,9 @@ CREATE TABLE `rbu_transaction` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Estructura de tabla para la tabla `rbu_user`
--- 
+--
 
 CREATE TABLE `rbu_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -483,10 +483,10 @@ CREATE TABLE `rbu_user` (
   `country` varchar(4) NOT NULL DEFAULT 'ES',
   `culture` varchar(7) NOT NULL DEFAULT 'es_es',
   `exemption_id` int(10) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` timestamp NOT NULL,
   `created_by` int(10) unsigned DEFAULT NULL,
-  `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `last_action` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_login` timestamp NOT NULL,
+  `last_action` timestamp NOT NULL,
   `updated` datetime NOT NULL,
   `magic` varchar(64) DEFAULT NULL,
   `blocked` timestamp NULL DEFAULT NULL,
@@ -498,9 +498,9 @@ CREATE TABLE `rbu_user` (
   KEY `FK_exemption_exemption_id` (`exemption_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
--- 
+--
 -- Filtros para las tablas descargadas (dump)
--- 
+--
 
 --
 -- Filtros para la tabla `rbu_account`
@@ -510,7 +510,7 @@ ALTER TABLE `rbu_account`
 
 --
 -- Filtros para la tabla `rbu_authorization`
--- 
+--
 ALTER TABLE `rbu_authorization`
   ADD CONSTRAINT `FK_authorization_account` FOREIGN KEY (`account_id`) REFERENCES `rbu_account` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `rbu_authorization_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE;
@@ -523,7 +523,7 @@ ALTER TABLE `rbu_entity`
 
 --
 -- Filtros para la tabla `rbu_invitation`
--- 
+--
 ALTER TABLE `rbu_invitation`
   ADD CONSTRAINT `FK_invitation_user` FOREIGN KEY (`user_id`) REFERENCES `rbu_account` (`id`) ON DELETE NO ACTION;
 
@@ -556,34 +556,34 @@ ALTER TABLE `rbu_link`
 
 --
 -- Filtros para la tabla `rbu_market_ad`
--- 
+--
 ALTER TABLE `rbu_market_ad`
   ADD CONSTRAINT `rbu_market_ad_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `rbu_entity` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
--- 
+--
 -- Filtros para la tabla `rbu_market_joined`
--- 
+--
 ALTER TABLE `rbu_market_joined`
   ADD CONSTRAINT `FK_market_joined_ad_id` FOREIGN KEY (`ad_id`) REFERENCES `rbu_market_ad` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rbu_market_joined_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
--- 
+--
 -- Filtros para la tabla `rbu_notification_configuration`
--- 
+--
 ALTER TABLE `rbu_notification_configuration`
   ADD CONSTRAINT `FK_configuration_notification_id` FOREIGN KEY (`notification_id`) REFERENCES `rbu_notification` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rbu_notification_configuration_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
--- 
+--
 -- Filtros para la tabla `rbu_notification_message`
--- 
+--
 ALTER TABLE `rbu_notification_message`
   ADD CONSTRAINT `FK_notification_user_noti` FOREIGN KEY (`notification_id`) REFERENCES `rbu_notification` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rbu_notification_message_ibfk_1` FOREIGN KEY (`entity_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
--- 
+--
 -- Filtros para la tabla `rbu_pending`
--- 
+--
 ALTER TABLE `rbu_pending`
   ADD CONSTRAINT `FK_pending_charge_account` FOREIGN KEY (`charge_account`) REFERENCES `rbu_account` (`id`) ON DELETE NO ACTION,
   ADD CONSTRAINT `FK_pending_deposit_account` FOREIGN KEY (`deposit_account`) REFERENCES `rbu_account` (`id`) ON DELETE NO ACTION,
@@ -598,7 +598,7 @@ ALTER TABLE `rbu_period`
 
 --
 -- Filtros para la tabla `rbu_rate`
--- 
+--
 ALTER TABLE `rbu_rate`
   ADD CONSTRAINT `FK_rate_entity_from` FOREIGN KEY (`from_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_rate_entity_to` FOREIGN KEY (`to_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -611,7 +611,7 @@ ALTER TABLE `rbu_record`
 
 --
 -- Filtros para la tabla `rbu_role`
--- 
+--
 ALTER TABLE `rbu_role`
   ADD CONSTRAINT `FK_role_actor` FOREIGN KEY (`actor_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_role_part` FOREIGN KEY (`part_id`) REFERENCES `rbu_entity` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -624,23 +624,21 @@ ALTER TABLE `rbu_rule`
 
 --
 -- Filtros para la tabla `rbu_transaction`
--- 
+--
 ALTER TABLE `rbu_transaction`
   ADD CONSTRAINT `FK_transaction_charge_account` FOREIGN KEY (`charge_account`) REFERENCES `rbu_account` (`id`) ON DELETE NO ACTION,
   ADD CONSTRAINT `FK_transaction_deposit_account` FOREIGN KEY (`deposit_account`) REFERENCES `rbu_account` (`id`) ON DELETE NO ACTION,
   ADD CONSTRAINT `rbu_transaction_ibfk_1` FOREIGN KEY (`charge_entity`) REFERENCES `rbu_entity` (`id`) ON DELETE NO ACTION,
   ADD CONSTRAINT `rbu_transaction_ibfk_2` FOREIGN KEY (`deposit_entity`) REFERENCES `rbu_entity` (`id`) ON DELETE NO ACTION;
 
--- 
+--
 -- Filtros para la tabla `rbu_user`
--- 
+--
 ALTER TABLE `rbu_user`
   ADD CONSTRAINT `FK_exemption_exemption_id` FOREIGN KEY (`exemption_id`) REFERENCES `rbu_exemption` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_user_created_by` FOREIGN KEY (`created_by`) REFERENCES `rbu_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
 SET FOREIGN_KEY_CHECKS=1;
 
 
@@ -658,7 +656,7 @@ INSERT INTO `rbu_tribe_group` (`id`) VALUES
 --
 
 INSERT INTO `rbu_tribe` (`id`, `nickname`, `name`, `email`, `summary`, `description`, `image`, `last_action`, `group_id`, `created_by`, `added`, `updated`, `deleted`) VALUES
-(1, 'default', 'La Isla por defecto de Demos', 'contacto@monedademos.es', 'Al llegar a demos entrarás a esta Isla hasta que encuentres o crees un grupo con el que empezar a participar. Esta isla no es una isla de pruebas, lo que hagas aquí formará parte de tu actividad en Demos', NULL, NULL, '0000-00-00 00:00:00', 1, NULL, '2014-04-24 16:00:56', '2014-04-24 16:00:56', NULL);
+(1, 'default', 'La Tribu por defecto de Demos', 'contacto@monedademos.es', 'Al llegar a demos entrarás a esta tribu hasta que encuentres o crees un grupo con el que empezar a participar. Esta isla no es una isla de pruebas, lo que hagas aquí formará parte de tu actividad en Demos', NULL, NULL, '0000-00-00 00:00:00', 1, NULL, '2014-04-24 16:00:56', '2014-04-24 16:00:56', NULL);
 
 
 --
@@ -684,12 +682,19 @@ INSERT INTO `rbu_account` (`id`, `tribe_id`, `class`, `credit`, `earned`, `spend
 INSERT INTO `rbu_rule` (`id`, `tribe_group_id`, `added`, `salary`, `min_salary`, `multiplier`, `system_adapted`) VALUES
 (1, 1, now(), 500000, 200000, 10, 1);
 
+
+--
+-- Volcado de datos para la tabla `rbu_record`
+--
+
+INSERT INTO `rbu_record` (`id`, `tribe_id`, `added`, `total_amount`, `user_count`, `account_count`) VALUES (NULL, '1', NOW(), '5000000', '0', '2');
+
 --
 -- Volcado de datos para la tabla `rbu_user`
 --
 
-INSERT INTO `rbu_user` (`id`, `username`, `salt`, `password`, `name`, `surname`, `birthday`, `identification`, `contribution_title`, `contribution_text`, `email`, `contact`, `zip`, `country`, `culture`, `exemption_id`, `created`, `created_by`, `last_login`, `last_action`, `updated`, `magic`, `blocked`, `deleted`) VALUES
-(1, 'Fund', '', '', 'System Fund', 'System Fund', '2012-05-20', 'DNI: ', '', '', 'contacto@monedademos.es', '', '35009', 'ES', 'es_es', NULL, now(), NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, NULL, NULL);
+-- INSERT INTO `rbu_user` (`id`, `username`, `salt`, `password`, `name`, `surname`, `birthday`, `identification`, `contribution_title`, `contribution_text`, `email`, `contact`, `zip`, `country`, `culture`, `exemption_id`, `created`, `created_by`, `last_login`, `last_action`, `updated`, `magic`, `blocked`, `deleted`) VALUES
+-- (1, 'Fund', '', '', 'System Fund', 'System Fund', '2012-05-20', 'DNI: ', '', '', 'contacto@monedademos.es', '', '35009', 'ES', 'es_es', NULL, now(), NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, NULL, NULL);
 
 
 --
@@ -749,9 +754,3 @@ INSERT INTO `rbu_notification_configuration` (`entity_id`, `notification_id`, `m
 (1, 17, 'instantly', 'active', 'active'),
 (1, 18, 'instantly', 'active', 'active'),
 (1, 19, 'instantly', 'active', 'active');
-
-
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
