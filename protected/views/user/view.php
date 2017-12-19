@@ -23,8 +23,8 @@ $this->breadcrumbs = array(
           <div class="row">
               <div class="small-12 columns">
                 <?php echo CHtml::link(Yii::t('app', 'Ver ficha'), array('me'), array('class' => "button secondary")); ?>
-                <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit contribution'), array('edit', 'id' => $model->id), array('class' => "button secondary")); ?>
-                <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Update user info'), array('update', 'id' => $model->id), array('class' => "button")); ?>
+                <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Edit contribution'), array('edit', 'id' => $entity->id), array('class' => "button secondary")); ?>
+                <?php echo '&nbsp;' . CHtml::link(Yii::t('app', 'Update user info'), array('update', 'id' => $entity->id), array('class' => "button")); ?>
               </div>
           </div>
 <?php } ?>
