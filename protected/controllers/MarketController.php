@@ -26,12 +26,12 @@ class MarketController extends Controller {
      */
     public function accessRules() {
         return array(
-            array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view', 'rss'),
-                'users' => array('*'),
-            ),
+            // array('allow', // allow all users to perform 'index' and 'view' actions
+            //     'actions' => array('index', 'view', 'rss'),
+            //     'users' => array('*'),
+            // ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'join', 'panel', 'panelView', 'list', 'delete', 'expire'),
+                'actions' => array('index', 'view', 'rss', 'create', 'update', 'join', 'panel', 'panelView', 'list', 'delete', 'expire'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -339,7 +339,7 @@ class MarketController extends Controller {
         $entity_id = Yii::app()->user->getId();
         $dataProvider = MarketAd::getAds($mode, $entity_id,$tribe_id);
 
-        
+
         $model = new MarketAd('search');
         $model->unsetAttributes();  // clear any default values
         $tribe= null;

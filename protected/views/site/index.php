@@ -69,6 +69,6 @@ foreach ($tribes as $tribe) {
     </div>
 <?php } ?>
 
-<?php echo $this->renderPartial('_socialRow', array('dataProviderMarketAd' => $dataProviderMarketAd)); ?>
+<?php //echo $this->renderPartial('_socialRow', array('dataProviderMarketAd' => $dataProviderMarketAd)); ?>
 
 <br/>

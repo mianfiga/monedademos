@@ -58,8 +58,7 @@ $this->breadcrumbs = array(
     </div>
     <div class="small-12 large-8 columns">
         <h2><?php echo Yii::t('app','New to Demos?') ?> <span class="subheader"><?php echo Yii::t('app','Sign up') ?></span></h2>
-        <?php echo $this->renderPartial('/user/_noform'); ?>
-        <?php //echo $this->renderPartial('/user/_form', array('model' => $modelRegister)); ?>
+        <?php echo $this->renderPartial('/user/_form', array('model' => $modelRegister)); ?>
     </div>
     <?php /*<div class="small-12 large-8 columns show-for-small">
         <h2><?php echo Yii::t('app','New to Demos?') ?> <span class="subheader"><?php echo Yii::t('app','Sign up') ?></span></h2>
