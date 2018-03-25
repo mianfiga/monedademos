@@ -171,5 +171,6 @@ return array(
     'Pasword updated successfully'=> 'Contraseña actualizada con éxito',
     'Check your E-mail for further instructions' => 'Comprueba tu e-mail para continuar',
     'Public accounts' => 'Cuentas públicas',
+    'Search' => 'Buscar',
 );
 ?>

@@ -54,7 +54,7 @@ class SiteController extends Controller {
         if (Yii::app()->user) {
             $entity_id = Yii::app()->user->getId();
         }
-        $dataProviderMarketAd = MarketAd::getAds(3, $entity_id, null, 10);
+        $dataProviderMarketAd = MarketAd::getAds(null, 3, $entity_id, null, 10);
 
         $dataProviderMarketAd->setPagination(false);
 
@@ -153,7 +153,7 @@ class SiteController extends Controller {
     }
 
     /**
-     * 
+     *
      */
     public function actionMobile() {
         if (isset($_POST['MobileForm'])) {
@@ -172,7 +172,7 @@ class SiteController extends Controller {
     }
 
     /**
-     * 
+     *
      */
     public function actionLanguage() {
         if (isset($_POST['LanguageForm'])) {
@@ -195,7 +195,7 @@ class SiteController extends Controller {
     }
 
     /**
-     * 
+     *
      */
     public function actionRoles() {
         if (isset($_POST['RolesForm'])) {

@@ -35,7 +35,7 @@ class MarketAd extends MarketAdBase
     public $form_price;
     public $form_image;
     public $expired;
-    
+
     protected $_isNew = false;
 
     public static function classOptions()
@@ -136,7 +136,20 @@ class MarketAd extends MarketAdBase
         // Warning: Please modify the following code to remove attributes that
         // should not be searched.
 
-        $criteria = new CDbCriteria;
+        $criteria = $this->searchCriteria();
+
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
+    public function searchCriteria($criteria = null)
+    {
+        if(!$criteria){
+          $criteria = new CDbCriteria;
+        }
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
         $criteria->compare('title', $this->title, true);
         $criteria->compare('class', $this->class, true);
@@ -147,12 +160,9 @@ class MarketAd extends MarketAdBase
         $criteria->compare('expiration', $this->expiration, true);
         $criteria->compare('zip', $this->zip, true);
 
-
-
-        return new CActiveDataProvider($this, array(
-            'criteria' => $criteria,
-        ));
+        return $criteria;
     }
+
 
     protected function beforeSave()
     {
@@ -234,9 +244,13 @@ class MarketAd extends MarketAdBase
         $this->expired = $this->expiration < date('Y-m-d');
     }
 
-    public static function getAds($mode = null, $entity_id = null, $tribe_id = null, $limit = null, $pageSize = 10)
+    public static function getAds($searchModel = null, $mode = null, $entity_id = null, $tribe_id = null, $limit = null, $pageSize = 10)
     {
         $with = array();
+        if(!$searchModel){
+          $searchModel = new MarketAd('search');
+          $searchModel->unsetAttributes();
+        }
         if (!!$mode && !is_numeric($mode)) {
             $mode = null;
         }
@@ -282,7 +296,7 @@ class MarketAd extends MarketAdBase
         }
 
         return new CActiveDataProvider('MarketAd', array(
-            'criteria' => $criteria,
+            'criteria' => $searchModel->searchCriteria(new CDbCriteria($criteria)),
             'sort' => array(
                 'defaultOrder' => '(t.expiration >= CURDATE()) DESC, t.updated DESC',
             ),

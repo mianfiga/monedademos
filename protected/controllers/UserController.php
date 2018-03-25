@@ -75,7 +75,7 @@ class UserController extends Controller {
             $model = $entity->getObject();
             $dataProvider = Rate::getTo($entity->id);
             $ratesDataProvider = Rate::getTo($entity->id);
-            $adsDataProvider = MarketAd::getAds(4, $entity->id);
+            $adsDataProvider = MarketAd::getAds(null, 4, $entity->id);
 
             $this->render('view', array(
                 'model' => $model,

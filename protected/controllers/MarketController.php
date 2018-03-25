@@ -337,9 +337,7 @@ class MarketController extends Controller {
             throw new CHttpException(404, 'Access denied.');
         }
         $entity_id = Yii::app()->user->getId();
-        $dataProvider = MarketAd::getAds($mode, $entity_id,$tribe_id);
 
-        
         $model = new MarketAd('search');
         $model->unsetAttributes();  // clear any default values
         $tribe= null;
@@ -348,6 +346,7 @@ class MarketController extends Controller {
         }
         if (isset($_GET['MarketAd']))
             $model->attributes = $_GET['MarketAd'];
+        $dataProvider = MarketAd::getAds($model, $mode, $entity_id,$tribe_id);
 
         $this->render('index', array(
             'dataProvider' => $dataProvider,
@@ -376,7 +375,7 @@ class MarketController extends Controller {
     public function actionRss() {
         $entity_id = Yii::app()->user->getId();
 
-        $dataProvider = MarketAd::getAds(3, $entity_id);
+        $dataProvider = MarketAd::getAds(null, 3, $entity_id);
     	$dataProvider->setPagination(false);
         $this->renderPartial('rss', array(
             'dataProvider' => $dataProvider,

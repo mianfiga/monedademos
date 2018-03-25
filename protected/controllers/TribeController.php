@@ -67,7 +67,7 @@ class TribeController extends Controller {
             'rule' => Rule::getCurrentRule($model->group_id),
             'entity' => $entity,
             'adsDataProvider' => MarketAd::getAds(null, null, $model->id, 5, 5),
-            'newsDataProvider' => MarketAd::getAds(1, Entity::get($model)->id, null, 5, 5),
+            'newsDataProvider' => MarketAd::getAds(null, 1, Entity::get($model)->id, null, 5, 5),
             'publicAccountDataProvider' => $publicAccountDataProvider,
             'next_rule' => Rule::getDateRule(date(Common::DATETIME_FORMAT, mktime(0, 0, 0, date("n") + 1)), $id),
         ));
